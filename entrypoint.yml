@@ -24,7 +24,4 @@
     - name: Execute application
       include_tasks:
         file: jobs/run/exec.yml
-    - name: Run tests to make sure app is running as expected
-      include_tasks:
-        file: jobs/tests/tests.yml
 

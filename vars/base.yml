@@ -9,6 +9,8 @@ iperf:
   server:
     enable: "{{ lookup('env', 'IPERF_SERVER_ENABLE') }}"
     ip: "{{ lookup('env', 'IPERF_SERVER_IP') }}"
+    port: "{{ lookup('env', 'IPERF_SERVER_PORT') }}"
   format: "{{ lookup('env', 'IPERF_FORMAT') }}"
   userfile: "/opt/manager/data/users.csv"
   protocol: "{{ lookup('env', 'IPERF_PROTOCOL') }}"
+  username: "{{ lookup('env', 'IPERF_USERNAME') }}"

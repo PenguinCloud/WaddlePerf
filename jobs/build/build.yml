@@ -5,6 +5,12 @@
       - gcc
       - make
       - libiperf0
+      - lksctp-tools-devel
+      - openssl-devel 
+- name: Let's try to get SCTP enabled... 
+  shell:
+    cmd: modprobe sctp
+  ignore_errors: yes
 - name: Lets make sure we get iperf installed
   block:
     - name: Get iperf3
@@ -49,6 +55,7 @@
       ansible.builtin.apt:
         pkg: iperf3
 
-#- name: Copy sudoers
-#  ansible.builtin.copy:
-#    src: "{{ playbook_dir }}/data/sudoers"
+- name: Copy sudoers
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/data/sudoers"
+    dest: /etc/sudoers

@@ -11,7 +11,7 @@
     mode: "0555"
 - name: Generate hash
   ansible.builtin.shell:
-    cmd: "{{{ iperf.username }}}$IPERF3_PASSWORD | sha256sum"
+    cmd: "'{'{{ iperf.username }}'}'$IPERF3_PASSWORD | sha256sum"
   register: user_hash
 - name: Generate userfile 
   ansible.builtin.copy:

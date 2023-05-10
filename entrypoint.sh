@@ -1,4 +1,4 @@
 #!/bin/bash
-/opt/manger/bins/servers.sh
+/opt/manager/bins/server.sh
 echo "Sleeping awaiting action!"
 /bin/sleep infinity
