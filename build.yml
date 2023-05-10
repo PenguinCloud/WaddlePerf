@@ -1,0 +1,25 @@
+- name: Building Image
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - vars/base.yml
+  become: yes
+  become_user: root
+  remote_user: root
+  tasks:
+    - name: Include nodeType variables
+      include_vars:
+        file: "vars/{{ BUILD_ENVIRONMENT }}.yml"
+      tags:
+        - always
+      ignore_errors: yes
+    - name: Include Special Variables
+      include_vars:
+        file: "vars/{{ lookup('env', 'COMPUTE_ENV') | default( 'base', True) }}.yml"
+      ignore_errors: yes
+    - name: Build And Install
+      include_tasks:
+        file: jobs/build/build.yml
+
+    
