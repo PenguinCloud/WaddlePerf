@@ -29,10 +29,13 @@
         target: install
         params:
           NUM_THREADS: "{{ build.threads }}"
-    - name: Remove the imposter!
+    - name: Remove the lesser!
       ansible.builtin.file:
-        path: /usr/local/bin/iperf3
+        path: "{{ item }}"
         state: absent
+      loop:
+        - /usr/bin/iperf3
+        - /usr/local/bin/iperf3
     - name: Crown our built binary!
       ansible.builtin.file:
         src: /opt/iperf3/src/iperf3
@@ -40,6 +43,7 @@
         mode: '0555'
         owner: root
         group: root
+        state: link
   rescue:
     - name: Installing from repo as backup option
       ansible.builtin.apt:

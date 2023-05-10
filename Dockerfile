@@ -16,8 +16,16 @@ ARG IPERF_URL="https://github.com/esnet/iperf/archive/refs/tags/3.13.tar.gz"
 # BUILD IT!
 RUN ansible-playbook build.yml -c local
 
-# PUT YER ENVS in here
-ENV HELLO="WORLD"
+# Environment variables
+ENV IPERF_SERVER_ENABLE="1"
+ENV IPERF_SERVER_IP="127.0.0.1"
+ENV IPERF_SERVER_PORT="5201"
+ENV IPERF_FORMAT="default"
+ENV IPERF3_PASSWORD="changeme"
+ENV IPERF_USERNAME="ptg-user"
+ENV IPERF_PROTOCOL="TCP"
+
+RUN ansible-playbook entrypoint.yml  -c local 
 
 # Switch to non-root user
 USER ptg-user

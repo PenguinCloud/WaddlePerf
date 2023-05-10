@@ -1,0 +1,24 @@
+---
+- name: Move server into place
+  ansible.builtin.template:
+    src: /opt/manager/templates/iperf3-server.j2
+    dest: /usr/local/bin/iperf3-server
+    mode: "0555"
+- name: Move client into place
+  ansible.builtin.template:
+    src: /opt/manager/templates/iperf3-client.j2
+    dest: /usr/local/bin/iperf3-client
+    mode: "0555"
+- name: Generate hash
+  ansible.builtin.shell:
+    cmd: "{{{ iperf.username }}}$IPERF3_PASSWORD | sha256sum"
+  register: user_hash
+- name: Generate userfile 
+  ansible.builtin.copy:
+    content: "{{ iperf.username }},{{ user_hash }}" 
+    dest: "{{ iperf.userfile }}" 
+- name: Fill in start script if server enabled
+  ansible.builtin.lineinfile:
+    line: nohup iperf3-server 
+    path: /opt/manager/bins/server.sh
+    mode: "0555"
