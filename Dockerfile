@@ -1,5 +1,5 @@
 FROM ubuntu:22.04 AS BUILD
-ARG URL="https://github.com/esnet/iperf/archive/refs/tags/3.13-mt-beta2.tar.gz"
+ARG URL="https://github.com/esnet/iperf/archive/refs/tags/3.13.tar.gz"
 COPY /bins/pre-build.sh /opt/pre-build.sh
 WORKDIR /opt
 RUN /opt/pre-build.sh
