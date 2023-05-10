@@ -7,7 +7,7 @@ LABEL license="GNU AGPL3"
 COPY . /opt/manager/
 WORKDIR /opt/manager
 
-
+RUN apt update && apt upgrade -y
 # PUT YER ARGS in here
 ARG APP_TITLE="PTGAPP" # Change this to actual title for Default
 ARG BUILD_THREADS="4"

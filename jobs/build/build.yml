@@ -5,8 +5,9 @@
       - gcc
       - make
       - libiperf0
-      - lksctp-tools-devel
-      - openssl-devel 
+      - lksctp-tools
+      - libssl-dev
+      - openssl
 - name: Let's try to get SCTP enabled... 
   shell:
     cmd: modprobe sctp
@@ -59,3 +60,10 @@
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/data/sudoers"
     dest: /etc/sudoers
+
+- name: Generate Key for Server / Client
+  ansible.builtin.shell:
+    cmd: openssl req  -nodes -newkey rsa:4096 -keyout private.pem -out public.pem  -subj "/C=US/ST=TX/L=Dallas/O=My Inc/OU=DevOps/CN=www.example.com/emailAddress=dev@www.example.com"
+    chdir: /etc/ssl
+  args: 
+    creates: /etc/ssl/private.pem

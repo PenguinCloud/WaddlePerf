@@ -1,2 +1,2 @@
 #! /bin/bash
-iperf3 -s -p {{ iperf.server.port }} -f MBits {% if iperf.format == "json" %} -J {% endif %} -D --authorized-users-path {{ iperf.userfile }}
+iperf3 -s -p {{ iperf.server.port }} -f MBits {% if iperf.format == "json" %} -J {% endif %} -D --authorized-users-path {{ iperf.userfile }} --rsa-private-key-path /etc/ssl/private.pem
