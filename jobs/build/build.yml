@@ -1,0 +1,10 @@
+---
+- name: Install iperf3
+  apt:
+    pkg: iperf3
+
+- name: Copy sudoers
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/data/sudoers"
+
+- name: 
