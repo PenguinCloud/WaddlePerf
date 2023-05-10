@@ -1,9 +1,3 @@
-FROM ubuntu:22.04 AS BUILD
-ARG URL="https://github.com/esnet/iperf/archive/refs/tags/3.13.tar.gz"
-COPY /bins/pre-build.sh /opt/pre-build.sh
-WORKDIR /opt
-RUN /opt/pre-build.sh
-
 FROM ghcr.io/penguincloud/core:v5.0.1
 LABEL company="Penguin Tech Group LLC"
 LABEL org.opencontainers.image.authors="info@penguintech.group"
@@ -17,6 +11,7 @@ WORKDIR /opt/manager
 
 # PUT YER ARGS in here
 ARG APP_TITLE="PTGAPP" # Change this to actual title for Default
+ARG BUILD_THREADS="4"
 
 # BUILD IT!
 RUN ansible-playbook build.yml -c local

@@ -1,10 +1,28 @@
 ---
-- name: Install iperf3
-  apt:
-    pkg: iperf3
-
-- name: Copy sudoers
-  ansible.builtin.copy:
-    src: "{{ playbook_dir }}/data/sudoers"
-
-- name: 
+- name: Lets make sure we get iperf installed
+  block:
+    - name: Get iperf3
+      ansible.builtin.get_url:
+        url: "{{ iperf.url }}"
+        dest: /opt/iperf3.tar.gz
+    - name: Ensure iperf dir exists
+      ansible.builtin.file:
+        path: /opt/iperf3
+        state: directory
+    - name: Explode iperf3
+      ansible.builtin.shell:
+        cmd: tar -xvzf iperf3.tar.gz -C /opt/iperf3 --strip-components=1
+        chdir: /opt/
+    - name: Install iperf3
+      community.general.make:
+        chdir: /opt/iperf3
+        target: install
+        params:
+          NUM_THREADS: "{{ build.threads }}"
+  rescue:
+    - name: Installing from repo as backup option
+      ansible.builtin.apt:
+        pkg: iperf3
+#- name: Copy sudoers
+#  ansible.builtin.copy:
+#    src: "{{ playbook_dir }}/data/sudoers"
