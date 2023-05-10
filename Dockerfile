@@ -4,7 +4,6 @@ LABEL org.opencontainers.image.authors="info@penguintech.group"
 LABEL license="GNU AGPL3"
 
 # GET THE FILES WHERE WE NEED THEM!
-COPY --from=BUILD /opt/iperf3/* /opt/iperf3/
 COPY . /opt/manager/
 WORKDIR /opt/manager
 
