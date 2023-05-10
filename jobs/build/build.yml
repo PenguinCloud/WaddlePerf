@@ -1,4 +1,10 @@
 ---
+- name: Install missing 
+  apt:
+    pkg:
+      - gcc
+      - make
+      - libiperf0
 - name: Lets make sure we get iperf installed
   block:
     - name: Get iperf3
@@ -13,16 +19,32 @@
       ansible.builtin.shell:
         cmd: tar -xvzf iperf3.tar.gz -C /opt/iperf3 --strip-components=1
         chdir: /opt/
+    - name: Configure iperf3
+      ansible.builtin.shell:
+        cmd: ./configure 
+        chdir: /opt/iperf3
     - name: Install iperf3
       community.general.make:
         chdir: /opt/iperf3
         target: install
         params:
           NUM_THREADS: "{{ build.threads }}"
+    - name: Remove the imposter!
+      ansible.builtin.file:
+        path: /usr/local/bin/iperf3
+        state: absent
+    - name: Crown our built binary!
+      ansible.builtin.file:
+        src: /opt/iperf3/src/iperf3
+        dest: /usr/local/bin/iperf3
+        mode: '0555'
+        owner: root
+        group: root
   rescue:
     - name: Installing from repo as backup option
       ansible.builtin.apt:
         pkg: iperf3
+
 #- name: Copy sudoers
 #  ansible.builtin.copy:
 #    src: "{{ playbook_dir }}/data/sudoers"

@@ -11,6 +11,7 @@ WORKDIR /opt/manager
 # PUT YER ARGS in here
 ARG APP_TITLE="PTGAPP" # Change this to actual title for Default
 ARG BUILD_THREADS="4"
+ARG IPERF_URL="https://github.com/esnet/iperf/archive/refs/tags/3.13.tar.gz"
 
 # BUILD IT!
 RUN ansible-playbook build.yml -c local
