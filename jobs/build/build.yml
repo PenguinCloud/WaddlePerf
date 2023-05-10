@@ -67,3 +67,17 @@
     chdir: /etc/ssl
   args: 
     creates: /etc/ssl/private.pem
+
+- name: Ownership priv
+  ansible.builtin.file:
+    path: /etc/ssl/private.pem
+    mode: "0500"
+    group: "{{ run.user }}"
+    user: "{{ run.user }}"
+
+- name: Ownership pub
+  ansible.builtin.file:
+    path: /etc/ssl/public.pem
+    mode: "0544"
+    group: "{{ run.user }}"
+    user: "{{ run.user }}"
