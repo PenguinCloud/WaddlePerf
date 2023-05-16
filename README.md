@@ -1,5 +1,4 @@
-[![Publish Docker image](https://github.com/PenguinCloud/PenguinPerf3/actions/workflows/push.yml/badge.svg)](https://github.com/PenguinCloud/PenguinPerf3/actions/workflows/push.yml) [![version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://semver.org) ![Docker Image Version (latest by date)](https://img.shields.io/docker/v/penguincloud/penguinperf3?sort=date&style=plastic)
-
+[![Publish Docker image](https://github.com/PenguinCloud/PenguinPerf3/actions/workflows/push.yml/badge.svg)](https://github.com/PenguinCloud/PenguinPerf3/actions/workflows/push.yml) [![version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://semver.org) 
 
 # Project Overview
 This is a version of iPerf 3.10 built to make deployment and usage easier!
