@@ -1,10 +1,10 @@
 - name: Building Image
   hosts: localhost
   connection: local
-  gather_facts: False
+  gather_facts: false
   vars_files:
     - vars/base.yml
-  become: True
+  become: true
   become_user: root
   remote_user: root
   tasks:
