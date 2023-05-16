@@ -11,7 +11,7 @@
 - name: Let's try to get SCTP enabled... 
   shell:
     cmd: modprobe sctp
-  ignore_errors: yes
+  ignore_errors: True
 - name: Lets make sure we get iperf installed
   block:
     - name: Get iperf3
@@ -77,4 +77,3 @@
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/data/sudoers"
     dest: /etc/sudoers
-

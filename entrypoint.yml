@@ -1,18 +1,13 @@
 ---
-- name: PROJECT NAME
+- name: PenguinPerf3
   hosts: localhost
   connection: local
   vars_files:
     - vars/base.yml
   tasks:
-    - name: Include Special Variables
-      include_vars:
-        file: "vars/{{ lookup('env', 'COMPUTE_ENV') | default( 'base', True) }}.yml"
-      ignore_errors: yes
     - name: Run And Configure
       include_tasks:
         file: jobs/run/run.yml
     - name: Execute application
       include_tasks:
         file: jobs/run/exec.yml
-
