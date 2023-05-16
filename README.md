@@ -1,4 +1,4 @@
-[![Publish Docker image](https://github.com/PenguinCloud/project-template/actions/workflows/docker-image.yml/badge.svg)](https://github.com/PenguinCloud/core/actions/workflows/docker-image.yml) [![version](https://img.shields.io/badge/version-0.0.0-yellow.svg)](https://semver.org) ![Docker Image Version (latest by date)](https://img.shields.io/docker/v/penguincloud/project-tempalte?sort=date&style=plastic)
+[![Publish Docker image](https://github.com/PenguinCloud/PenguinPerf3/actions/workflows/push.yml/badge.svg)](https://github.com/PenguinCloud/PenguinPerf3/actions/workflows/push.yml) [![version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://semver.org) ![Docker Image Version (latest by date)](https://img.shields.io/docker/v/penguincloud/penguinperf3?sort=date&style=plastic)
 
 
 # Project Overview
