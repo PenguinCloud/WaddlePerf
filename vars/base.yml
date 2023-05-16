@@ -7,7 +7,7 @@ build:
 iperf:
   url: "{{ lookup('env', 'IPERF_URL') }}"
   client:
-    streams: "{{ lookup('env', 'IPERF_CLIENT_STREAMS') }}" 
+    streams: "{{ lookup('env', 'IPERF_CLIENT_STREAMS') }}"
   server:
     enable: "{{ lookup('env', 'IPERF_SERVER_ENABLE') }}"
     ip: "{{ lookup('env', 'IPERF_SERVER_IP') }}"

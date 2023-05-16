@@ -6,4 +6,3 @@
 - name: Create client run script
   include_tasks:
     file: client.yml
-
