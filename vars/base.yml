@@ -17,4 +17,4 @@ iperf:
   protocol: "{{ lookup('env', 'IPERF_PROTOCOL') }}"
   username: "{{ lookup('env', 'IPERF_USERNAME') }}"
 web:
-  port: "{{ lookup('env', 'WEB_PORT') }}" 
+  port: "{{ lookup('env', 'WEB_PORT') }}"

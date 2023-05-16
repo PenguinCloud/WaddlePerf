@@ -1,7 +1,7 @@
 ---
 - name: Generate Key for Server / Client
   ansible.builtin.shell:
-    cmd: | 
+    cmd: |
       openssl req  -nodes -newkey rsa:4096 -keyout private.pem -out public.pem \
       -subj "/C=US/ST=TX/L=Dallas/O=My Inc/OU=DevOps/CN=www.example.com/emailAddress=dev@www.example.com"
     chdir: /opt/penguinperf3
