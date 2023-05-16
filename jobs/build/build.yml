@@ -55,29 +55,26 @@
     - name: Installing from repo as backup option
       ansible.builtin.apt:
         pkg: iperf3
-
+- name: Make sure app directories are built
+  ansible.builtin.file:
+    path: "{{ item }}"
+    mode: '0744'
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    state: directory
+  loop:
+    - /opt/penguinperf3
+    - /opt/results
+- name: Make sure web directory is built
+  ansible.builtin.file:
+    path: /var/www/penguinperf3
+    mode: '0744'
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    state: directory  
+    recurse: yes  
 - name: Copy sudoers
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/data/sudoers"
     dest: /etc/sudoers
 
-- name: Generate Key for Server / Client
-  ansible.builtin.shell:
-    cmd: openssl req  -nodes -newkey rsa:4096 -keyout private.pem -out public.pem  -subj "/C=US/ST=TX/L=Dallas/O=My Inc/OU=DevOps/CN=www.example.com/emailAddress=dev@www.example.com"
-    chdir: /etc/ssl
-  args: 
-    creates: /etc/ssl/private.pem
-
-- name: Ownership priv
-  ansible.builtin.file:
-    path: /etc/ssl/private.pem
-    mode: "0500"
-    group: "{{ run.user }}"
-    user: "{{ run.user }}"
-
-- name: Ownership pub
-  ansible.builtin.file:
-    path: /etc/ssl/public.pem
-    mode: "0544"
-    group: "{{ run.user }}"
-    user: "{{ run.user }}"

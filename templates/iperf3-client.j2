@@ -1,2 +1,2 @@
 #! /bin/bash
-iperf3 -c {{ iperf.server.port }} -p {{ iperf.server.port }} {% if iperf.format == "json" %} -J {% elif iperf.format == "logfile" %} --logfile /opt/results.log {% endif %} {% if iperf.protocol== "udp" %} -u {% elif iperf.format == "sctp" %} --sctp {% endif %}   --username={{ iperf.username }}
+iperf3 -c {{ iperf.server.port }} -p {{ iperf.server.port }} {% if iperf.format == "json" %} -J {% elif iperf.format == "logfile" %} --logfile /opt/results/results.log {% endif %} {% if iperf.protocol== "udp" %} -u {% elif iperf.format == "sctp" %} --sctp {% endif %}   --username={{ iperf.username }} -P {{ iperf.client.streams }} - T WaddleSpeed  --repeating-payload

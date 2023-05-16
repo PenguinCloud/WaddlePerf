@@ -6,6 +6,8 @@ build:
   threads: "{{ lookup('env', 'BUILD_THREADS') }}"
 iperf:
   url: "{{ lookup('env', 'IPERF_URL') }}"
+  client:
+    streams: "{{ lookup('env', 'IPERF_CLIENT_STREAMS') }}" 
   server:
     enable: "{{ lookup('env', 'IPERF_SERVER_ENABLE') }}"
     ip: "{{ lookup('env', 'IPERF_SERVER_IP') }}"
@@ -14,3 +16,5 @@ iperf:
   userfile: "/opt/manager/data/users.csv"
   protocol: "{{ lookup('env', 'IPERF_PROTOCOL') }}"
   username: "{{ lookup('env', 'IPERF_USERNAME') }}"
+web:
+  port: "{{ lookup('env', 'WEB_PORT') }}" 

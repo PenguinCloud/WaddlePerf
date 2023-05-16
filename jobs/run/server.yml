@@ -1,0 +1,52 @@
+---
+- name: Generate Key for Server / Client
+  ansible.builtin.shell:
+    cmd: openssl req  -nodes -newkey rsa:4096 -keyout private.pem -out public.pem  -subj "/C=US/ST=TX/L=Dallas/O=My Inc/OU=DevOps/CN=www.example.com/emailAddress=dev@www.example.com"
+    chdir: /opt/penguinperf3
+  args: 
+    creates: /opt/penguinperf3/private.pem
+
+- name: Ownership priv
+  ansible.builtin.file:
+    path: /opt/penguinperf3/private.pem
+    mode: "0500"
+    group: "{{ run.user }}"
+    owner: "{{ run.user }}"
+
+- name: Ownership pub
+  ansible.builtin.file:
+    path: /opt/penguinperf3/public.pem
+    mode: "0544"
+    group: "{{ run.user }}"
+    owner: "{{ run.user }}"
+- name: Copy pub to web server
+  ansible.builtin.copy:
+    src: /opt/penguinperf3/public.pem
+    dest: /var/www/penguinperf3/public.pem
+    mode: "0544"
+    group: "{{ run.user }}"
+    owner: "{{ run.user }}"
+    remote_src: True
+- name: Move server into place
+  ansible.builtin.template:
+    src: /opt/manager/templates/iperf3-server.j2
+    dest: "/home/{{ run.user }}/iperf3-server"
+    mode: "0555"
+- name: Move pyweb into place
+  ansible.builtin.template:
+    src: /opt/manager/templates/pyweb.j2
+    dest: /opt/manager/bins/pyweb.sh
+    mode: "0555"
+- name: Fill in start script if server enabled
+  ansible.builtin.lineinfile:
+    line: nohup iperf3-server 
+    path: /opt/manager/bins/server.sh
+    mode: "0555"
+- name: Generate hash
+  ansible.builtin.shell:
+    cmd: "'{'{{ iperf.username }}'}'$IPERF3_PASSWORD | sha256sum"
+  register: user_hash
+- name: Generate userfile 
+  ansible.builtin.copy:
+    content: "{{ iperf.username }},{{ user_hash }}" 
+    dest: "{{ iperf.userfile }}" 

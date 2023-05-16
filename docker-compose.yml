@@ -1,5 +1,12 @@
 ---
 version: "2.4"
 services:
-  app:
-    image: penguintech/core-ansible
+  penguinperf3:
+    build: .
+    image: penguincloud/penguinperf3
+    env_file: .env
+    ports:
+      - 8080:8080
+    volumes:
+      - ./results.log:/opt/results/results.log:rw
+      - ./users.csv:/opt/manager/data/users.csv:rw
