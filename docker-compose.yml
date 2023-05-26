@@ -6,6 +6,5 @@ services:
     image: penguincloud/penguinperf3
     env_file: .env
     ports:
-      - 8080-8090:8080
-      - 5200-5210:5201
+      - 8080:8080
 

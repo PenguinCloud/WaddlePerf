@@ -6,3 +6,6 @@
 - name: Create client run script
   include_tasks:
     file: client.yml
+- name: Create client run script
+  include_tasks:
+    file: ../tests/test.yml
