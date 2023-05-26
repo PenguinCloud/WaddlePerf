@@ -32,23 +32,29 @@
 - name: Move server into place
   ansible.builtin.template:
     src: /opt/manager/templates/iperf3-server.j2
-    dest: "/home/{{ run.user }}/iperf3-server"
+    dest: "/opt/penguinperf3/iperf3-server"
     mode: "0555"
 - name: Move pyweb into place
   ansible.builtin.template:
     src: /opt/manager/templates/pyweb.j2
-    dest: /opt/manager/bins/pyweb.sh
+    dest: /opt/penguinperf3/pyweb.sh
     mode: "0555"
 - name: Fill in start script if server enabled
   ansible.builtin.lineinfile:
-    line: "nohup /home/{{ run.user }}/iperf3-server"
+    line: "nohup /opt/penguinperf3/iperf3-server"
     path: /opt/manager/bins/server.sh
     mode: "0555"
 - name: Generate hash
   ansible.builtin.shell:
-    cmd: "'{'{{ iperf.username }}'}'$IPERF3_PASSWORD | sha256sum"
+    cmd: echo -n "{$S_USER}$S_PASSWD" | sha256sum | cut -d " " -f 1
+  environment:
+    - S_USER: "{{ iperf.username }}"
+    - S_PASS: "{{ iperf.password }}"
   register: user_hash
+- name: User added
+  debug:
+    msg: "{{ iperf.username }},{{ user_hash.stdout }}"
 - name: Generate userfile
   ansible.builtin.copy:
-    content: "{{ iperf.username }},{{ user_hash }}"
+    content: "{{ iperf.username }},{{ user_hash.stdout }}"
     dest: "{{ iperf.userfile }}"

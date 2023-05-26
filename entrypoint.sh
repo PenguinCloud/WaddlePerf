@@ -1,6 +1,7 @@
 #!/bin/bash
 ansible-playbook entrypoint.yml  -c local 
-/opt/manager/bins/pyweb.sh &
+/opt/penguinperf3/pyweb.sh &
 /opt/manager/bins/server.sh
-echo "Sleeping awaiting action!"
-/bin/sleep infinity
+
+#echo "Sleepy time!"
+#/usr/bin/sleep infinity

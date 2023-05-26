@@ -1,66 +1,22 @@
 ---
-- name: Install missing
+- name: Install missing apt packages
   apt:
     pkg:
       - gcc
       - make
       - libiperf0
-      - lksctp-tools
       - libssl-dev
       - openssl
-- name: Let's try to get SCTP enabled...
-  shell:
-    cmd: modprobe sctp
-  ignore_errors: true
-- name: Lets make sure we get iperf installed
-  block:
-    - name: Get iperf3
-      ansible.builtin.get_url:
-        url: "{{ iperf.url }}"
-        dest: /opt/iperf3.tar.gz
-    - name: Ensure iperf dir exists
-      ansible.builtin.file:
-        path: /opt/iperf3
-        state: directory
-    - name: Explode iperf3
-      ansible.builtin.shell:
-        cmd: tar -xvzf iperf3.tar.gz -C /opt/iperf3 --strip-components=1
-        chdir: /opt/
-    - name: Configure iperf3
-      ansible.builtin.shell:
-        cmd: ./configure
-        chdir: /opt/iperf3
-    - name: Install iperf3
-      community.general.make:
-        chdir: /opt/iperf3
-        target: install
-        params:
-          NUM_THREADS: "{{ build.threads }}"
-    - name: Remove the lesser!
-      ansible.builtin.file:
-        path: "{{ item }}"
-        state: absent
-      loop:
-        - /usr/bin/iperf3
-        - /usr/local/bin/iperf3
-    - name: Crown our built binary!
-      ansible.builtin.file:
-        src: /opt/iperf3/src/iperf3
-        dest: /usr/local/bin/iperf3
-        mode: '0555'
-        owner: root
-        group: root
-        state: link
-  rescue:
-    - name: Installing from repo as backup option
-      ansible.builtin.apt:
-        pkg: iperf3
+- name: Create iperf3 binary
+  include_tasks:
+    file: build-iperf3.yml
 - name: Make sure app directories are built
   ansible.builtin.file:
     path: "{{ item }}"
     mode: '0744'
     owner: "{{ run.user }}"
     group: "{{ run.user }}"
+    recurse: true
     state: directory
   loop:
     - /opt/penguinperf3
@@ -73,7 +29,20 @@
     group: "{{ run.user }}"
     state: directory
     recurse: true
+- name: give edit rights to startup
+  ansible.builtin.file:
+    path: /opt/manager/bins/server.sh
+    mode: '0755'
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
 - name: Copy sudoers
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/data/sudoers"
     dest: /etc/sudoers
+- name: Create blank log file
+  copy:
+    content: ""
+    dest: /var/www/penguinperf3/results.log
+    force: false
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"

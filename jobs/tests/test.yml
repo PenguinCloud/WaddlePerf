@@ -1,0 +1,12 @@
+- name: Run through file exist tests
+  block:
+    - name: Validate file
+      stat: "path={{ item }}"
+      register: userfilestat
+    - name: Fail if file is not there!
+      fail: msg="File {{ item }} does not exist!"
+      when: not userfilestat.stat.exists
+  loop:
+    - "{{ iperf.userfile }}"
+    - /var/www/penguinperf3/results.log
+    - /etc/ssl/private.pem

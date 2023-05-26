@@ -1,4 +1,4 @@
-FROM ghcr.io/penguincloud/core:main
+FROM ghcr.io/penguincloud/core
 LABEL company="Penguin Tech Group LLC"
 LABEL org.opencontainers.image.authors="info@penguintech.group"
 LABEL license="GNU AGPL3"
@@ -19,7 +19,6 @@ RUN ansible-playbook build.yml -c local
 # Environment variables
 ENV IPERF_SERVER_ENABLE="1"
 ENV IPERF_SERVER_IP="127.0.0.1"
-ENV IPERF_SERVER_PORT="5201"
 ENV IPERF_CLIENT_STREAMS="5"
 ENV IPERF_FORMAT="default"
 ENV IPERF3_PASSWORD="changeme"
@@ -29,6 +28,8 @@ ENV WEB_PORT="8080"
 
 # Switch to non-root user
 USER ptg-user
+
+EXPOSE 5201
 
 # Entrypoint time (aka runtime)
 ENTRYPOINT ["/bin/bash","/opt/manager/entrypoint.sh"]

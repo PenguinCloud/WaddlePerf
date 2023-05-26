@@ -13,8 +13,9 @@ iperf:
     ip: "{{ lookup('env', 'IPERF_SERVER_IP') }}"
     port: "{{ lookup('env', 'IPERF_SERVER_PORT') }}"
   format: "{{ lookup('env', 'IPERF_FORMAT') }}"
-  userfile: "/opt/manager/data/users.csv"
+  userfile: "/opt/penguinperf3/users.csv"
   protocol: "{{ lookup('env', 'IPERF_PROTOCOL') }}"
   username: "{{ lookup('env', 'IPERF_USERNAME') }}"
+  password: "{{ lookup('env', 'IPERF3_PASSWORD') }}"
 web:
   port: "{{ lookup('env', 'WEB_PORT') }}"

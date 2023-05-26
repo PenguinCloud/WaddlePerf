@@ -7,6 +7,4 @@ services:
     env_file: .env
     ports:
       - 8080:8080
-    volumes:
-      - ./results.log:/opt/results/results.log:rw
-      - ./users.csv:/opt/manager/data/users.csv:rw
+
