@@ -1,4 +1,4 @@
 #! /bin/bash
-#iperf3 -s {% if iperf.format == "json" %} -J {% endif %} --authorized-users-path {{ iperf.userfile }} --logfile {{ iperf.server.webDirectory }}results.log --rsa-private-key-path /etc/ssl/private.pem
+#iperf3 -s {% if iperf.format == "json" %} -J {% endif %} --authorized-users-path {{ iperf.userfile }} --logfile /var/www/{{ app.title }}/results.log --rsa-private-key-path /etc/ssl/private.pem
 echo "Starting iperf3 server..."
 iperf3 -s {% if iperf.format == "json" %} -J {% endif %} -p {{ iperf.server.port }} --logfile /var/www/{{ app.title }}/results.log
