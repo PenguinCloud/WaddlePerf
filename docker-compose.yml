@@ -3,7 +3,8 @@ version: "2.4"
 services:
   penguinperf3:
     build: .
-    image: penguincloud/penguinperf3
-    env_file: .env
+    image: penguincloud/waddleperf3
+    # env_file: .env
     ports:
       - 8080:8080
+      - 5201:5201

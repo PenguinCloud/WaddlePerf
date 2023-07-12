@@ -1,7 +1,7 @@
 run:
   user: ptg-user
 app:
-  title: "WaddlePerf3"
+  title: "waddleperf3"
 build:
   threads: "{{ lookup('env', 'BUILD_THREADS') }}"
 iperf:
