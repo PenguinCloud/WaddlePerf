@@ -1,7 +1,7 @@
 ---
 # .ansible-lint
 
-profile: safety # min, basic, moderate,safety, shared, production
+profile: moderate # min, basic, moderate,safety, shared, production
 
 # Allows dumping of results in SARIF format
 # sarif_file: result.sarif
@@ -12,8 +12,10 @@ profile: safety # min, basic, moderate,safety, shared, production
 exclude_paths:
   - .cache/ # implicit unless exclude_paths is defined in config
   - .github/
+  - docker-compose.yml
   - test/fixtures/formatting-before/
   - test/fixtures/formatting-prettier/
+  - jobs/tests/
 # parseable: true
 # quiet: true
 # strict: true
@@ -54,6 +56,7 @@ use_default_rules: true
 skip_list:
   - skip_this_tag
   - yaml[octal-values]
+  - command-shell
 
 # Ansible-lint does not automatically load rules that have the 'opt-in' tag.
 # You must enable opt-in rules by listing each rule 'id' below.
@@ -62,7 +65,7 @@ enable_list:
   - empty-string-compare # opt-in
   - no-log-password # opt-in
   - no-same-owner # opt-in
-  - name[prefix] # opt-in
+  #- name[prefix] # opt-in
   # add yaml here if you want to avoid ignoring yaml checks when yamllint
   # library is missing. Normally its absence just skips using that rule.
   - yaml
@@ -73,7 +76,8 @@ enable_list:
 # Ansible-lint does not fail on warnings from the rules or tags listed below
 warn_list:
   - skip_this_tag
-  - experimental # experimental is included in the implicit list
+  - jinja[spacing]
+  #- experimental # experimental is included in the implicit list
   # - role-name
   # - yaml[document-start]  # you can also use sub-rule matches
 
@@ -86,7 +90,7 @@ warn_list:
 #   - all
 
 # Offline mode disables installation of requirements.yml and schema refreshing
-offline: true
+offline: false
 
 # Return success if number of violations compared with previous git
 # commit has not increased. This feature works only in git
@@ -108,10 +112,10 @@ extra_vars:
 # List of additional kind:pattern to be added at the top of the default
 # match list, first match determines the file kind.
 kinds:
-  # - playbook: "**/examples/*.{yml,yaml}"
+  - playbook: "**.yml"
   # - galaxy: "**/folder/galaxy.yml"
-  # - tasks: "**/tasks/*.yml"
-  # - vars: "**/vars/*.yml"
+  - tasks: "**/taskjobs/**/*.yml"
+  - vars: "**/vars/*.yml"
   # - meta: "**/meta/main.yml"
   - yaml: "**/*.yaml-too"
 

@@ -30,8 +30,8 @@ PTG relies on volunteer customers and community members to beta test images, ens
 
 # Contributors
 ## PTG
-Maintainer: creatorsemailhere@penguintech.group
-General: info@penguintech.group
+Maintainer:  justin@penguintech.io
+General: info@penguintech.io
 
 ## community
 

@@ -1,7 +1,7 @@
 run:
   user: ptg-user
 app:
-  title: "{{ lookup('ansible.builtin.env', 'APP_TILE') }}"
+  title: "waddleperf3"
 build:
   threads: "{{ lookup('env', 'BUILD_THREADS') }}"
 iperf:
@@ -13,9 +13,9 @@ iperf:
     ip: "{{ lookup('env', 'IPERF_SERVER_IP') }}"
     port: "{{ lookup('env', 'IPERF_SERVER_PORT') }}"
   format: "{{ lookup('env', 'IPERF_FORMAT') }}"
-  userfile: "/opt/penguinperf3/users.csv"
+  userfile: "/opt/{{ app.title }}/users.csv"
   protocol: "{{ lookup('env', 'IPERF_PROTOCOL') }}"
   username: "{{ lookup('env', 'IPERF_USERNAME') }}"
-  password: "{{ lookup('env', 'IPERF3_PASSWORD') }}"
+  password: "{{ lookup('env', 'IPERF_PASSWORD') }}"
 web:
   port: "{{ lookup('env', 'WEB_PORT') }}"

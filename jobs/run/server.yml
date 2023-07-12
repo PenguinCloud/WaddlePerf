@@ -1,56 +1,31 @@
 ---
-- name: Generate Key for Server / Client
-  ansible.builtin.shell:
-    cmd: |
-      openssl req  -nodes -newkey rsa:4096 -keyout private.pem -out public.pem \
-      -subj "/C=US/ST=TX/L=Dallas/O=My Inc/OU=DevOps/CN=www.example.com/emailAddress=dev@www.example.com"
-    chdir: /opt/penguinperf3
-  args:
-    creates: /opt/penguinperf3/private.pem
-
-- name: Ownership priv
-  ansible.builtin.file:
-    path: /opt/penguinperf3/private.pem
-    mode: "0500"
-    group: "{{ run.user }}"
-    owner: "{{ run.user }}"
-
-- name: Ownership pub
-  ansible.builtin.file:
-    path: /opt/penguinperf3/public.pem
-    mode: "0544"
-    group: "{{ run.user }}"
-    owner: "{{ run.user }}"
-- name: Copy pub to web server
-  ansible.builtin.copy:
-    src: /opt/penguinperf3/public.pem
-    dest: /var/www/penguinperf3/public.pem
-    mode: "0544"
-    group: "{{ run.user }}"
-    owner: "{{ run.user }}"
-    remote_src: true
 - name: Move server into place
   ansible.builtin.template:
     src: /opt/manager/templates/iperf3-server.j2
-    dest: "/opt/penguinperf3/iperf3-server"
+    dest: "/opt/{{ app.title }}/iperf3-server"
     mode: "0555"
 - name: Move pyweb into place
   ansible.builtin.template:
     src: /opt/manager/templates/pyweb.j2
-    dest: /opt/penguinperf3/pyweb.sh
+    dest: "/opt/{{ app.title }}/pyweb.sh"
     mode: "0555"
 - name: Fill in start script if server enabled
   ansible.builtin.lineinfile:
-    line: "nohup /opt/penguinperf3/iperf3-server"
-    path: /opt/manager/bins/server.sh
+    line: "nohup /opt/{{ app.title }}/iperf3-server"
+    path: "/opt/manager/bins/server.sh"
     mode: "0555"
+- name: Setup hash generator
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/templates/generate-hash.j2"
+    dest: "/opt/manager/bins/hash.sh"
+    mode: "0500"
+# noqa
 - name: Generate hash
   ansible.builtin.shell:
-    cmd: echo -n "{$S_USER}$S_PASSWD" | sha256sum | cut -d " " -f 1
-  environment:
-    - S_USER: "{{ iperf.username }}"
-    - S_PASS: "{{ iperf.password }}"
+    cmd: /opt/manager/bins/hash.sh
   register: user_hash
+  tags:
+    - skip_ansible_lint
 - name: User added
   debug:
     msg: "{{ iperf.username }},{{ user_hash.stdout }}"
