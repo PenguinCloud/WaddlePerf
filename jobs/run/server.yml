@@ -4,27 +4,27 @@
     cmd: |
       openssl req  -nodes -newkey rsa:4096 -keyout private.pem -out public.pem \
       -subj "/C=US/ST=TX/L=Dallas/O=My Inc/OU=DevOps/CN=www.example.com/emailAddress=dev@www.example.com"
-    chdir: /opt/penguinperf3
+    chdir: "/opt/{{ app.title }}"
   args:
-    creates: /opt/penguinperf3/private.pem
+    creates: "/opt/{{ app.title }}/private.pem"
 
 - name: Ownership priv
   ansible.builtin.file:
-    path: /opt/penguinperf3/private.pem
+    path: "/opt/{{ app.title }}/private.pem"
     mode: "0500"
     group: "{{ run.user }}"
     owner: "{{ run.user }}"
 
 - name: Ownership pub
   ansible.builtin.file:
-    path: /opt/penguinperf3/public.pem
+    path: "/opt/{{ app.title }}/public.pem"
     mode: "0544"
     group: "{{ run.user }}"
     owner: "{{ run.user }}"
 - name: Copy pub to web server
   ansible.builtin.copy:
-    src: /opt/penguinperf3/public.pem
-    dest: /var/www/penguinperf3/public.pem
+    src: "/opt/{{ app.title }}/public.pem"
+    dest: "/var/www/{{ app.title }}/public.pem"
     mode: "0544"
     group: "{{ run.user }}"
     owner: "{{ run.user }}"
@@ -32,17 +32,17 @@
 - name: Move server into place
   ansible.builtin.template:
     src: /opt/manager/templates/iperf3-server.j2
-    dest: "/opt/penguinperf3/iperf3-server"
+    dest: "/opt/{{ app.title }}/iperf3-server"
     mode: "0555"
 - name: Move pyweb into place
   ansible.builtin.template:
     src: /opt/manager/templates/pyweb.j2
-    dest: /opt/penguinperf3/pyweb.sh
+    dest: "/opt/{{ app.title }}/pyweb.sh"
     mode: "0555"
 - name: Fill in start script if server enabled
   ansible.builtin.lineinfile:
-    line: "nohup /opt/penguinperf3/iperf3-server"
-    path: /opt/manager/bins/server.sh
+    line: "nohup /opt/{{ app.title }}/iperf3-server"
+    path: "/opt/manager/bins/server.sh"
     mode: "0555"
 - name: Generate hash
   ansible.builtin.shell:
