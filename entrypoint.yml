@@ -1,13 +1,59 @@
 ---
-- name: PenguinPerf3
+- name: WaddlePerf3
   hosts: localhost
   connection: local
   vars_files:
     - vars/base.yml
   tasks:
-    - name: Run And Configure
-      include_tasks:
-        file: jobs/run/run.yml
-    - name: Execute application
-      include_tasks:
-        file: jobs/run/exec.yml
+    - name: Build
+      tags:  
+        - build
+      block:
+        - name: Create iperf3 binary
+          include_tasks:
+            file: jobs/build/install-packages.yml
+            apply:
+              tags:
+                - build
+        - name: Create iperf3 binary
+          include_tasks:
+            file: jobs/build/build-iperf3.yml
+            apply:
+              tags:
+                - build
+        - name: Create filesystem directories and structure
+          include_tasks:
+            file: jobs/build/build-filesystem.yml
+            apply:
+              tags:
+                - build
+        - name: Create logs and sudoers
+          include_tasks:
+            file: jobs/build/build-security.yml
+            apply:
+              tags:
+                - build
+    - name: Run
+      tags:  
+        - run
+      block:
+        - name: Run in server mode
+          include_tasks:
+            file: jobs/run/server.yml
+            apply:
+              tags:
+                - run
+          when: iperf.server.enable == "1"
+        - name: Create client run script
+          include_tasks:
+            file: jobs/run/client.yml
+            apply:
+              tags:
+                - run
+        - name: Test connections
+          include_tasks:
+            file: jobs/tests/test.yml
+            apply:
+              tags:
+                - run
+                - test

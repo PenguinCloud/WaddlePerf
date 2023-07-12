@@ -1,0 +1,28 @@
+---
+- name: Make sure app directories are built
+  ansible.builtin.file:
+    path: "{{ item }}"
+    mode: '0744'
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    recurse: true
+    state: directory
+  loop:
+    - "/opt/{{ app.title }}"
+    - /opt/results
+- name: Make sure web directory is built
+  ansible.builtin.file:
+    path: "/var/www/{{ app.title }}"
+    mode: '0744'
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    state: directory
+    recurse: true
+- name: give edit rights to startup
+  ansible.builtin.file:
+    path: /opt/manager/bins
+    state: directory
+    recurse: true
+    mode: '0755'
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"

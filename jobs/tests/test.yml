@@ -8,5 +8,5 @@
       when: not userfilestat.stat.exists
   loop:
     - "{{ iperf.userfile }}"
-    - /var/www/penguinperf3/results.log
+    - "/var/www/{{app.title}}/results.log"
     - /etc/ssl/private.pem

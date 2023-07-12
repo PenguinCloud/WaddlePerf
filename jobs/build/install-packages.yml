@@ -1,0 +1,9 @@
+---
+- name: Install missing apt packages
+  apt:
+    pkg:
+      - gcc
+      - make
+      - libiperf0
+      - libssl-dev
+      - openssl
