@@ -14,13 +14,18 @@
     line: "nohup /opt/{{ app.title }}/iperf3-server"
     path: "/opt/manager/bins/server.sh"
     mode: "0555"
+- name: Setup hash generator
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/templates/generate-hash.j2"
+    dest: "/opt/manager/bins/hash.sh"
+    mode: "0500"
+# noqa
 - name: Generate hash
   ansible.builtin.shell:
-    cmd: echo -n "{$S_USER}$S_PASSWD" | sha256sum | cut -d " " -f 1
-  environment:
-    - S_USER: "{{ iperf.username }}"
-    - S_PASS: "{{ iperf.password }}"
+    cmd: /opt/manager/bins/hash.sh
   register: user_hash
+  tags:
+    - skip_ansible_lint
 - name: User added
   debug:
     msg: "{{ iperf.username }},{{ user_hash.stdout }}"

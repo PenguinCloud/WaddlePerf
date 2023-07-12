@@ -6,7 +6,7 @@
     - vars/base.yml
   tasks:
     - name: Build
-      tags:  
+      tags:
         - build
       block:
         - name: Create iperf3 binary
@@ -38,9 +38,9 @@
             file: jobs/build/build-certificate.yml
             apply:
               tags:
-                - build     
+                - build
     - name: Run
-      tags:  
+      tags:
         - run
       block:
         - name: Run in server mode
@@ -65,5 +65,5 @@
                 - test
           loop:
             - "{{ iperf.userfile }}"
-            - "/var/www/{{app.title}}/results.log"
-            - "/var/www/{{app.title}}/public.pem"
+            - "/var/www/{{ app.title }}/results.log"
+            - "/var/www/{{ app.title }}/public.pem"

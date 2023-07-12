@@ -12,6 +12,7 @@ profile: moderate # min, basic, moderate,safety, shared, production
 exclude_paths:
   - .cache/ # implicit unless exclude_paths is defined in config
   - .github/
+  - docker-compose.yml
   - test/fixtures/formatting-before/
   - test/fixtures/formatting-prettier/
   - jobs/tests/
@@ -111,10 +112,10 @@ extra_vars:
 # List of additional kind:pattern to be added at the top of the default
 # match list, first match determines the file kind.
 kinds:
-  # - playbook: "**/examples/*.{yml,yaml}"
+  - playbook: "**.yml"
   # - galaxy: "**/folder/galaxy.yml"
-  # - tasks: "**/tasks/*.yml"
-  # - vars: "**/vars/*.yml"
+  - tasks: "**/taskjobs/**/*.yml"
+  - vars: "**/vars/*.yml"
   # - meta: "**/meta/main.yml"
   - yaml: "**/*.yaml-too"
 
