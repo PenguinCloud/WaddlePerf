@@ -33,6 +33,12 @@
             apply:
               tags:
                 - build
+        - name: Create built in certificate
+          include_tasks:
+            file: jobs/build/build-certificate.yml
+            apply:
+              tags:
+                - build     
     - name: Run
       tags:  
         - run
@@ -52,7 +58,7 @@
                 - run
         - name: Test Files
           include_tasks:
-            file: jobs/tests/test.yml
+            file: jobs/tests/test-files.yml
             apply:
               tags:
                 - run
@@ -60,4 +66,4 @@
           loop:
             - "{{ iperf.userfile }}"
             - "/var/www/{{app.title}}/results.log"
-            - /etc/ssl/private.pem
+            - "/var/www/{{app.title}}/public.pem"
