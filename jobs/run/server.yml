@@ -44,7 +44,6 @@
     line: "nohup /opt/{{ app.title }}/iperf3-server"
     path: "/opt/manager/bins/server.sh"
     mode: "0555"
-    remote_src: true
 - name: Generate hash
   ansible.builtin.shell:
     cmd: echo -n "{$S_USER}$S_PASSWD" | sha256sum | cut -d " " -f 1

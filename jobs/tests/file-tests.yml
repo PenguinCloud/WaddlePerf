@@ -6,7 +6,4 @@
     - name: Fail if file is not there!
       fail: msg="File {{ item }} does not exist!"
       when: not userfilestat.stat.exists
-  loop:
-    - "{{ iperf.userfile }}"
-    - "/var/www/{{app.title}}/results.log"
-    - /etc/ssl/private.pem
+

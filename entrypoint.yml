@@ -50,10 +50,14 @@
             apply:
               tags:
                 - run
-        - name: Test connections
+        - name: Test Files
           include_tasks:
             file: jobs/tests/test.yml
             apply:
               tags:
                 - run
                 - test
+          loop:
+            - "{{ iperf.userfile }}"
+            - "/var/www/{{app.title}}/results.log"
+            - /etc/ssl/private.pem
