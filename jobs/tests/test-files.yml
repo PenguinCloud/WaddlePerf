@@ -1,9 +1,7 @@
-- name: Run through file exist tests
-  block:
-    - name: Validate file
-      stat: "path={{ item }}"
-      register: userfilestat
-    - name: Fail if file is not there!
-      fail: msg="File {{ item }} does not exist!"
-      when: not userfilestat.stat.exists
-
+---
+- name: Validate file
+  stat: "path={{ item }}"
+  register: userfilestat
+- name: Fail if file is not there!
+  fail: msg="File {{ item }} does not exist!"
+  when: not userfilestat.stat.exists
