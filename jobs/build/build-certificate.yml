@@ -4,7 +4,7 @@
 - name: Generate Key for Server / Client
   ansible.builtin.shell:
     cmd: |
-      openssl req -nodes -newkey rsa:2048 -keyout private.pem -outform PEM -out public.pem 
+      openssl req -nodes -newkey rsa:2048 -keyout private.pem -outform PEM -out public.pem
       openssl rsa -pubout -in private.pem > public.pem
     chdir: "/opt/{{ app.title }}"
   args:
@@ -20,7 +20,7 @@
     path: "/opt/{{ app.title }}/public.pem"
     mode: "0444"
     group: "{{ run.user }}"
-    owner: "{{ run.user }}"   
+    owner: "{{ run.user }}"
 - name: Link pub to web server
   ansible.builtin.file:
     src: "/opt/{{ app.title }}/public.pem"
