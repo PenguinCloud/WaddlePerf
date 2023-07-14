@@ -34,7 +34,5 @@ ENV WEB_PORT="8080"
 # Switch to non-root user
 USER ptg-user
 
-WORKDIR /opt/waddleperf3
-
 # Entrypoint time (aka runtime)
 ENTRYPOINT ["/bin/bash","/opt/manager/entrypoint.sh"]

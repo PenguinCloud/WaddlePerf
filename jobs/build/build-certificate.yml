@@ -1,8 +1,10 @@
 ---
+
+# -subj "/C=US/ST=TX/L=Dallas/O=My Inc/OU=DevOps/CN=www.example.com/emailAddress=dev@www.example.com"
 - name: Generate Key for Server / Client
   ansible.builtin.shell:
     cmd: |
-      openssl req -nodes -newkey rsa:1024 -keyout private.pem -out public.pem -subj "/C=US/ST=TX/L=Dallas/O=My Inc/OU=DevOps/CN=www.example.com/emailAddress=dev@www.example.com"
+      openssl req -nodes -newkey rsa:2048 -keyout private.pem -outform PEM -out public.pem 
       openssl rsa -pubout -in private.pem > public.pem
     chdir: "/opt/{{ app.title }}"
   args:

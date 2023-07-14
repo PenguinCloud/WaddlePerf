@@ -1,5 +1,6 @@
 #!/bin/bash
 ansible-playbook entrypoint.yml  -c local --tags run
+cd /opt/waddleperf3
 /opt/waddleperf3/pyweb.sh &
 sed -i 's/ \{2,\}/ /g' /opt/waddleperf3/iperf3-server
 sed -i 's/ \{2,\}/ /g' /opt/waddleperf3/iperf3-client
