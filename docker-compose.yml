@@ -1,10 +1,30 @@
 ---
-version: "2.4"
+version: "3.8"
 services:
   penguinperf3:
     build: .
     image: penguincloud/waddleperf3
+    volumes:
+      - ./results.log:/var/www/waddleperf3/results.log
+      # - ./private.pem:/opt/waddleperf3/private.pem
+      # - ./public.pem:/opt/waddleperf3/public.pem
+    container_name: iperf3
     # env_file: .env
     ports:
       - 8080:8080
       - 5201:5201
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s

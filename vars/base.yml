@@ -5,13 +5,16 @@ app:
 build:
   threads: "{{ lookup('env', 'BUILD_THREADS') }}"
 iperf:
+  authentication: "{{ lookup('env', 'IPERF_AUTHENTICATION') }}"
   url: "{{ lookup('env', 'IPERF_URL') }}"
   client:
     streams: "{{ lookup('env', 'IPERF_CLIENT_STREAMS') }}"
+    bitrate: "{{ lookup('env', 'IPERF_CLIENT_BITRATE') }}"
   server:
     enable: "{{ lookup('env', 'IPERF_SERVER_ENABLE') }}"
     ip: "{{ lookup('env', 'IPERF_SERVER_IP') }}"
     port: "{{ lookup('env', 'IPERF_SERVER_PORT') }}"
+    webPort: "8080"
   format: "{{ lookup('env', 'IPERF_FORMAT') }}"
   userfile: "/opt/{{ app.title }}/users.csv"
   protocol: "{{ lookup('env', 'IPERF_PROTOCOL') }}"

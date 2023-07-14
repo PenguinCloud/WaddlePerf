@@ -9,3 +9,8 @@
     src: /opt/manager/templates/iperf3-client.j2
     dest: "/home/{{ run.user }}/iperf3-client"
     mode: "0555"
+- name: Get Server Public Key
+  ansible.builtin.get_url:
+    url: https://{{ iperf.server.ip }}:{{ iperf.server.webPort }}/public.pem
+    dest: "/var/www/{{ app.title }}/public.pem"
+    backup: true
