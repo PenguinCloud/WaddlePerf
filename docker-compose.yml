@@ -3,6 +3,7 @@ version: "3.8"
 services:
   waddleperf3:
     build: .
+    platform: linux/amd64
     image: ghcr.io/penguincloud/waddleperf3:main
     volumes:
       - /var/logs
