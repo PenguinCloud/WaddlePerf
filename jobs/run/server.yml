@@ -4,6 +4,11 @@
     src: /opt/manager/templates/iperf3-server.j2
     dest: "/opt/{{ app.title }}/iperf3-server"
     mode: "0555"
+- name: Move server into local bin
+  ansible.builtin.template:
+    src: /opt/manager/templates/iperf3-server.j2
+    dest: "/usrc/local/bin/iperf3-server"
+    mode: "0555"
 - name: Move pyweb into place
   ansible.builtin.template:
     src: /opt/manager/templates/pyweb.j2
