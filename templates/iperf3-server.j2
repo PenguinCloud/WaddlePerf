@@ -1,6 +1,9 @@
 #! /bin/bash
 echo "Starting iperf3 server..."
 iperf3 -s {% if iperf.format == "json" %} -J {% endif %}  \
--p {{ iperf.server.port }} -B 0.0.0.0 --logfile /var/www/{{ app.title }}/results.log \
+-p {{ iperf.server.port }} \
+-B 0.0.0.0 \
+-T WaddlePerf3 \
+--logfile /var/www/{{ app.title }}/results.log \
 {% if iperf.authentication == "1" %} --authorized-users-path {{ iperf.userfile }}  --rsa-private-key-path /opt/{{ app.title }}/private.pem {% endif %} 
 
