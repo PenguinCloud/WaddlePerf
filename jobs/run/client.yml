@@ -10,3 +10,4 @@
     dest: "/var/www/{{ app.title }}/public.pem"
     backup: true
   when: iperf.server.enable == "0"
+  ignore_errors: true
