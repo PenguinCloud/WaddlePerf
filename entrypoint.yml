@@ -42,6 +42,7 @@
     - name: Run
       tags:
         - run
+        - hash
       block:
         - name: Run in server mode
           include_tasks:
@@ -50,6 +51,13 @@
               tags:
                 - run
           when: iperf.server.enable == "1"
+        - name: create user hash file
+          include_tasks:
+            file: jobs/run/hash.yml
+            apply:
+              tags:
+                - run
+                - hash
         - name: Create client run script
           include_tasks:
             file: jobs/run/client.yml
