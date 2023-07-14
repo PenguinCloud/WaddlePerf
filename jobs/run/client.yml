@@ -2,5 +2,5 @@
 - name: Move client into place
   ansible.builtin.template:
     src: /opt/manager/templates/iperf3-client.j2
-    dest: "/home/{{ run.user }}/iperf3-client"
+    dest: "/usr/local/bin/iperf3-client"
     mode: "0555"
