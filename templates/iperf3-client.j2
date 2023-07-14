@@ -3,7 +3,7 @@ echo "Executing Test... "
 iperf3 -c {{ iperf.server.ip }} \
 -p {{ iperf.server.port }} \
 {% if iperf.format == "json" %} -J {% endif %} \
- --logfile /opt/{{ app.title }}/results.log  \
+ {% if iperf.client.logfile == "1" %} --logfile /opt/{{ app.title }}/results.log {% endif %} \
  {% if iperf.protocol== "udp" %} -u {% elif iperf.format == "sctp" %} --sctp {% endif %} \
  {% if iperf.client.return== "1" %} -R {% endif %} \
  {% if iperf.authentication == "1" %}  --username={{ iperf.username }} --rsa-public-key-path=/var/www/{{ app.title }}/public.pem {% endif %} \

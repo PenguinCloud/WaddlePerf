@@ -9,7 +9,7 @@ services:
       # - ./results.log:/var/www/waddleperf3/
       # - ./private.pem:/opt/waddleperf3/private.pem
       # - ./public.pem:/opt/waddleperf3/public.pem
-    container_name: iperf3
+    # container_name: iperf3
     env_file: .env
     ports:
       - 8080:8080
