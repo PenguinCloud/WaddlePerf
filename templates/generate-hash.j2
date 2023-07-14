@@ -1,4 +1,4 @@
 #! /bin/bash
-export  S_USER={{ iperf.username }}
+export S_USER={{ iperf.username }}
 export S_PASS={{ iperf.password }}
 echo -n "{$S_USER}$S_PASSWD" | sha256sum | cut -d " " -f 1

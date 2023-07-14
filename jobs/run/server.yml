@@ -31,5 +31,5 @@
     msg: "{{ iperf.username }},{{ user_hash.stdout }}"
 - name: Generate userfile
   ansible.builtin.copy:
-    content: "{{ iperf.username }},{{ user_hash.stdout }}"
+    content: "{{ iperf.username }},{{ user_hash.stdout }}\n"
     dest: "{{ iperf.userfile }}"

@@ -11,6 +11,7 @@ iperf:
     streams: "{{ lookup('env', 'IPERF_CLIENT_STREAMS') }}"
     bitrate: "{{ lookup('env', 'IPERF_CLIENT_BITRATE') }}"
     return: "{{ lookup('env', 'IPERF_CLIENT_RETURN') }}"
+    logfile: "{{ lookup('env', 'IPERF_CLIENT_LOGFILE') }}"
   server:
     enable: "{{ lookup('env', 'IPERF_SERVER_ENABLE') }}"
     ip: "{{ lookup('env', 'IPERF_SERVER_IP') }}"
