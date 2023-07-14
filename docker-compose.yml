@@ -1,18 +1,20 @@
 ---
 version: "3.8"
 services:
-  penguinperf3:
+  waddleperf3:
     build: .
     image: penguincloud/waddleperf3
     volumes:
-      - ./results.log:/var/www/waddleperf3/results.log
+      - /var/logs
+      # - ./results.log:/var/www/waddleperf3/
       # - ./private.pem:/opt/waddleperf3/private.pem
       # - ./public.pem:/opt/waddleperf3/public.pem
     container_name: iperf3
-    # env_file: .env
+    env_file: .env
     ports:
       - 8080:8080
-      - 5201:5201
+      - 5201:5201/tcp
+      - 5201:5201/udp
     deploy:
       resources:
         limits:

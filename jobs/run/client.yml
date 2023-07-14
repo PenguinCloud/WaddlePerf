@@ -11,6 +11,6 @@
     mode: "0555"
 - name: Get Server Public Key
   ansible.builtin.get_url:
-    url: https://{{ iperf.server.ip }}:{{ iperf.server.webPort }}/public.pem
+    url: https://{{ iperf.server.webIP }}:{{ iperf.server.webPort }}/public.pem
     dest: "/var/www/{{ app.title }}/public.pem"
     backup: true
