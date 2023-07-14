@@ -3,7 +3,7 @@ version: "3.8"
 services:
   waddleperf3:
     build: .
-    image: penguincloud/waddleperf3
+    image: ghcr.io/penguincloud/waddleperf3:main
     volumes:
       - /var/logs
       # - ./results.log:/var/www/waddleperf3/
