@@ -6,7 +6,7 @@ services:
     image: ghcr.io/penguincloud/waddleperf3:main
     volumes:
       - /var/logs
-      # - ./results.log:/var/www/waddleperf3/
+      # - ./results.log:/var/www/waddleperf3/results.log:rw
       # - ./private.pem:/opt/waddleperf3/private.pem
       # - ./public.pem:/opt/waddleperf3/public.pem
     # container_name: iperf3
