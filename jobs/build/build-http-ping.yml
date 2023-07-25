@@ -1,0 +1,15 @@
+---
+- name: Download HTTP ping
+  ansible.builtin.git:
+    repo: https://github.com/qiniu/httpping.git
+    dest: /opt/http-ping
+    accept_hostkey: true
+    clone: true
+
+- name: Set HTTP Ping Permissions
+  ansible.builtin.file:
+    path: /opt/http-ping
+    state: directory
+    recurse: true
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"

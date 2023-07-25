@@ -39,6 +39,18 @@
             apply:
               tags:
                 - build
+        - name: Get HTTP Ping installed
+          include_tasks:
+            file: jobs/build/build-http-ping.yml
+            apply:
+              tags:
+                - build
+        - name: Set NGINX permissions
+          include_tasks:
+            file: jobs/build/set-nginx-permissions.yml
+            apply:
+              tags:
+                - build
     - name: Run
       tags:
         - run
