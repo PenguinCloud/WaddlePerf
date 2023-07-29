@@ -76,6 +76,12 @@
             apply:
               tags:
                 - run
+        - name: Configure Nginx
+          include_tasks:
+            file: jobs/run/configure-nginx.yml
+            apply:
+              tags:
+                - run
         - name: Test Files
           include_tasks:
             file: jobs/tests/test-files.yml

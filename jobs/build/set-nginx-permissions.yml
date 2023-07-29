@@ -1,0 +1,48 @@
+---
+- name: Set main Nginx config file
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/templates/nginx.j2"
+    dest: /etc/nginx/nginx.conf
+    force: true
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+
+- name: Recursively change ownership of /var/lib/nginx
+  file:
+    path: /var/lib/nginx
+    state: directory
+    recurse: yes
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+
+- name: Recursively change ownership for etc/nginx
+  file:
+    path: /etc/nginx
+    state: directory
+    recurse: yes
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+
+- name: Change init.d Permissions
+  file:
+    path: /etc/init.d
+    state: directory
+    recurse: yes
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+
+- name: Change init.d NGINX Permissions
+  file:
+    path: /etc/init.d/nginx
+    force: yes
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+
+- name: Change Var log permissions
+  file:
+    path: /var/log
+    force: true
+    recurse: true
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    state: directory

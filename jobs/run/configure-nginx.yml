@@ -7,6 +7,14 @@
     owner: "{{ run.user }}"
     group: "{{ run.user }}"
 
+- name: Set Nginx.conf file
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/templates/nginx.j2"
+    dest: /etc/nginx/nginx.conf
+    force: true
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+
 - name: Start Nginx
   shell:
     cmd: /etc/init.d/nginx start
