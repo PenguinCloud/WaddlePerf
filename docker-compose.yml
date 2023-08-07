@@ -12,8 +12,9 @@ services:
       # - ./public.pem:/opt/waddleperf3/public.pem
     # container_name: iperf3
     env_file: .env
+    depends_on: 
+      - nginx
     ports:
-      - 8080:8080
       - 5201:5201/tcp
       - 5201:5201/udp
       - 5202:5202
@@ -25,9 +26,24 @@ services:
       restart_policy:
         condition: on-failure
         max_attempts: 3
+    networks:
+      - penguinperf
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 30s
+
+  nginx:
+    image: ghcr.io/penguincloud/nginx:v1.0.0.1rc4
+    ports:
+      - 8080:8080
+    volumes:
+      - ./templates/nginx.j2:/etc/nginx/nginx.conf:rw
+      - ./templates/hosts.j2:/etc/nginx/conf.d/hosts.conf:rw
+    networks:
+      - penguinperf
+    
+networks:
+  penguinperf:

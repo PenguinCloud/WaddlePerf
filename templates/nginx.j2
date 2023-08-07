@@ -62,7 +62,7 @@ http {
 stream {
     server {
 		listen 5201;
-    	proxy_pass perf;
+    	proxy_pass perf:5201;
     	proxy_connect_timeout 5s;
     }
 	server {

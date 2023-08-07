@@ -1,6 +1,9 @@
 upstream perf {
     hash $remote_addr consistent;
-    server localhost:5201;
+    server 127.0.0.1:5202;
+    server 127.0.0.1:5203;
+    server 127.0.0.1:5204;
+    server 127.0.0.1:5205;
 }
 
 upstream web {
