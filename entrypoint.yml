@@ -45,12 +45,7 @@
             apply:
               tags:
                 - build
-        - name: Set NGINX permissions
-          include_tasks:
-            file: jobs/build/set-nginx-permissions.yml
-            apply:
-              tags:
-                - build
+                
     - name: Run
       tags:
         - run
@@ -73,12 +68,6 @@
         - name: Create client run script
           include_tasks:
             file: jobs/run/client.yml
-            apply:
-              tags:
-                - run
-        - name: Configure Nginx
-          include_tasks:
-            file: jobs/run/configure-nginx.yml
             apply:
               tags:
                 - run
