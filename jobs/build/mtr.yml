@@ -1,0 +1,44 @@
+---
+- name: check for file
+  ansible.builtin.stat:
+    path: /opt/mtr/.v{{ mtr.version }}
+  register: mtr-installed
+- name: Compile MTR
+  when: not mtr-installed.stat.exists && mtr.compile
+  block:
+    - name: Get the source file
+      ansible.builtin.get_url:
+        url: "https://github.com/traviscross/mtr/archive/refs/tags/v{{ mtr.version }}.tar.gz"
+        dest: /opt/mtr.tgz
+        owner: "{{ run.user }}"
+        group: "{{ run.user }}"
+    - name: break out the file
+      ansible.builtin.unarchive:
+        src: /opt/mtr.tgz
+        dest: /opt/mtr
+        remote_src: yes
+    - name: Touch version file
+      ansible.builtin.file:
+        path: /opt/mtr/.v{{ mtr.version }}
+        state: touch
+        owner: "{{ run.user }}"
+        group: "{{ run.user }}"
+        mode: "0444"
+    - name: Prepare to compile
+      ansible.builtin.shell:
+        chdir: /opt/mtr/
+        cmd: |
+         ./bootstrap.sh && ./configure && make
+    - name: compile mtr
+        community.general.make:
+          chdir: /opt/mtr/
+          target: install
+
+- name: Install MTR
+  when: not mtr.compile
+  block:
+    - name: Get the source file   
+      ansible.builtin.apt:
+        package:
+          - mtr-tiny
+        state: latest

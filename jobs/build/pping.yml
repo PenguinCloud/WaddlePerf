@@ -1,0 +1,42 @@
+---
+- name: Install GoLang
+  ansible.builtin.apt:
+    pkg: 
+      - golang
+    state: latest
+- name: check for file
+  ansible.builtin.stat:
+    path: /opt/pping/.v{{ pping.version }}
+  register: pping-installed
+- name: Compile pping
+  when: not pping-installed.stat.exists
+  block:
+    - name: Get the source file
+      ansible.builtin.get_url:
+        url: "https://github.com/wzv5/pping/releases/download/v{{ pping.version }}/pping_{{ pping.version }}_Linux_x86_64.tar.gz"
+        dest: /opt/pping.tgz
+        owner: "{{ run.user }}"
+        group: "{{ run.user }}"
+    - name: break out the file
+      ansible.builtin.unarchive:
+        src: /opt/pping.tgz
+        dest: /opt/pping
+        remote_src: yes
+    - name: Touch version file
+      ansible.builtin.file:
+        path: /opt/pping/.v{{ pping.version }}
+        state: touch
+        owner: "{{ run.user }}"
+        group: "{{ run.user }}"
+        mode: "0444"
+    - name: Prepare to compile
+      ansible.builtin.shell:
+        chdir: /opt/pping/
+        cmd: |
+         go build -o /opt/pping/pping
+         go install
+    - name: Copy created file to bin
+      ansible.builtin.file:
+        src: /opt/pping/pping
+        dest: /usr/local/bin/pping
+        state: link

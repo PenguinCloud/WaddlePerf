@@ -1,0 +1,4 @@
+---
+- name: Validate file
+  stat: "path={{ item }}"
+  register: userfilestat

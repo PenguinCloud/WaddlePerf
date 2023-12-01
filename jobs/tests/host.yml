@@ -1,0 +1,6 @@
+---
+- name: Check that a page returns successfully but fail if the word AWESOME is not in the page contents
+  ansible.builtin.uri:
+    url: "{{ healthcheck.url }}"
+  register: httpcheck
+  failed_when: httpcheck is failed 

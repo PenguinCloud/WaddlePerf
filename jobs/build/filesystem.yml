@@ -1,0 +1,54 @@
+---
+- name: Make sure app directories are built
+  ansible.builtin.file:
+    path: "{{ item }}"
+    mode: '0744'
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    recurse: true
+    state: directory
+  loop:
+    - "/opt/{{ app.title }}"
+    - "/var/www/{{ app.title }}"
+- name: Give edit rights to startup
+  ansible.builtin.file:
+    path: /opt/manager/bins
+    state: directory
+    recurse: true
+    mode: '0755'
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+- name: Create temporary scripts
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    mode: "0755"
+    state: touch
+  loop:
+    - "/opt/{{ app.title }}/iperf3-server"
+    - "/opt/{{ app.title }}/iperf3-client"
+- name: Link to server scripts
+  ansible.builtin.file:
+    src: "/opt/{{ app.title }}/iperf3-server"
+    dest: /usr/local/bin/iperf3-server
+    owner: root
+    group: root
+    mode: "0755"
+    state: link
+  loop:
+    - /usr/local/bin/iperf3-client
+- name: Link to client scripts
+  ansible.builtin.file:
+    src: "/opt/{{ app.title }}/iperf3-client"
+    path: /usr/local/bin/iperf3-client
+    owner: root
+    group: root
+    mode: "0755"
+    state: link
+- name: Cleanup Tasks
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /opt/iperf3.tar.gz

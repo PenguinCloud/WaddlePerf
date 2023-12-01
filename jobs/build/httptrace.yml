@@ -1,0 +1,10 @@
+--- 
+- name: install NPM
+  ansible.builtin.apt:
+    pkg: 
+      - npm
+    state: latest
+- name: Install http traceroute
+  community.general.npm:
+    name: http-traceroute
+    global: true
