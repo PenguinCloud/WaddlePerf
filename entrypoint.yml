@@ -83,6 +83,13 @@
         - run
         - hash
       block:
+        - name: Configure NGINX default site
+          ansible.builtin.include_tasks:
+            file: jobs/run/nginx.yml
+            apply:
+              tags:
+                - run
+          when: iperf.server.enabled == "1"
         - name: Run in server mode
           ansible.builtin.include_tasks:
             file: jobs/run/server.yml

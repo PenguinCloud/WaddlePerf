@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# Quick script written for now... will wrap back and clean up eventually
 import json
 import sys
 

@@ -1,6 +1,8 @@
 run:
   user: ptg-user
-  autoupdates: true # TODO move to DOCKERFILE
+  autoupdates: "{{ lookup('env', 'RUN_AUTOUPDATES') }}"
+results:
+  - output.json 
 app:
   title: "waddleperf"
 build:
@@ -9,7 +11,7 @@ iperf:
   authentication: "{{ lookup('env', 'IPERF_AUTHENTICATION') }}"
   url: "{{ lookup('env', 'IPERF_URL') }}"
   client:
-    enabled: true # TODO move to DOCKERFILE
+    enabled: "{{ lookup('env', 'IPERF_CLIENT_ENABLED') }}"
     streams: "{{ lookup('env', 'IPERF_CLIENT_STREAMS') }}"
     bitrate: "{{ lookup('env', 'IPERF_CLIENT_BITRATE') }}"
     return: "{{ lookup('env', 'IPERF_CLIENT_RETURN') }}"
@@ -28,52 +30,50 @@ web:
   sport: "{{ lookup('env', 'WEB_SPORT') }}" 
   host: "{{ lookup('env', 'WEB_HOST') }}"
 mtr:
-  version: 0.95 #TODO move to DOCKERFILE
-  enabled: true #TODO move to DOCKERFILE
-  compile: false #TODO move to DOCKERFILE
-  use6: false #TODO move to DOCKERFILE # If true, use ipv6 only
-  use4: false #TODO move to DOCKERFILE # If true, use ipv4 only
-  localport: 4343
-  destport: 9090
-  desthost: localhost
+  version: "{{ lookup('env','MTR_VERSION') }}" 
+  enabled: "{{ lookup('env','MTR_ENABLED') }}" 
+  compile: "{{ lookup('env','MTR_COMPILED') }}" 
+  use6: "{{ lookup('env','MTR_USE6') }}" 
+  use4: "{{ lookup('env','MTR_USE4') }}" 
+  localport: "{{ lookup('env','MTR_LOCALPORT') }}" 
+  destport: "{{ lookup('env','MTR_DESTPORT') }}" 
+  desthost: "{{ lookup('env','MTR_DESTHOST') }}" 
   packet:
-    size: 1450 #TODO move to DOCKERFILE
-    count: 2
-    interval: 5
-    protocl: icmp # icmp, udp, tcp
-    tos: 0000
+    size: "{{ lookup('env','MTR_PACKET_SIZE') }}" 
+    count: "{{ lookup('env','MTR_PACKET_COUNT') }}" 
+    interval: "{{ lookup('env','MTR_PACKET_INTERVAL') }}" 
+    protocol: "{{ lookup('env','MTR_PACKET_PROTOCOL') }}"  # icmp, udp, tcp
+    tos: "{{ lookup('env','MTR_PACKET_TOS') }}" 
   lookups:
-    domains: false
-    ipinfo: false
-    asninfo: false 
+    domains: "{{ lookup('env','MTR_LOOKUPS_DNS') }}" 
+    ipinfo: "{{ lookup('env','MTR_LOOKUPS_IPINFO') }}" 
+    asninfo: "{{ lookup('env','MTR_LOOKUPS_ASNINFO') }}" 
 pping:
-  version: 0.8.3 #TODO move to DOCKERFILE
-  enabled: true #TODO move to DOCKERFILE
-  protocol: http # http, dns, tls, quic
-  count: 2
-  interval: 2
-  use4: false
-  use6: false
-  destport: 9090
-  desthost: localhost
-  
+  version: "{{ lookup('env','PPING_VERSION') }}" 
+  enabled: "{{ lookup('env','PPING_ENABLED') }}"
+  protocol: "{{ lookup('env','PPING_PROTOCOL') }}"
+  count: "{{ lookup('env','PPING_COUNT') }}"
+  interval: "{{ lookup('env','PPING_INTERVAL') }}"
+  use4: "{{ lookup('env','PPING_USE4') }}"
+  use6: "{{ lookup('env','PPING_USE6') }}"
+  destport: "{{ lookup('env','PPING_DESTPORT') }}"
+  desthost: "{{ lookup('env','PPING_DESTHOST') }}"
 httptrace:
-  enabled: true #TODO move to DOCKERFILE
+  enabled: "{{ lookup('env','HTTPTRACE_ENABLED') }}"
+  url: "{{ lookup('env','HTTPTRACE_URL') }}"
 s3:
-  interval: 10
-  enabled: false #TODO move to DOCKERFILE
-  url: localhost #TODO move to DOCKERFILE
-  bucket: waddleperf #TODO move to DOCKERFILE
-  encrypt: false #TODO move to DOCKERFILE
-  compatibility: true #TODO move to DOCKERFILE
+  interval: "{{ lookup('env','S3_INTERVAL') }}"
+  enabled: "{{ lookup('env','S3_ENABLED') }}"
+  url: "{{ lookup('env','S3_URL') }}"
+  bucket: "{{ lookup('env','S3_BUCKET') }}"
+  encrypt: "{{ lookup('env','S3_ENCRYPT') }}"
+  compatibility: "{{ lookup('env','S3_COMPATIBILITY') }}"
   key:
-    access: change #TODO move to DOCKERFILE
-    secret: menow #TODO move to DOCKERFILE
-results:
-  - output.json 
+    access: "{{ lookup('env','S3_KEY_ACCESS') }}"
+    secret: "{{ lookup('env','S3_KEY_SECRET') }}"
 healthcheck:
-  enabled: true #TODO move to DOCKERFILE
-  interval: 10 #TODO move to DOCKERFILE
+  enabled: "{{ lookup('env','HEALTHCHECK_ENABLED') }}"
+  interval: "{{ lookup('env','HEALTHCHECK_INTERVAL') }}"
 autoperf:
-  enabled: false #TODO move to DOCKERFILE
-  interval: 10 #TODO move to DOCKERFILE
+  enabled: "{{ lookup('env','AUTOPERF_ENABLED') }}"
+  interval: "{{ lookup('env','AUTOPERF_INTERVAL') }}"
