@@ -12,6 +12,6 @@
         rgw: "{{ s3.compatibility }}"
         permission: []
         s3_url: "{{ s3.url }}"
-      loop: "{{ results }}"
+      loop: "/var/www/public_html/{{ results }}"
       loop_control:
         label: "{{ item.path }}"

@@ -31,6 +31,19 @@ mtr:
   version: 0.95 #TODO move to DOCKERFILE
   enabled: true #TODO move to DOCKERFILE
   compile: false #TODO move to DOCKERFILE
+  use6: false #TODO move to DOCKERFILE # If true, use ipv6 only
+  use4: true #TODO move to DOCKERFILE # If true, use ipv4 only
+  localport: 4343
+  packet:
+    size: 1450 #TODO move to DOCKERFILE
+    count: 2
+    interval: 5
+    protocl: icmp # icmp, udp, tcp
+  lookups:
+    domains: false
+    ipinfo: false
+    asninfo: false 
+
 pping:
   version: 0.8.3 #TODO move to DOCKERFILE
   enabled: true #TODO move to DOCKERFILE
