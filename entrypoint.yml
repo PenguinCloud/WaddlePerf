@@ -9,6 +9,12 @@
       tags:
         - build
       block:
+        - name: Install User
+          ansible.builtin.include_tasks:
+            file: "jobs/build/user.yml"
+            apply:
+              tags:
+                - build   
         - name: Create iperf3 binary
           ansible.builtin.include_tasks:
             file: jobs/build/install-packages.yml
@@ -65,7 +71,13 @@
             file: "jobs/build/cron.yml"
             apply:
               tags:
-                - build             
+                - build        
+        - name: Install NGINX
+          ansible.builtin.include_tasks:
+            file: "jobs/build/nginx.yml"
+            apply:
+              tags:
+                - build         
     - name: Run
       tags:
         - run

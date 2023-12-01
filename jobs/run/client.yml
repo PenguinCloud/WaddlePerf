@@ -1,13 +1,32 @@
 ---
-- name: Move client into local bin
+- name: Move iperf3 client script into user home dir
+  when: iperf3.client.enabled
   ansible.builtin.template:
     src: /opt/manager/templates/iperf3-client.j2
-    dest: "/opt/{{ app.title }}/iperf3-client"
+    dest: "/home/{{ run.user }}/iperf3-client"
     mode: "0555"
 - name: Get Server Public Key
+  when: iperf.server.enabled == "0"
   ansible.builtin.get_url:
-    url: https://{{ iperf.server.webIP }}:{{ iperf.server.webPort }}/public.pem
+    url: https://{{ web.host }}:{{ web.port }}/public.pem
     dest: "/var/www/{{ app.title }}/public.pem"
     backup: true
-  when: iperf.server.enabled == "0"
   ignore_errors: true
+- name: Copy mtr client script into user home dir
+  when: mtr.enabled
+  ansible.builtin.template:
+    src: /opt/manager/templates/mtr.j2
+    dest: "/home/{{ run.user }}/mtr-client"
+    mode: "0555"
+- name: Copy pping client script into user home dir
+  when: pping.enabled
+  ansible.builtin.template:
+    src: /opt/manager/templates/mtr.j2
+    dest: "/home/{{ run.user }}/pping-client"
+    mode: "0555"
+- name: Copy http trace client script into user home dir
+  when: httptrace.enabled
+  ansible.builtin.template:
+    src: /opt/manager/templates/mtr.j2
+    dest: "/home/{{ run.user }}/httptrace-client"
+    mode: "0555"

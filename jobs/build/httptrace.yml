@@ -1,4 +1,5 @@
 --- 
+# At some point need to replace all of this with a python or GoLang 
 - name: install NPM
   ansible.builtin.apt:
     pkg: 

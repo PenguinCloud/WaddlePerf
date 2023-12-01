@@ -8,7 +8,6 @@
       - libiperf0
       - libssl-dev
       - openssl
-      - nginx-light
       - unattended-upgrades
 - name: Turn off unattended upgrades
   ansible.builtin.lineinfile:

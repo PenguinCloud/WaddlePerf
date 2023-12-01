@@ -16,7 +16,7 @@ ARG IPERF_URL="https://github.com/esnet/iperf/archive/refs/tags/3.14.tar.gz"
 # BUILD IT!
 RUN ansible-playbook entrypoint.yml -c local --tags build
 
-# Environment variables
+# IPERF Environment variables
 ENV IPERF_SERVER_ENABLE="1"
 ENV IPERF_SERVER_IP="127.0.0.1"
 ENV IPERF_SERVER_PORT="5201"
@@ -24,11 +24,12 @@ ENV IPERF_CLIENT_STREAMS="1"
 ENV IPERF_CLIENT_BITRATE="100M"
 ENV IPERF_CLIENT_RETURN="1"
 ENV IPERF_CLIENT_LOGFILE="0"
-ENV IPERF_FORMAT="default"
 ENV IPERF_PASSWORD="changeme"
 ENV IPERF_USERNAME="ptg-user"
 ENV IPERF_PROTOCOL="tcp"
 ENV IPERF_AUTHENTICATION="1"
+
+# NGINX Environment variables
 ENV WEB_PORT="8080"
 
 # Switch to non-root user

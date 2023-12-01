@@ -18,35 +18,45 @@ iperf:
     enabled: "{{ lookup('env', 'IPERF_SERVER_ENABLE') }}"
     ip: "{{ lookup('env', 'IPERF_SERVER_IP') }}"
     port: "{{ lookup('env', 'IPERF_SERVER_PORT') }}"
-    webPort: "8080"
-    webIP: "{{ lookup('env', 'IPERF_SERVER_WEBIP') }}"
-  format: "{{ lookup('env', 'IPERF_FORMAT') }}"
+  format: json
   userfile: "/opt/{{ app.title }}/users.csv"
   protocol: "{{ lookup('env', 'IPERF_PROTOCOL') }}"
   username: "{{ lookup('env', 'IPERF_USERNAME') }}"
   password: "{{ lookup('env', 'IPERF_PASSWORD') }}"
 web:
   port: "{{ lookup('env', 'WEB_PORT') }}"
+  sport: "{{ lookup('env', 'WEB_SPORT') }}" 
+  host: "{{ lookup('env', 'WEB_HOST') }}"
 mtr:
   version: 0.95 #TODO move to DOCKERFILE
   enabled: true #TODO move to DOCKERFILE
   compile: false #TODO move to DOCKERFILE
   use6: false #TODO move to DOCKERFILE # If true, use ipv6 only
-  use4: true #TODO move to DOCKERFILE # If true, use ipv4 only
+  use4: false #TODO move to DOCKERFILE # If true, use ipv4 only
   localport: 4343
+  destport: 9090
+  desthost: localhost
   packet:
     size: 1450 #TODO move to DOCKERFILE
     count: 2
     interval: 5
     protocl: icmp # icmp, udp, tcp
+    tos: 0000
   lookups:
     domains: false
     ipinfo: false
     asninfo: false 
-
 pping:
   version: 0.8.3 #TODO move to DOCKERFILE
   enabled: true #TODO move to DOCKERFILE
+  protocol: http # http, dns, tls, quic
+  count: 2
+  interval: 2
+  use4: false
+  use6: false
+  destport: 9090
+  desthost: localhost
+  
 httptrace:
   enabled: true #TODO move to DOCKERFILE
 s3:
