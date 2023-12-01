@@ -1,7 +1,8 @@
 [![Publish Docker image](https://github.com/PenguinCloud/PenguinPerf3/actions/workflows/push.yml/badge.svg)](https://github.com/PenguinCloud/PenguinPerf3/actions/workflows/push.yml) [![version](https://img.shields.io/badge/version-1.0.2-blue.svg)](https://semver.org) 
 
 # Project Overview
-This is a version of iPerf 3.10 built to make deployment and usage easier!
+This is a power server/client container infrastructure designed to help track down your computer's or your dc2dc network performance issues quickly!
+We are employing PPING, HTTPTRACEROUTE, IPERF3, MTR, and more and spitting them out in USABLE JSON!
 
 # Why this image vs others
 ## Built in self testing and healing
@@ -10,8 +11,8 @@ All PTG builds have unit and dynamic tests as part of the build of their images,
 ## Secured... even if the software isn'template
 All PTG images under go a 8 stage security check to ensure not only is the PTG portion of the code secure, but to also identify and help remediate the underlying libraries and software security. 
 
-## Updated daily
-All of our images are checked daily for updates from upstream sources.
+## Updated weekly
+Our images are checked weekly for updates from upstream sources.
 
 ## Designed for air-gapped or for internet facing
 All PTG images are designed to be ran inside of air gapped environments with no internet, allowing datacenters to use a local cache as well saving bandwidth.
@@ -35,7 +36,7 @@ General: info@penguintech.io
 
 ## community
 
-* Insert list of community collaborators
+* Un-named community contributor
 
 
 # Resources
