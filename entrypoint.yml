@@ -1,5 +1,5 @@
 ---
-- name: WaddlePerf3
+- name: WaddlePerf
   hosts: localhost
   connection: local
   vars_files:
@@ -10,63 +10,97 @@
         - build
       block:
         - name: Create iperf3 binary
-          include_tasks:
+          ansible.builtin.include_tasks:
             file: jobs/build/install-packages.yml
             apply:
               tags:
                 - build
         - name: Create iperf3 binary
-          include_tasks:
-            file: jobs/build/build-iperf3.yml
+          ansible.builtin.include_tasks:
+            file: jobs/build/iperf3.yml
             apply:
               tags:
                 - build
         - name: Create filesystem directories and structure
-          include_tasks:
-            file: jobs/build/build-filesystem.yml
+          ansible.builtin.include_tasks:
+            file: jobs/build/filesystem.yml
             apply:
               tags:
                 - build
         - name: Create logs and sudoers
-          include_tasks:
-            file: jobs/build/build-security.yml
+          ansible.builtin.include_tasks:
+            file: jobs/build/security.yml
             apply:
               tags:
                 - build
         - name: Create built in certificate
-          include_tasks:
-            file: jobs/build/build-certificate.yml
+          ansible.builtin.include_tasks:
+            file: jobs/build/certificate.yml
             apply:
               tags:
                 - build
+        - name: Create MTR testing
+          when: mtr.enabled
+          ansible.builtin.include_tasks:
+            file: "jobs/build/mtr.yml"
+            apply:
+              tags:
+                - build
+        - name: Create PPING testing
+          when: pping.enabled
+          ansible.builtin.include_tasks:
+            file: "jobs/build/pping.yml"
+            apply:
+              tags:
+                - build
+        - name: Create HttpTraceroute testing
+          when: httptrace.enabled
+          ansible.builtin.include_tasks:
+            file: "jobs/build/httptrace.yml"
+            apply:
+              tags:
+                - build    
+        - name: Create cron jobs
+          ansible.builtin.include_tasks:
+            file: "jobs/build/cron.yml"
+            apply:
+              tags:
+                - build             
     - name: Run
       tags:
         - run
         - hash
       block:
         - name: Run in server mode
-          include_tasks:
+          ansible.builtin.include_tasks:
             file: jobs/run/server.yml
             apply:
               tags:
                 - run
-          when: iperf.server.enable == "1"
+          when: iperf.server.enabled == "1"
         - name: create user hash file
-          include_tasks:
+          ansible.builtin.include_tasks:
             file: jobs/run/hash.yml
             apply:
               tags:
                 - run
                 - hash
         - name: Create client run script
-          include_tasks:
+          ansible.builtin.include_tasks:
             file: jobs/run/client.yml
             apply:
               tags:
                 - run
+        - name: Run S3 Uploader
+          ansible.builtin.include_tasks:
+            file: jobs/run/s3.yml
+            apply:
+              tags:
+                - run
+                - s3
         - name: Test Files
-          include_tasks:
-            file: jobs/tests/test-files.yml
+          ansible.builtin.include_tasks:
+            file: jobs/tests/files.yml
             apply:
               tags:
                 - run
@@ -75,3 +109,18 @@
             - "{{ iperf.userfile }}"
             - "/var/www/{{ app.title }}/results.log"
             - "/var/www/{{ app.title }}/public.pem"
+- name: Health Checks
+  tags:
+    - run
+    - health
+    - test
+  ansible.builtin.include_tasks:
+    file: jobs/tests/{{ item }}.yml
+    apply:
+      tags:
+        - run
+        - health
+        - test
+  loop:
+    - nginx
+    - host

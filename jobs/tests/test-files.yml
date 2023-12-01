@@ -1,7 +1,0 @@
----
-- name: Validate file
-  stat: "path={{ item }}"
-  register: userfilestat
-- name: Fail if file is not there!
-  fail: msg="File {{ item }} does not exist!"
-  when: not userfilestat.stat.exists

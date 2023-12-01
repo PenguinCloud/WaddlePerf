@@ -1,19 +1,21 @@
 run:
   user: ptg-user
+  autoupdates: true # TODO move to DOCKERFILE
 app:
-  title: "waddleperf3"
+  title: "waddleperf"
 build:
   threads: "{{ lookup('env', 'BUILD_THREADS') }}"
 iperf:
   authentication: "{{ lookup('env', 'IPERF_AUTHENTICATION') }}"
   url: "{{ lookup('env', 'IPERF_URL') }}"
   client:
+    enabled: true # TODO move to DOCKERFILE
     streams: "{{ lookup('env', 'IPERF_CLIENT_STREAMS') }}"
     bitrate: "{{ lookup('env', 'IPERF_CLIENT_BITRATE') }}"
     return: "{{ lookup('env', 'IPERF_CLIENT_RETURN') }}"
     logfile: "{{ lookup('env', 'IPERF_CLIENT_LOGFILE') }}"
   server:
-    enable: "{{ lookup('env', 'IPERF_SERVER_ENABLE') }}"
+    enabled: "{{ lookup('env', 'IPERF_SERVER_ENABLE') }}"
     ip: "{{ lookup('env', 'IPERF_SERVER_IP') }}"
     port: "{{ lookup('env', 'IPERF_SERVER_PORT') }}"
     webPort: "8080"
@@ -25,3 +27,30 @@ iperf:
   password: "{{ lookup('env', 'IPERF_PASSWORD') }}"
 web:
   port: "{{ lookup('env', 'WEB_PORT') }}"
+mtr:
+  version: 0.95 #TODO move to DOCKERFILE
+  enabled: true #TODO move to DOCKERFILE
+  compile: false #TODO move to DOCKERFILE
+pping:
+  version: 0.8.3 #TODO move to DOCKERFILE
+  enabled: true #TODO move to DOCKERFILE
+httptrace:
+  enabled: true #TODO move to DOCKERFILE
+s3:
+  interval: 10
+  enabled: false #TODO move to DOCKERFILE
+  url: localhost #TODO move to DOCKERFILE
+  bucket: waddleperf #TODO move to DOCKERFILE
+  encrypt: false #TODO move to DOCKERFILE
+  compatibility: true #TODO move to DOCKERFILE
+  key:
+    access: change #TODO move to DOCKERFILE
+    secret: menow #TODO move to DOCKERFILE
+results:
+  - output.json 
+healthcheck:
+  enabled: true #TODO move to DOCKERFILE
+  interval: 10 #TODO move to DOCKERFILE
+autoperf:
+  enabled: false #TODO move to DOCKERFILE
+  interval: 10 #TODO move to DOCKERFILE

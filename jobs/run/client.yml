@@ -9,5 +9,5 @@
     url: https://{{ iperf.server.webIP }}:{{ iperf.server.webPort }}/public.pem
     dest: "/var/www/{{ app.title }}/public.pem"
     backup: true
-  when: iperf.server.enable == "0"
+  when: iperf.server.enabled == "0"
   ignore_errors: true
