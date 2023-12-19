@@ -2,7 +2,14 @@
 
 # Project Overview
 This is a power server/client container infrastructure designed to help track down your computer's or your dc2dc network performance issues quickly!
-We are employing PPING, HTTPTRACEROUTE, IPERF3, MTR, and more and spitting them out in USABLE JSON!
+We are employing:
+* PPING
+* HTTPTRACEROUTE
+* HTTPPING
+* IPERF3
+* MTR
+* and more 
+We take these outputs and convert them out in USABLE JSON structures locally or to S3 .
 
 # Why this image vs others
 ## Built in self testing and healing
