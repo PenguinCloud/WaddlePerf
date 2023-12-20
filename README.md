@@ -3,12 +3,14 @@
 # Project Overview
 This is a power server/client container infrastructure designed to help track down your computer's or your dc2dc network performance issues quickly!
 We are employing:
-* PPING
-* HTTPTRACEROUTE
-* HTTPPING
-* IPERF3
-* MTR
-* and more 
+* Pping - https://github.com/wzv5/pping 
+* Httptrace - https://github.com/watson/http-traceroute 
+* HttpPing - https://github.com/folkertvanheusden/HTTPing 
+* Mtr - https://github.com/traviscross/mtr/ 
+* SSHPing - https://github.com/spook/sshping 
+* MTU-Test (ICMP based solution)
+More to come
+
 We take these outputs and convert them out in USABLE JSON structures locally or to S3 .
 
 # Why this image vs others
