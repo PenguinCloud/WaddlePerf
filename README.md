@@ -12,7 +12,7 @@ We are employing:
 
 More to come
 
-We take these outputs and convert them out in USABLE JSON structures locally or to S3 .
+We take these outputs and convert them out in USABLE JSON structures locally or to S3 as well as to a local database, if configured (coming in v3.1.0).
 
 # Why this image vs others
 ## Built in self testing and healing
