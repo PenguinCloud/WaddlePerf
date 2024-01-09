@@ -77,7 +77,14 @@
             file: "jobs/build/nginx.yml"
             apply:
               tags:
-                - build         
+                - build     
+        - name: Install SSHPing
+          when: sshping.enabled
+          ansible.builtin.include_tasks:
+            file: "jobs/build/sshping.yml"
+            apply:
+              tags:
+                - build          
     - name: Run
       tags:
         - run
@@ -128,18 +135,18 @@
             - "{{ iperf.userfile }}"
             - "/var/www/{{ app.title }}/results.log"
             - "/var/www/{{ app.title }}/public.pem"
-- name: Health Checks
-  tags:
-    - run
-    - health
-    - test
-  ansible.builtin.include_tasks:
-    file: jobs/tests/{{ item }}.yml
-    apply:
+    - name: Health Checks
       tags:
         - run
         - health
         - test
-  loop:
-    - nginx
-    - host
+      ansible.builtin.include_tasks:
+        file: jobs/tests/{{ item }}.yml
+        apply:
+          tags:
+            - run
+            - health
+            - test
+      loop:
+        - nginx
+        - host

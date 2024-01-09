@@ -1,42 +1,38 @@
 ---
-- name: Install GoLang
-  ansible.builtin.apt:
-    pkg: 
-      - golang
-    state: latest
+- name: remove old Go binary
+  ansible.builtin.file:
+    path: /usr/local/go
+    state: absent
+- name: Get the package
+  ansible.builtin.unarchive:
+    src: https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
+    dest: /usr/local
+    remote_src: true 
+- name: Link to binaries
+  ansible.builtin.file:
+    src: "/usr/local/go/bin/{{ item }}"
+    dest: "/usr/local/bin/{{item }}"
+    state: link
+  loop:
+    - go
+    - gofmt
 - name: check for file
   ansible.builtin.stat:
     path: /opt/pping/.v{{ pping.version }}
-  register: pping-installed
+  register: installed
 - name: Compile pping
-  when: not pping-installed.stat.exists
+  when: not installed.stat.exists
   block:
     - name: Get the source file
-      ansible.builtin.get_url:
-        url: "https://github.com/wzv5/pping/releases/download/v{{ pping.version }}/pping_{{ pping.version }}_Linux_x86_64.tar.gz"
-        dest: /opt/pping.tgz
-        owner: "{{ run.user }}"
-        group: "{{ run.user }}"
-    - name: break out the file
-      ansible.builtin.unarchive:
-        src: /opt/pping.tgz
+      ansible.builtin.git:
+        repo: https://github.com/wzv5/pping.git
         dest: /opt/pping
-        remote_src: yes
-    - name: Touch version file
-      ansible.builtin.file:
-        path: /opt/pping/.v{{ pping.version }}
-        state: touch
-        owner: "{{ run.user }}"
-        group: "{{ run.user }}"
-        mode: "0444"
+        single_branch: true
+        version: "v{{ pping.version }}"
+
     - name: Prepare to compile
       ansible.builtin.shell:
-        chdir: /opt/pping/
+        chdir: /opt/pping/cmd/pping
         cmd: |
-         go build -o /opt/pping/pping
+         go build -o /usr/local/bin/pping
          go install
-    - name: Copy created file to bin
-      ansible.builtin.file:
-        src: /opt/pping/pping
-        dest: /usr/local/bin/pping
-        state: link

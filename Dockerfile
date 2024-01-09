@@ -28,6 +28,9 @@ ARG HTTPTRACE_ENABLED="true"
 ARG PPING_VERSION="0.8.3"
 ARG PPING_ENABLED="true" 
 
+#SSHPING ARGS
+ARG SSHPING_ENABLED="true"
+
 # S3
 ARG S3_ENABLED="true"
 
@@ -105,6 +108,9 @@ ENV HEALTHCHECK_INTERVAL="10"
 # Automatic Performance Testing for Client
 ENV AUTOPERF_ENABLED="true" 
 ENV AUTOPERF_INTERVAL="10"
+
+# SSHPING
+ENV SSHPING_ENABLED="true"
 
 # Switch to non-root user
 USER ptg-user
