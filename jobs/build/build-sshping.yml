@@ -1,0 +1,19 @@
+---
+- name: Grab SSHPing
+  ansible.builtin.git:
+    repo: https://github.com/spook/sshping.git
+    dest: /usr/local/sshping
+    single_branch: true
+    version: master
+- name: Run 'install' target as root
+  ansible.builtin.shell:
+    chdir: /usr/local/sshping
+    cmd: |
+      make
+- name: Copy bin to usr local
+  ansible.builtin.copy:
+    src: /usr/local/sshping/bin/sshping
+    dest: /usr/local/bin/sshping
+    owner: root
+    group: root
+    mode: "0555"
