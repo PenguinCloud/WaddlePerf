@@ -25,3 +25,6 @@ iperf:
   password: "{{ lookup('env', 'IPERF_PASSWORD') }}"
 web:
   port: "{{ lookup('env', 'WEB_PORT') }}"
+pping:
+  enable: "{{ lookup('env', 'PPING_ENABLE') }}"
+  version: "{{ lookup('env', 'PPING_VERSION') }}"

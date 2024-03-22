@@ -12,6 +12,8 @@ WORKDIR /opt/manager
 ARG APP_TITLE="PTGAPP" # Change this to actual title for Default
 ARG BUILD_THREADS="4"
 ARG IPERF_URL="https://github.com/esnet/iperf/archive/refs/tags/3.14.tar.gz"
+ARG PPING_ENABLE="1"
+ARG PPING_VERSION="0.8.4"
 
 # BUILD IT!
 RUN ansible-playbook entrypoint.yml -c local --tags build

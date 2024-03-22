@@ -17,25 +17,25 @@
                 - build
         - name: Create iperf3 binary
           include_tasks:
-            file: jobs/build/build-iperf3.yml
+            file: jobs/build/iperf3.yml
             apply:
               tags:
                 - build
         - name: Create filesystem directories and structure
           include_tasks:
-            file: jobs/build/build-filesystem.yml
+            file: jobs/build/filesystem.yml
             apply:
               tags:
                 - build
         - name: Create logs and sudoers
           include_tasks:
-            file: jobs/build/build-security.yml
+            file: jobs/build/security.yml
             apply:
               tags:
                 - build
         - name: Create built in certificate
           include_tasks:
-            file: jobs/build/build-certificate.yml
+            file: jobs/build/certificate.yml
             apply:
               tags:
                 - build
