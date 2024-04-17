@@ -10,9 +10,14 @@ We are employing:
 * SSHPing - https://github.com/spook/sshping 
 * MTU-Test (ICMP based solution)
 
-More to come
+More to come - follow the project plans here:
 
-We take these outputs and convert them out in USABLE JSON structures locally or to S3 as well as to a local database, if configured (coming in v3.1.0).
+https://github.com/orgs/PenguinCloud/projects/11
+
+We take these outputs and convert them out in USABLE JSON structures into a local DB, and plan to then forward it to:
+- External DB using Web2Py's PyDAL library: http://web2py.com/books/default/chapter/29/06/the-database-abstraction-layer
+- S3
+- webhook
 
 # Why this image vs others
 ## Built in self testing and healing
