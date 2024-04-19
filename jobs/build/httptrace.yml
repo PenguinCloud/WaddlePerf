@@ -1,8 +1,8 @@
---- 
-# At some point need to replace all of this with a python or GoLang 
-- name: install NPM
+---
+# At some point need to replace all of this with a python or GoLang
+- name: Install NPM
   ansible.builtin.apt:
-    pkg: 
+    pkg:
       - npm
     state: latest
 - name: Install http traceroute

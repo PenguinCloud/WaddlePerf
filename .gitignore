@@ -4,4 +4,3 @@ id_rsa*
 *.key
 venv/
 .idea/
-

@@ -1,5 +1,4 @@
 #!/bin/bash
-
 mtr -j  --displaymode 2  -Q {{ mtr.packet.tos }} {% if mtr.use6 == "true" %} -6 {% endif %} {% if mtr.use4 == "true" %} -4 {% endif %} \
 -s {{ mtr.packet.size }} {% if mtr.lookups.domains == "false" %} -n {% endif %} \
 -b {% if mtr.packet.protocol == "udp" %} -u -P  {{ mtr.destport }} -L {{ mtr.localport}} {% endif %} \

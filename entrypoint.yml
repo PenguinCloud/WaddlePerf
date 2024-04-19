@@ -14,7 +14,7 @@
             file: "jobs//build/user.yml"
             apply:
               tags:
-                - build   
+                - build
         - name: Create iperf3 binary
           ansible.builtin.include_tasks:
             file: jobs/build/packages.yml
@@ -65,26 +65,26 @@
             file: "jobs/build/httptrace.yml"
             apply:
               tags:
-                - build    
+                - build
        # - name: Create cron jobs
        #   ansible.builtin.include_tasks:
        #     file: "jobs/build/cron.yml"
        #     apply:
        #       tags:
-       #         - build        
+       #         - build
         - name: Install NGINX
           ansible.builtin.include_tasks:
             file: "jobs/build/nginx.yml"
             apply:
               tags:
-                - build     
+                - build
         - name: Install SSHPing
           when: sshping.enabled
           ansible.builtin.include_tasks:
             file: "jobs/build/sshping.yml"
             apply:
               tags:
-                - build          
+                - build
     - name: Run
       tags:
         - run
@@ -104,7 +104,7 @@
               tags:
                 - run
           when: iperf.server.enabled == "1"
-        - name: create user hash file
+        - name: Create user hash file
           ansible.builtin.include_tasks:
             file: jobs/run/hash.yml
             apply:

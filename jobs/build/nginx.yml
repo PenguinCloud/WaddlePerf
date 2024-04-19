@@ -1,5 +1,5 @@
 ---
-- name: install NGINX Light
+- name: Install NGINX Light
   ansible.builtin.apt:
     pkg:
       - nginx-light

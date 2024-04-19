@@ -1,5 +1,4 @@
 ---
-
 # -subj "/C=US/ST=TX/L=Dallas/O=My Inc/OU=DevOps/CN=www.example.com/emailAddress=dev@www.example.com"
 - name: Generate Key for Server / Client
   ansible.builtin.shell:

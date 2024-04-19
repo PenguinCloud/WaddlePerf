@@ -2,46 +2,34 @@ FROM ghcr.io/penguincloud/core
 LABEL company="Penguin Tech Group LLC"
 LABEL org.opencontainers.image.authors="info@penguintech.io"
 LABEL license="GNU AGPL3"
-
 # GET THE FILES WHERE WE NEED THEM!
 COPY . /opt/manager/
 WORKDIR /opt/manager
-
 # RUN apt update && apt upgrade -y
 # PUT YER ARGS in here
 ARG APP_TITLE="WADDLEPERF" # Change this to actual title for Default
 ARG BUILD_THREADS="4"
 ARG RUN_AUTOUPDATES="true"
-
 # IPERF ARGS
 ARG IPERF_URL="https://github.com/esnet/iperf/archive/refs/tags/3.14.tar.gz"
-
 # MTR ARGS
 ARG MTR_VERSION="0.95"
 ARG MTR_ENABLED="true"
 ARG MTR_COMPILE="false"
-
 # HTTPTRACE ARGS
 ARG HTTPTRACE_ENABLED="true"
-
 # PPING ARGS
 ARG PPING_VERSION="0.8.3"
-ARG PPING_ENABLED="true" 
-
+ARG PPING_ENABLED="true"
 #SSHPING ARGS
 ARG SSHPING_ENABLED="true"
-
 # S3
 ARG S3_ENABLED="true"
-
 # BUILD IT!
 RUN ansible-playbook entrypoint.yml -c local --tags build
-
 #------------------------------------------------------------------#
-
 # General Environment variables
 ENV APP_TITLE="WADDLEPERF"
-
 # IPERF Environment variables
 ENV IPERF_SERVER_ENABLE="1"
 ENV IPERF_SERVER_IP="127.0.0.1"
@@ -55,12 +43,10 @@ ENV IPERF_PASSWORD="changeme"
 ENV IPERF_USERNAME="ptg-user"
 ENV IPERF_PROTOCOL="tcp"
 ENV IPERF_AUTHENTICATION="1"
-
 # NGINX Environment variables
 ENV WEB_PORT="8080"
 ENV WEB_SPORT="8443"
 ENV WEB_HOST="localhost"
-
 # MTR Environment variables - ICMP, UDP, and TCP Ping Tool Suite
 ENV MTR_ENABLED="true"
 ENV MTR_USE4="false"
@@ -71,49 +57,41 @@ ENV MTR_DESTHOST="127.0.0.1"
 ENV MTR_PACKET_SIZE="1450"
 ENV MTR_PACKET_COUNT="2"
 ENV MTR_PACKET_INTERVAL="2"
-ENV MTR_PACKET_PROTOCOL="icmp" 
+ENV MTR_PACKET_PROTOCOL="icmp"
 ENV MTR_PACKET_TOS="0000"
 ENV MTR_LOOKUPS_DNS="true"
 ENV MTR_LOOKUPS_IPINFO="true"
 ENV MTR_LOOKUPS_ASNINFO="true"
-
 # PPING - HTTP, QUIC, DNS, and TLS Ping Tool Suite
-ENV PPING_ENABLED="true" 
+ENV PPING_ENABLED="true"
 ENV PPING_PROTOCOL="http"
-ENV PPING_COUNT="2" 
+ENV PPING_COUNT="2"
 ENV PPING_INTERVAL="2"
 ENV PPING_USE4="false"
 ENV PPING_USE6="false"
 ENV PPING_DESTPORT="9090"
 ENV PPING_DESTHOST="localhost"
-
 # HTTPTRACE
 ENV HTTPTRACE_ENABLED="true"
 ENV HTTPTRACE_URL="http://localhost"
-
 # S3
 ENV S3_ENABLED="false"
 ENV S3_INTERVAL="10"
 ENV S3_URL="http://localhost"
 ENV S3_BUCKET="changeme"
 ENV S3_ENCRYPT="true"
-ENV S3_COMPATIBILITY="true" 
+ENV S3_COMPATIBILITY="true"
 ENV S3_KEY_ACCESS="key_example_access"
 ENV S3_KEY_SECRET="SUPERSECRETSQUIRREL_EXAMPLE"
-
 # HealthCheck
-ENV HEALTHCHECK_ENABLED="true" 
+ENV HEALTHCHECK_ENABLED="true"
 ENV HEALTHCHECK_INTERVAL="10"
-
 # Automatic Performance Testing for Client
-ENV AUTOPERF_ENABLED="true" 
+ENV AUTOPERF_ENABLED="true"
 ENV AUTOPERF_INTERVAL="10"
-
 # SSHPING
 ENV SSHPING_ENABLED="true"
-
 # Switch to non-root user
 USER ptg-user
-
 # Entrypoint time (aka runtime)
 ENTRYPOINT ["/bin/bash","/opt/manager/entrypoint.sh"]

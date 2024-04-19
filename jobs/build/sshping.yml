@@ -1,11 +1,14 @@
 ---
+- name: Install needed libs
+  ansible.builtin.apt:
+    pkg: libssh-dev
 - name: Grab SSHPing
   ansible.builtin.git:
     repo: https://github.com/spook/sshping.git
     dest: /usr/local/sshping
     single_branch: true
     version: master
-- name: Run 'install' target as root
+- name: Run install target as root
   ansible.builtin.shell:
     chdir: /usr/local/sshping
     cmd: |

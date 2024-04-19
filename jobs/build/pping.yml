@@ -1,5 +1,5 @@
 ---
-- name: remove old Go binary
+- name: Remove old Go binary
   ansible.builtin.file:
     path: /usr/local/go
     state: absent
@@ -7,32 +7,31 @@
   ansible.builtin.unarchive:
     src: https://go.dev/dl/go1.21.5.linux-amd64.tar.gz
     dest: /usr/local
-    remote_src: true 
+    remote_src: true
 - name: Link to binaries
   ansible.builtin.file:
     src: "/usr/local/go/bin/{{ item }}"
-    dest: "/usr/local/bin/{{item }}"
+    dest: "/usr/local/bin/{{ item }}"
     state: link
   loop:
     - go
     - gofmt
-- name: check for file
+- name: Check for file
   ansible.builtin.stat:
     path: /opt/pping/.v{{ pping.version }}
   register: installed
 - name: Compile pping
   when: not installed.stat.exists
   block:
-    - name: Get the source file
-      ansible.builtin.git:
-        repo: https://github.com/wzv5/pping.git
-        dest: /opt/pping
-        single_branch: true
-        version: "v{{ pping.version }}"
-
-    - name: Prepare to compile
-      ansible.builtin.shell:
-        chdir: /opt/pping/cmd/pping
-        cmd: |
-         go build -o /usr/local/bin/pping
-         go install
+- name: Get the source file
+  ansible.builtin.git:
+    repo: https://github.com/wzv5/pping.git
+    dest: /opt/pping
+    single_branch: true
+    version: "v{{ pping.version }}"
+- name: Prepare to compile
+  ansible.builtin.shell:
+    chdir: /opt/pping/cmd/pping
+    cmd: |
+      go build -o /usr/local/bin/pping
+      go install

@@ -10,7 +10,7 @@
     cmd: /opt/manager/bins/hash.sh
   register: user_hash
 - name: User added
-  debug:
+  ansible.builtin.debug:
     msg: "{{ iperf.username }},{{ user_hash.stdout }}"
 - name: Generate userfile
   ansible.builtin.lineinfile:

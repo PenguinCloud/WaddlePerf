@@ -3,4 +3,4 @@
   ansible.builtin.uri:
     url: "{{ healthcheck.url }}"
   register: httpcheck
-  failed_when: httpcheck is failed 
+  failed_when: httpcheck is failed
