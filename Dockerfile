@@ -5,7 +5,7 @@ LABEL license="GNU AGPL3"
 # GET THE FILES WHERE WE NEED THEM!
 COPY . /opt/manager/
 WORKDIR /opt/manager
-# RUN apt update && apt upgrade -y
+RUN apt update 
 # PUT YER ARGS in here
 ARG APP_TITLE="WADDLEPERF" # Change this to actual title for Default
 ARG BUILD_THREADS="4"
