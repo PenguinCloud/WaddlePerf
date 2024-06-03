@@ -2,7 +2,8 @@ run:
   user: ptg-user
   autoupdates: "{{ lookup('env', 'RUN_AUTOUPDATES') }}"
 results:
-  - output.json
+  file:  output.json
+  dir: /var/www/public_html/
 app:
   title: "waddleperf"
 build:
@@ -33,6 +34,7 @@ mtr:
   version: "{{ lookup('env', 'MTR_VERSION') }}"
   enabled: "{{ lookup('env', 'MTR_ENABLED') }}"
   compile: "{{ lookup('env', 'MTR_COMPILED') }}"
+  max_hop: "{{ lookup('env', 'MTR_MAX_HOP') }}"
   use6: "{{ lookup('env', 'MTR_USE6') }}"
   use4: "{{ lookup('env', 'MTR_USE4') }}"
   localport: "{{ lookup('env', 'MTR_LOCALPORT') }}"
@@ -44,6 +46,7 @@ mtr:
     interval: "{{ lookup('env', 'MTR_PACKET_INTERVAL') }}"
     protocol: "{{ lookup('env', 'MTR_PACKET_PROTOCOL') }}"  # icmp, udp, tcp
     tos: "{{ lookup('env', 'MTR_PACKET_TOS') }}"
+    timeout: "{{ lookup('env', 'MTR_PACKET_TIMEOUT') }}"
   lookups:
     domains: "{{ lookup('env', 'MTR_LOOKUPS_DNS') }}"
     ipinfo: "{{ lookup('env', 'MTR_LOOKUPS_IPINFO') }}"
@@ -79,3 +82,9 @@ autoperf:
   interval: "{{ lookup('env', 'AUTOPERF_INTERVAL') }}"
 sshping:
   enabled: "{{ lookup('env', 'SSHPING_ENABLED') }}"
+  bandwidth_test: "{{ lookup('env', 'SSHPING_BANDWIDTH') }}"
+  count: "{{ lookup('env', 'SSHPING_COUNT') }}"
+  timeout: "{{ lookup('env', 'SSHPING_TIMEOUT') }}"
+  target: "{{ lookup('env', 'SSHPING_TARGET') }}"
+  user: "{{ lookup('env', 'SSHPING_USER') }}"
+  port: "{{ lookup('env', 'SSHPING_PORT') }}"

@@ -137,16 +137,32 @@
             - "/var/www/{{ app.title }}/public.pem"
     - name: Health Checks
       tags:
-        - run
-        - health
-        - test
-      ansible.builtin.include_tasks:
-        file: jobs/tests/{{ item }}.yml
-        apply:
-          tags:
-            - run
-            - health
-            - test
-      loop:
-        - nginx
-        - host
+      - run
+      - health
+      - test
+      block:
+        - name: Static Health Checks
+          tags: static
+          ansible.builtin.include_tasks:
+            file: jobs/tests/{{ item }}.yml
+            apply:
+              tags:
+                - run
+                - health
+                - test
+                - static
+          loop:
+            - files
+        - name: Dynamic Health Checks
+          tags: dynamic
+          ansible.builtin.include_tasks:
+            file: jobs/tests/{{ item }}.yml
+            apply:
+              tags:
+                - run
+                - health
+                - test
+                - dynamic
+          loop:
+            - nginx
+            - host

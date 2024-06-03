@@ -1,4 +1,17 @@
 ---
 - name: Validate file
-  stat: "path={{ item }}"
+  ansible.builtin.stat: 
+    path:"{{ item }}"
   register: userfilestat
+  failed_when: userfilestat.stat.exists == false
+  loop: 
+    - "{{ iperf.userfile }}"
+    - "/var/www/{{ app.title }}/results.log"
+    - "/var/www/{{ app.title }}/public.pem"
+    - /etc/nginx/sites-enabled/default
+    - /opt/manager/bins/hash.sh
+    - /usr/local/bin/iperf3
+    - /home/{{ run.user }}/iperf3-client
+    - /home/{{ run.user }}/mtr-client
+    - /home/{{ run.user }}/pping-client
+    - /home/{{ run.user }}/httptrace-client
