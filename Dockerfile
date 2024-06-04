@@ -72,7 +72,7 @@ ENV PPING_USE6="false"
 ENV PPING_DESTPORT="9090"
 ENV PPING_DESTHOST="localhost"
 # HTTPTRACE
-ENV HTTPTRACE_ENABLED="true"
+ENV HTTPTRACE_ENABLED="false"
 ENV HTTPTRACE_URL="http://localhost"
 # S3
 ENV S3_ENABLED="false"
@@ -91,6 +91,15 @@ ENV AUTOPERF_ENABLED="true"
 ENV AUTOPERF_INTERVAL="10"
 # SSHPING
 ENV SSHPING_ENABLED="true"
+ENV SSHPING_COUNT="2"
+ENV SSHPING_TIMEOUT="20"
+ENV SSHPING_TARGET="localhost"
+ENV SSHPING_PORT="22"
+ENV SSHPING_USER="ptg-user"
+ENV SSHPING_BANDWIDTH="100M"
+# Results drop off location
+ENV RESULTS_DIR="/var/www/html"
+ENV RESULTS_FILE="results.json"
 # Switch to non-root user
 USER ptg-user
 # Entrypoint time (aka runtime)

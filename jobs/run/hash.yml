@@ -18,3 +18,5 @@
     path: "{{ iperf.userfile }}"
     create: true
     backup: true
+    owner: "{{run.user}}"
+    group: "{{run.group}}"
