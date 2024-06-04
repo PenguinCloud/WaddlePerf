@@ -62,7 +62,7 @@ pping:
   destport: "{{ lookup('env', 'PPING_DESTPORT') }}"
   desthost: "{{ lookup('env', 'PPING_DESTHOST') }}"
 httptrace:
-  enabled: "{{ lookup('env', 'HTTPTRACE_ENABLED') | '0' }}"
+  enabled: "{{ lookup('env', 'HTTPTRACE_ENABLED')  }}"
   url: "{{ lookup('env', 'HTTPTRACE_URL') }}"
 s3:
   interval: "{{ lookup('env', 'S3_INTERVAL') }}"
