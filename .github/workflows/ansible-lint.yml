@@ -1,0 +1,12 @@
+- name: run-ansible-lint
+  # You may pin to the exact commit or the version.
+  # uses: ansible/ansible-lint@95382d398ea1744bf6bfa47b030f14c38b3f6957
+  uses: ansible/ansible-lint@v24.7.0
+  with:
+    # Arguments to be passed to ansible-lint command.
+    args: # optional, default is 
+    # If false, this action will not setup python and will instead rely on the already installed python.
+    setup_python: # optional, default is true
+    # The directory where to run ansible-lint from. Default is `github.workspace`.
+    working_directory: # optional, default is 
+          
