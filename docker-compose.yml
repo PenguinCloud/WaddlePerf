@@ -1,10 +1,10 @@
 ---
 version: "3.8"
 services:
-  waddleperf3:
+  waddleperf:
     build: .
     platform: linux/amd64
-    image: ghcr.io/penguincloud/waddleperf3:main
+    image: ghcr.io/penguincloud/waddleperf
     volumes:
       - /var/logs
       # - ./results.log:/var/www/waddleperf3/results.log:rw
@@ -13,7 +13,8 @@ services:
     # container_name: iperf3
     env_file: .env
     ports:
-      - 8080:8080
+      - 80:80
+      - 443:443
       - 5201:5201/tcp
       - 5201:5201/udp
     deploy:

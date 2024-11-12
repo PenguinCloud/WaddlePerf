@@ -1,9 +1,9 @@
 ---
 - name: Move iperf3 client script into user home dir
-  when: iperf3.client.enabled
+  when: iperf.client.enabled
   ansible.builtin.template:
     src: /opt/manager/templates/iperf3-client.j2
-    dest: "/home/{{ run.user }}/iperf3-client"
+    dest: "/opt/{{ app.title }}/iperf3-client"
     mode: "0555"
     owner: "{{ run.user }}"
     group: "{{ run.user }}"
@@ -16,7 +16,6 @@
     owner: "{{ run.user }}"
     group: "{{ run.user }}"
     mode: "0500"
-  ignore_errors: true
 - name: Copy mtr client script into user home dir
   when: mtr.enabled
   ansible.builtin.template:

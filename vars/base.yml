@@ -1,5 +1,5 @@
 run:
-  user: ptg-user
+  user: www-data
   autoupdates: "{{ lookup('env', 'RUN_AUTOUPDATES') }}"
 results:
   file:  "{{ lookup('env', 'RESULTS_FILE') }}"
@@ -85,7 +85,7 @@ sshping:
   bandwidth_test: "{{ lookup('env', 'SSHPING_BANDWIDTH') }}"
   count: "{{ lookup('env', 'SSHPING_COUNT') }}"
   timeout: "{{ lookup('env', 'SSHPING_TIMEOUT') }}"
-  target: "{{ lookup('env', 'SSHPING_TARGET') }}"
+  target: "{{ lookup('env', 'SSHPING_DESTHOST') }}"
   user: "{{ lookup('env', 'SSHPING_USER') }}"
   port: "{{ lookup('env', 'SSHPING_PORT') }}"
 

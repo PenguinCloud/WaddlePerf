@@ -10,6 +10,7 @@
   loop:
     - "/opt/{{ app.title }}"
     - "/var/www/{{ app.title }}"
+    - /etc/nginx/sites-enabled
 - name: Give edit rights to startup
   ansible.builtin.file:
     path: /opt/manager/bins
@@ -28,7 +29,8 @@
   loop:
     - "/opt/{{ app.title }}/iperf3-server"
     - "/opt/{{ app.title }}/iperf3-client"
-- name: Link to server scripts
+    - "/opt/{{ app.title }}/mtr-client"
+- name: Link to iperf server scripts
   ansible.builtin.file:
     src: "/opt/{{ app.title }}/iperf3-server"
     dest: /usr/local/bin/iperf3-server
@@ -38,10 +40,18 @@
     state: link
   loop:
     - /usr/local/bin/iperf3-client
-- name: Link to client scripts
+- name: Link to iperf client scripts
   ansible.builtin.file:
     src: "/opt/{{ app.title }}/iperf3-client"
     path: /usr/local/bin/iperf3-client
+    owner: root
+    group: root
+    mode: "0755"
+    state: link
+- name: Link to mtr client scripts
+  ansible.builtin.file:
+    src: "/opt/{{ app.title }}/mtr-client"
+    path: /usr/local/bin/mtr-client
     owner: root
     group: root
     mode: "0755"

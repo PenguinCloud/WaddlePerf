@@ -2,7 +2,7 @@
 - name: Copy mtr script to binary
   ansible.builtin.template:
     src: "{{ playbook_dir }}/templates/mtr.j2"
-    dest: /usr/local/bin/mtr-client
+    dest: "/opt/{{ app.title }}/mtr-client"
     owner: "{{run.user}}"
     group: "{{run.user}}"
     mode: "0555"

@@ -19,4 +19,4 @@
     create: true
     backup: true
     owner: "{{run.user}}"
-    group: "{{run.group}}"
+    group: "{{run.user}}"
