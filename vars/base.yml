@@ -88,3 +88,4 @@ sshping:
   target: "{{ lookup('env', 'SSHPING_TARGET') }}"
   user: "{{ lookup('env', 'SSHPING_USER') }}"
   port: "{{ lookup('env', 'SSHPING_PORT') }}"
+

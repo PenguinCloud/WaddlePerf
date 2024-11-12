@@ -23,8 +23,8 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Ansible Lint
-        uses: ansible/ansible-lint-action@v6.11.0
-      
+        uses: ansible/ansible-lint-action@v24.6.0
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
            
