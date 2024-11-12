@@ -1,0 +1,17 @@
+---
+- name: Upload to S3 Storage
+  aws_s3:
+    bucket: "{{ backup_bucket }}"
+    object: "{{ item.path }}"
+    src: "{{ item.path }}"
+    mode: put
+    aws_access_key: "{{ s3.key.access }}"
+    aws_secret_key: "{{ s3.key.secret }}"
+    validate_certs: "{{ s3.validate }}"
+    encrypt: "{{ s3.encrypt }}"
+    rgw: "{{ s3.compatibility }}"
+    permission: []
+    s3_url: "{{ s3.url }}"
+  loop: "{{ results.dir }}/{{ results.files }}"
+  loop_control:
+    label: "{{ item.path }}"

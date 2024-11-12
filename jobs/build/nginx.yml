@@ -1,0 +1,9 @@
+---
+- name: Install NGINX Light
+  ansible.builtin.apt:
+    pkg:
+      - nginx-light
+- name: Remove default
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
