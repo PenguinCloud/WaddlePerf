@@ -18,7 +18,7 @@ iperf:
     return: "{{ lookup('env', 'IPERF_CLIENT_RETURN') }}"
     logfile: "{{ lookup('env', 'IPERF_CLIENT_LOGFILE') }}"
   server:
-    enabled: "{{ lookup('env', 'IPERF_SERVER_ENABLE') }}"
+    enabled: "{{ lookup('env', 'IPERF_SERVER_ENABLED') }}"
     ip: "{{ lookup('env', 'IPERF_SERVER_IP') }}"
     port: "{{ lookup('env', 'IPERF_SERVER_PORT') }}"
   format: json

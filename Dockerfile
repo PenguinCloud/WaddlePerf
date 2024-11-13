@@ -34,7 +34,7 @@ RUN ansible-playbook entrypoint.yml -c local --tags build
 # General Environment variables
 ENV APP_TITLE="WADDLEPERF"
 # IPERF Environment variables
-ENV IPERF_SERVER_ENABLE="true"
+ENV IPERF_SERVER_ENABLED="true"
 ENV IPERF_SERVER_IP="127.0.0.1"
 ENV IPERF_SERVER_PORT="5201"
 ENV IPERF_CLIENT_STREAMS="1"
