@@ -96,7 +96,7 @@
             apply:
               tags:
                 - run
-          when: iperf.server.enabled == "1"
+          when: iperf.server.enabled
         - name: Create user hash file
           ansible.builtin.include_tasks:
             file: jobs/run/hash.yml

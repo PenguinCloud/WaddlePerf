@@ -8,7 +8,7 @@
     owner: "{{ run.user }}"
     group: "{{ run.user }}"
 - name: Get Server Public Key
-  when: iperf.server.enabled == "0"
+  when: not iperf.server.enabled
   ansible.builtin.get_url:
     url: https://{{ web.host }}:{{ web.port }}/public.pem
     dest: "/var/www/{{ app.title }}/public.pem"
