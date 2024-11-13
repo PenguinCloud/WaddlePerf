@@ -10,7 +10,7 @@
 - name: Drop in our nginx default with autoindex
   ansible.builtin.template:
     src: "{{ playbook_dir }}/templates/nginx-conf.j2"
-    dest: /etc/nginx/sites-enabled/default
+    dest: /etc/nginx/nginx.conf
     owner: "{{ run.user }}"
     group: "{{ run.user }}"
     mode: "0555"
