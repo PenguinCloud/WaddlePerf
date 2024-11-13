@@ -101,7 +101,7 @@ ENV SSHPING_PORT="22"
 ENV SSHPING_USER="ptg-user"
 ENV SSHPING_BANDWIDTH="100M"
 # Results drop off location
-ENV RESULTS_DIR="/var/www/html"
+ENV RESULTS_DIR="/var/www/waddleperf"
 ENV RESULTS_FILE="results.json"
 RUN chown -R www-data:www-data /var/lib/nginx && chown -R www-data:www-data /usr/share/nginx
 # Switch to non-root user
