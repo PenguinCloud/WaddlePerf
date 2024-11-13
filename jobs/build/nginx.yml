@@ -9,6 +9,8 @@
     state: absent
 - name: Create NGINX configuration
   ansible.builtin.template:
-    src: "{{ playbook_dir}}/templates/nginx-conf.j2"
+    src: "templates/nginx-conf.j2"
     dest: /etc/nginx/nginx.conf
-    remote_src: true
+    mode: "0755"
+    owner: www-data
+    group: www-data

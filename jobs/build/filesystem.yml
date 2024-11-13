@@ -12,6 +12,7 @@
     - "/var/www/{{ app.title }}"
     - /etc/nginx/sites-enabled
     - /var/libs/nginx
+    - /var/www
 - name: Give edit rights to startup
   ansible.builtin.file:
     path: /opt/manager/bins
