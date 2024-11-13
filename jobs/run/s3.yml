@@ -1,5 +1,6 @@
 ---
 - name: Upload to S3 Storage
+  when: s3.enabled
   aws_s3:
     bucket: "{{ backup_bucket }}"
     object: "{{ item.path }}"
@@ -12,6 +13,6 @@
     rgw: "{{ s3.compatibility }}"
     permission: []
     s3_url: "{{ s3.url }}"
-  loop: "{{ results.dir }}/{{ results.file }}"
+  with_fileglob: "{{ results.dir }}/{{ results.file }}"
   loop_control:
     label: "{{ item.path }}"

@@ -1,17 +1,41 @@
 ---
-- name: Validate file
+- name: Validate user file
   ansible.builtin.stat: 
-    path:"{{ item }}"
+    path: "/opt/{{ app.title }}/{{ iperf.userfile }}"
   register: userfilestat
   failed_when: userfilestat.stat.exists == false
-  loop: 
-    - "{{ iperf.userfile }}"
-    - "/var/www/{{ app.title }}/results.log"
-    - "/var/www/{{ app.title }}/public.pem"
-    - /etc/nginx/sites-enabled/default
-    - /opt/manager/bins/hash.sh
-    - /usr/local/bin/iperf3
-    - /home/{{ run.user }}/iperf3-client
-    - /home/{{ run.user }}/mtr-client
-    - /home/{{ run.user }}/pping-client
-    - /home/{{ run.user }}/httptrace-client
+- name: Validate results file
+  ansible.builtin.stat: 
+    path: "/var/www/{{ app.title }}/results.log"
+  register: userfilestat
+  failed_when: userfilestat.stat.exists == false
+- name: Validate iperf certificate file
+  ansible.builtin.stat: 
+    path: "/var/www/{{ app.title }}/public.pem"
+  register: userfilestat
+  failed_when: userfilestat.stat.exists == false
+- name: Validate iperf3 binary installed
+  ansible.builtin.stat: 
+    path: /usr/local/bin/iperf3
+  register: userfilestat
+  failed_when: userfilestat.stat.exists == false
+- name: Validate iperf3 client script
+  ansible.builtin.stat: 
+    path: "/opt/{{ app.title }}/iperf3-client"
+  register: userfilestat
+  failed_when: userfilestat.stat.exists == false
+- name: Validate mtr client script
+  ansible.builtin.stat: 
+    path: "/opt/{{ app.title }}/mtr-client"
+  register: userfilestat
+  failed_when: userfilestat.stat.exists == false
+- name: Validate pping client script
+  ansible.builtin.stat: 
+    path: "/opt/{{ app.title }}/pping-client"
+  register: userfilestat
+  failed_when: userfilestat.stat.exists == false
+- name: Validate httptrace client script
+  ansible.builtin.stat: 
+    path: "/opt/{{ app.title }}/httptrace-client"
+  register: userfilestat
+  failed_when: userfilestat.stat.exists == false

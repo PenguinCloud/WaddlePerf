@@ -11,6 +11,7 @@
     - "/opt/{{ app.title }}"
     - "/var/www/{{ app.title }}"
     - /etc/nginx/sites-enabled
+    - /var/libs/nginx
 - name: Give edit rights to startup
   ansible.builtin.file:
     path: /opt/manager/bins
@@ -62,3 +63,7 @@
     state: absent
   loop:
     - /opt/iperf3.tar.gz
+- name: Ensure nginx has access to temp files
+  ansible.builtin.command:
+    cmd: chown -R www-data:www-data /var/libs/nginx
+  become: true

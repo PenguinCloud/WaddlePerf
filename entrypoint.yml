@@ -15,14 +15,13 @@
             apply:
               tags:
                 - build
-        - name: Create iperf3 binary
+        - name: Add apt and pip packages
           ansible.builtin.include_tasks:
             file: jobs/build/packages.yml
             apply:
               tags:
                 - build
         - name: Create iperf3 binary
-
           ansible.builtin.include_tasks:
             file: jobs/build/iperf3.yml
             apply:
@@ -67,12 +66,6 @@
             apply:
               tags:
                 - build
-       # - name: Create cron jobs
-       #   ansible.builtin.include_tasks:
-       #     file: "jobs/build/cron.yml"
-       #     apply:
-       #       tags:
-       #         - build
         - name: Install NGINX
           ansible.builtin.include_tasks:
             file: "jobs/build/nginx.yml"
@@ -97,7 +90,6 @@
             apply:
               tags:
                 - run
-          when: iperf.server.enabled == "1"
         - name: Run in server mode
           ansible.builtin.include_tasks:
             file: jobs/run/server.yml
@@ -132,10 +124,6 @@
               tags:
                 - run
                 - test
-          loop:
-            - "{{ iperf.userfile }}"
-            - "/var/www/{{ app.title }}/results.log"
-            - "/var/www/{{ app.title }}/public.pem"
     - name: Health Checks
       tags:
       - run
@@ -154,16 +142,4 @@
                 - static
           loop:
             - files
-        - name: Dynamic Health Checks
-          tags: dynamic
-          ansible.builtin.include_tasks:
-            file: jobs/tests/{{ item }}.yml
-            apply:
-              tags:
-                - run
-                - health
-                - test
-                - dynamic
-          loop:
-            - nginx
-            - host
+

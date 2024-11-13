@@ -7,6 +7,7 @@
       - make
       - libiperf0
       - libssl-dev
+      - net-tools
       - openssl
       - unattended-upgrades
 - name: Turn off unattended upgrades
@@ -15,3 +16,7 @@
     regex: APT::Periodic::Unattended-Upgrade
     line: APT::Periodic::Unattended-Upgrade "0";
   when: not run.autoupdates
+- name: Install pip libraries
+  ansible.builtin.pip:
+    name:
+      - psutil

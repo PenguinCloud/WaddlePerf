@@ -22,7 +22,7 @@ iperf:
     ip: "{{ lookup('env', 'IPERF_SERVER_IP') }}"
     port: "{{ lookup('env', 'IPERF_SERVER_PORT') }}"
   format: json
-  userfile: "/opt/{{ app.title }}/users.csv"
+  userfile: "users.csv"
   protocol: "{{ lookup('env', 'IPERF_PROTOCOL') }}"
   username: "{{ lookup('env', 'IPERF_USERNAME') }}"
   password: "{{ lookup('env', 'IPERF_PASSWORD') }}"
