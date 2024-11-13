@@ -4,6 +4,7 @@ LABEL org.opencontainers.image.authors="info@penguintech.io"
 LABEL license="GNU AGPL3"
 # GET THE FILES WHERE WE NEED THEM!
 COPY . /opt/manager/
+COPY Speed-Test/ /var/www/speedtest
 WORKDIR /opt/manager
 RUN apt update 
 # PUT YER ARGS in here
