@@ -47,7 +47,7 @@ ENV IPERF_USERNAME="www-data"
 ENV IPERF_PROTOCOL="tcp"
 ENV IPERF_AUTHENTICATION="1"
 # NGINX Environment variables
-ENV WEB_PORT="80"
+ENV WEB_PORT="8080"
 ENV WEB_SPORT="443"
 ENV WEB_HOST="localhost"
 # MTR Environment variables - ICMP, UDP, and TCP Ping Tool Suite

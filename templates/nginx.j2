@@ -1,6 +1,6 @@
 server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
+        listen 8080 default_server;
+        listen [::]:8080 default_server;
         root /var/www/{{ app.title }};
         # Add index.php to the list if you are using PHP
         #index index.html index.htm index.nginx-debian.html;
@@ -15,8 +15,8 @@ server {
 }
 server {
         server_name _ localhost YOURDOMAIN;
-        listen 8080 reuseport http2;
-        listen [::]:8080 reuseport http2;
+        listen 80 reuseport http2;
+        listen [::]:80 reuseport http2;
         root /var/www/speedtest;
         index index.html;
         client_max_body_size 35m;
