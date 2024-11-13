@@ -13,6 +13,7 @@
     - /etc/nginx/sites-enabled
     - /var/libs/nginx
     - /var/www
+    - /usr/share/nginx
 - name: Give edit rights to startup
   ansible.builtin.file:
     path: /opt/manager/bins
