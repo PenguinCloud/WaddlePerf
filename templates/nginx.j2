@@ -15,13 +15,13 @@ server {
 }
 server {
         server_name _ localhost YOURDOMAIN;
-        listen 80 reuseport http2;
-        listen [::]:80 reuseport http2;
+        listen 80 http2;
+        listen [::]:80 http2;
         root /var/www/speedtest;
         index index.html;
         client_max_body_size 35m;
         error_page 405 =200 $uri;
-        access_log off;
+        access_log on;
         gzip off; 
         fastcgi_read_timeout 999;
         log_not_found off;
@@ -38,7 +38,7 @@ server {
         location ~ /\.well-known/acme-challenge/ {
             allow all;
             default_type "text/plain";
-            root /usr/share/nginx/html/;
+            root /var/www/speedtest;
             try_files $uri =404;
             break;
         }
@@ -69,7 +69,7 @@ server {
        #HTTP2 & HTTP3 -> UPLOAD FIX -- START
 
        location = /upload {
-           proxy_pass http://127.0.0.1:3000/dev-null;
+           proxy_pass http://127.0.0.1/dev-null;
        }
        location = /dev-null {
            return 200;
