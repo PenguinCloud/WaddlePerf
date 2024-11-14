@@ -1,7 +1,8 @@
 ---
 - name: Install needed libs
   ansible.builtin.apt:
-    pkg: libssh-dev
+    pkg:
+      - libssh-dev
 - name: Grab SSHPing
   ansible.builtin.git:
     repo: https://github.com/spook/sshping.git
@@ -11,8 +12,7 @@
 - name: Run install target as root
   ansible.builtin.shell:
     chdir: /usr/local/sshping
-    cmd: |
-      make
+    cmd: make
 - name: Copy bin to usr local
   ansible.builtin.copy:
     src: /usr/local/sshping/bin/sshping
