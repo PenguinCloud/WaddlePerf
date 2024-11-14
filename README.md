@@ -1,4 +1,4 @@
-[![Publish Docker image](https://github.com/PenguinCloud/PenguinPerf3/actions/workflows/push.yml/badge.svg)](https://github.com/PenguinCloud/PenguinPerf3/actions/workflows/push.yml) [![version](https://img.shields.io/badge/version-1.0.2-blue.svg)](https://semver.org)
+[![Publish Docker image](https://github.com/PenguinCloud/PenguinPerf3/actions/workflows/push.yml/badge.svg)](https://github.com/PenguinCloud/PenguinPerf3/actions/workflows/push.yml) [![version](https://img.shields.io/badge/version-3.1.0-blue.svg)](https://semver.org)
 # Project Overview
 This is a power server/client container infrastructure designed to help track down your computer's or your dc2dc network performance issues quickly!
 We are employing:
