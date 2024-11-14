@@ -126,9 +126,9 @@
                 - test
     - name: Health Checks
       tags:
-      - run
-      - health
-      - test
+        - run
+        - health
+        - test
       block:
         - name: Static Health Checks
           tags: static
@@ -142,4 +142,3 @@
                 - static
           loop:
             - files
-

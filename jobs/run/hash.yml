@@ -15,8 +15,8 @@
 - name: Generate userfile
   ansible.builtin.lineinfile:
     line: "{{ iperf.username }},{{ user_hash.stdout }}"
-    path: "/opt/{{ app.title}}/{{ iperf.userfile }}"
+    path: "/opt/{{ app.title }}/{{ iperf.userfile }}"
     create: true
     backup: true
-    owner: "{{run.user}}"
-    group: "{{run.user}}"
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"

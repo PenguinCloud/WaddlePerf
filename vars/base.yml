@@ -2,7 +2,7 @@ run:
   user: www-data
   autoupdates: "{{ lookup('env', 'RUN_AUTOUPDATES') }}"
 results:
-  file:  "{{ lookup('env', 'RESULTS_FILE') }}"
+  file: "{{ lookup('env', 'RESULTS_FILE') }}"
   dir: "{{ lookup('env', 'RESULTS_DIR') }}"
 app:
   title: "waddleperf"
@@ -62,7 +62,7 @@ pping:
   destport: "{{ lookup('env', 'PPING_DESTPORT') }}"
   desthost: "{{ lookup('env', 'PPING_DESTHOST') }}"
 httptrace:
-  enabled: "{{ lookup('env', 'HTTPTRACE_ENABLED')  }}"
+  enabled: "{{ lookup('env', 'HTTPTRACE_ENABLED') }}"
   url: "{{ lookup('env', 'HTTPTRACE_URL') }}"
 s3:
   interval: "{{ lookup('env', 'S3_INTERVAL') }}"
@@ -88,4 +88,3 @@ sshping:
   target: "{{ lookup('env', 'SSHPING_DESTHOST') }}"
   user: "{{ lookup('env', 'SSHPING_USER') }}"
   port: "{{ lookup('env', 'SSHPING_PORT') }}"
-
