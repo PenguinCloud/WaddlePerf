@@ -24,7 +24,7 @@ def ppingResults():
     results.dstHost = sys.argv[2].split(':')[0]
     
     # Split it out by method to determine how to handle, note ICMP doesnt have a port so it doesnt matter what we throw in there
-    if results.method == 'http' or method == 'quic' or results.method == 'tls' or results.method == 'icmp':
+    if results.method == 'http' or result.method == 'quic' or results.method == 'tls' or results.method == 'icmp':
         results.dstPort = sys.argv[2].split(':')[1]
         result = run(['pping',results.method, results.dstHost], stdout=PIPE)
     elif results.method == 'dns':

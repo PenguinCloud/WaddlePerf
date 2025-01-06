@@ -2,7 +2,7 @@
 
 from pydal import DAL, Field, IS_IPADDRESS, IS_ALPHANUMERIC, IS_LENGTH, IS_IN_SET
 from dataclasses import dataclass
-from regex import search
+from re import search
 import requests
 
 
@@ -73,6 +73,7 @@ class logParser():
         self.logFile = logFile
         
     def iperf(self):
+        import json
         try:
             with open(self.logFile, 'r') as file:
                 perfData= json.load(file)
