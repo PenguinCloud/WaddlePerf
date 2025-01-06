@@ -1,0 +1,22 @@
+---
+- name: Add a job to upload results to S3
+  ansible.builtin.cron:
+    name: "Upload results"
+    minute: "*/{{ s3.interval }}"
+    job: ansible-playbook /opt/manager/entrypoint.yml -c local --tags=s3
+    cron_file: waddleperf
+  when: s3.enabled
+- name: Run a job to test ourselves to make sure we are online
+  ansible.builtin.cron:
+    name: "healthcheck"
+    minute: "*/{{ healthcheck.interval }}"
+    job: ansible-playbook /opt/manager/entrypoint.yml -c local --tags=health
+    cron_file: waddleperf
+  when: healthcheck.enabled
+- name: Run a job to test performance
+  ansible.builtin.cron:
+    name: "AutoPerf"
+    minute: "*/{{ autoperf.interval }}"
+    job: /opt/waddleperf3/iperf3-client
+    cron_file: waddleperf
+  when: autoperf.enabled && iperf.client.enabled

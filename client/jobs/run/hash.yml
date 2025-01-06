@@ -1,0 +1,22 @@
+---
+- name: Setup hash generator
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/templates/generate-hash.j2"
+    dest: "/opt/manager/bins/hash.sh"
+    mode: "0500"
+# noqa
+- name: Generate hash
+  ansible.builtin.shell:
+    cmd: /opt/manager/bins/hash.sh
+  register: user_hash
+- name: User added
+  ansible.builtin.debug:
+    msg: "{{ iperf.username }},{{ user_hash.stdout }}"
+- name: Generate userfile
+  ansible.builtin.lineinfile:
+    line: "{{ iperf.username }},{{ user_hash.stdout }}"
+    path: "/opt/{{ app.title }}/{{ iperf.userfile }}"
+    create: true
+    backup: true
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"

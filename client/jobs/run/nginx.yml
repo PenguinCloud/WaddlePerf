@@ -1,0 +1,8 @@
+---
+- name: Drop in our nginx default with autoindex
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/templates/nginx.j2"
+    dest: /etc/nginx/sites-enabled/default
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    mode: "0555"
