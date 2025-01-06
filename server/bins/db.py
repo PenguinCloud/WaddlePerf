@@ -3,6 +3,7 @@
 from pydal import DAL, Field, IS_IPADDRESS, IS_ALPHANUMERIC, IS_LENGTH, IS_IN_SET
 from dataclasses import dataclass
 from regex import search
+import requests
 
 
 @dataclass
@@ -35,7 +36,7 @@ class dbConnect:
                              Field('testName', 'string', required=True, requires = IS_ALPHANUMERIC()),
                              Field('testType', 'string', required=True, requires = IS_IN_SET(['sshping', 'iperf', 'httptrace', 
                                                                                               'pping-dns', 'pping-quic', 'pping-tcp', 
-                                                                                              'pping-tls', 'pping-http',
+                                                                                              'pping-tls', 'pping-http','pping',
                                                                                               'traceroute','mtr', 'ping'])), 
                              Field('testHost', 'string', required=True, requires = IS_ALPHANUMERIC(), label='hostname which the test was for'), 
                              Field('testServerIP', 'string', requires = IS_IPADDRESS(), label='Acting Server host for testing'), 
@@ -113,7 +114,19 @@ class logParser():
             perfData= file.readlines
             file.close
         self.result.testName = "pping"
-        self.result.testType = "pping-http"
+        # We have to check the file name to see what type of test as the output is the same for each
+        if 'http' in self.logFile:
+            self.result.testType = "pping-http"
+        elif 'dns' in self.logFile:
+            self.result.testType = "pping-dns"
+        elif 'quic' in self.logFile:
+            self.result.testType = "pping-quic"
+        elif 'tcp' in self.logFile:
+            self.result.testType = "pping-tcp"
+        elif 'tls' in self.logFile:
+            self.result.testType = "pping-tls"
+        else:
+            self.result.testType = "pping"
         for line in perfData:
             if "avg" in line:
                 line = line.strip(' ')
@@ -122,6 +135,7 @@ class logParser():
                 self.result.avgLatency = search(r'^(\d){1:5}', latency)
             if "packet loss" in line:
                 self.result.avgPacketLoss = line.split(' ')[5]
+
 class getpublicIP():
     def __init__(self):
         self.ip = {}

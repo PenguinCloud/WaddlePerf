@@ -1,4 +1,1 @@
-Ping http://google.com:
-
-	sent = 4, ok = 4, failed = 0 (0%)
-	min = 30 ms, max = 34 ms, avg = 32 ms
+Ping udp://google.com:53:
