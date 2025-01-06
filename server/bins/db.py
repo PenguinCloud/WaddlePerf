@@ -2,6 +2,7 @@
 
 from pydal import DAL, Field, IS_IPADDRESS, IS_ALPHANUMERIC, IS_LENGTH, IS_IN_SET
 from dataclasses import dataclass
+from regex import search
 
 
 @dataclass
@@ -71,42 +72,56 @@ class logParser():
         self.logFile = logFile
         
     def iperf(self):
+        try:
+            with open(self.logFile, 'r') as file:
+                perfData= json.load(file)
+                file.close
+            # TODO: CHange test name to be something onboarded as like a description later
+            self.result.testName = "iperf"
+            self.result.testType = "iperf"
+            # TODO: Change this to be more dynamic later from request
+            self.result.testHost = "nohost.local"
+            self.result.rawResults = perfData
+            self.result.testServerIP = getpublicIP()['icanhazip']
+            self.result.testClientIP = perfData['start']['connected'][0]['remote_host']
+            # Check if udp or tcp
+            if perfData['start']['test_start']['protocol'] == 'UDP':
+                # get packet loss
+                self.result.avgPacketLoss = perfData['end']['sum']['lost_packets']
+                # get mean latency
+                self.result.avgLatency = perfData['end']['sum']['seconds']/ perfData['end']['sum']['packets']
+                # get throughput
+                self.result.avgThroughput = perfData['end']['sum']['bits_per_second']
+                # get jitter
+                self.result.avgJitter = perfData['end']['sum']['jitter_ms']
+            elif perfData['start']['test_start']['protocol'] == 'TCP':
+                # Get packet loss
+                self.result.avgPacketLoss = perfData['end']['sum_sent']['retransmits'] 
+                # Get mean latency
+                self.result.avgLatency = perfData['end']['streams'][0]['sender']['mean_rtt']/2
+                # Get throughput
+                self.result.avgThroughput = perfData['end']['sum_received']['bits_per_second']
+                if self.results.avgThroughput == 0:
+                    self.result.avgThroughput = perfData['end']['sum_sent']['bits_per_second']
+                # Get Jitter
+                self.result.avgJitter = None
+            return self.result
+        except:
+            print("Error parsing log file")
+    def pping(self):
         with open(self.logFile, 'r') as file:
-            perfData= json.load(file)
+            perfData= file.readlines
             file.close
-        # TODO: CHange test name to be something onboarded as like a description later
-        self.result.testName = "iperf"
-        self.result.testType = "iperf"
-        # TODO: Change this to be more dynamic later from request
-        self.result.testHost = "nohost.local"
-        self.result.rawResults = perfData
-        self.result.testServerIP = getpublicIP()['icanhazip']
-        self.result.testClientIP = perfData['start']['connected'][0]['remote_host']
-        # Check if udp or tcp
-        if perfData['start']['test_start']['protocol'] == 'UDP':
-            # get packet loss
-            self.result.avgPacketLoss = perfData['end']['sum']['lost_packets']
-            # get mean latency
-            self.result.avgLatency = perfData['end']['sum']['seconds']/ perfData['end']['sum']['packets']
-            # get throughput
-            self.result.avgThroughput = perfData['end']['sum']['bits_per_second']
-            # get jitter
-            self.result.avgJitter = perfData['end']['sum']['jitter_ms']
-            
-        elif perfData['start']['test_start']['protocol'] == 'TCP':
-            # Get packet loss
-            self.result.avgPacketLoss = perfData['end']['sum_sent']['retransmits'] 
-            # Get mean latency
-            self.result.avgLatency = perfData['end']['streams'][0]['sender']['mean_rtt']/2
-            # Get throughput
-            self.result.avgThroughput = perfData['end']['sum_received']['bits_per_second']
-            if self.results.avgThroughput = 0
-                self.result.avgThroughput = perfData['end']['sum_sent']['bits_per_second']
-            # Get Jitter
-            self.result.avgJitter = None
-        return self.result
-        
-
+        self.result.testName = "pping"
+        self.result.testType = "pping-http"
+        for line in perfData:
+            if "avg" in line:
+                line = line.strip(' ')
+                latency = (line.split(',')[6]).split('=')[1]
+                # This should capture the latency in ms from the output at bottom
+                self.result.avgLatency = search(r'^(\d){1:5}', latency)
+            if "packet loss" in line:
+                self.result.avgPacketLoss = line.split(' ')[5]
 class getpublicIP():
     def __init__(self):
         self.ip = {}
