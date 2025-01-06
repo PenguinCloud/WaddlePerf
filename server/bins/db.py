@@ -18,13 +18,14 @@ class dbInfo:
 class perfInfo:
     testName: str
     testType: str
-    testDstHost: str
-    testSrcHost: str
+    testServerIP: str
+    testClientIP: str
     testHost: str
     avgLatency: float
     avgThroughput: float
     avgJitter: float
     avgPacketLoss: float
+    rawResults: str
 
 class dbConnect:
     def __init__(self, dbInfo):
@@ -36,28 +37,30 @@ class dbConnect:
                                                                                               'pping-tls', 'pping-http',
                                                                                               'traceroute','mtr', 'ping'])), 
                              Field('testHost', 'string', required=True, requires = IS_ALPHANUMERIC(), label='hostname which the test was for'), 
-                             Field('testDstHost', 'string', requires = IS_IPADDRESS(), label='Acting Server host for testing'), 
-                             Field('testSrcHost', 'string', requires = IS_IPADDRESS(), label='Client host for testing'), 
+                             Field('testServerIP', 'string', requires = IS_IPADDRESS(), label='Acting Server host for testing'), 
+                             Field('testClientIP', 'string', requires = IS_IPADDRESS(), label='Client host for testing'), 
                              Field('avgLatency', 'float', requires=IS_LENGTH(3, 12)), 
                              Field('avgThroughput', 'float', requires=IS_LENGTH(3, 12)), 
                              Field('avgJitter', 'float', requires=IS_LENGTH(3, 12)), 
-                             Field('avgPacketLoss', 'float', requires=IS_LENGTH(3, 12)))
+                             Field('avgPacketLoss', 'float', requires=IS_LENGTH(3, 12)),
+                             Field('rawResults', 'json', label='Raw results from test'))
     
     def insertPerfData(self, perfInfo):
         self.db.testResults.insert(testName=perfInfo.testName, 
                                    testType=perfInfo.testType, 
-                                   testDstHost=perfInfo.testDstHost, 
-                                   testSrcHost=perfInfo.testSrcHost, 
+                                   testServerIP=perfInfo.testServerIP, 
+                                   testClientIP=perfInfo.testClientIP, 
                                    avgLatency=perfInfo.avgLatency, 
                                    avgThroughput=perfInfo.avgThroughput, 
                                    avgJitter=perfInfo.avgJitter, 
-                                   avgPacketLoss=perfInfo.avgPacketLoss)
+                                   avgPacketLoss=perfInfo.avgPacketLoss,
+                                   rawResults=perfInfo.rawResults)
     
     def queryTestName(self, testName):
         return self.db(self.db.testResults.testName == testName).select()
     
     def queryHostName(self, hostName):
-        return self.db((self.db.testResults.testDstHost == hostName) | (self.db.testResults.testSrcHost == hostName)).select()
+        return self.db((self.db.testResults.testServerIP == hostName) | (self.db.testResults.testClientIP == hostName)).select()
     
     def close(self):
         self.db.close()
@@ -76,8 +79,27 @@ class logParser():
         self.result.testType = "iperf"
         # TODO: Change this to be more dynamic later from request
         self.result.testHost = "nohost.local"
-        self.result.testDstHost = perfData['server_ip']
-        self.result.testSrcHost = perfData['client_ip']
-    
-                    
+        self.result.testServerIP = getpublicIP()['icanhazip']
+        self.result.testClientIP = perfData['start']['connected'][0]['remote_host']
+        # Get packet loss
+        self.result.avgPacketLoss = perfData['end']['sum_sent']['retransmits']
+        if self.result.avgPacketLoss== 0 or self.result.avgPacketLoss == None:
+            self.result.avgPacketLoss = perfData['end']['sum_received]['retransmits']
+        # Get mean latency
+        self.result.avgLatency = perfData['end']['streams'][0]['sender']['mean_rtt']
+        if self.result.avgLatency == 0 or self.result.avgLatency == None:
+            self.result.avgLatency = perfData['end']['streams'][0]['receiver']['mean_rtt']
+        #
+        self.result.avgThroughput = perfData['end']['sum_received']['bits_per_second']
+        
         return self.result
+        
+
+class getpublicIP():
+    def __init__(self):
+        self.ip = {}
+        # Migrate this to our own servers at some point
+        self.ip["ipify"] = requests.get('https://api.ipify.org').text
+        self.ip["icanhazip"] = requests.get('http://icanhazip.com').text
+        return self.ip
+        
