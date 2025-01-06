@@ -39,10 +39,10 @@ class dbConnect:
                              Field('testHost', 'string', required=True, requires = IS_ALPHANUMERIC(), label='hostname which the test was for'), 
                              Field('testServerIP', 'string', requires = IS_IPADDRESS(), label='Acting Server host for testing'), 
                              Field('testClientIP', 'string', requires = IS_IPADDRESS(), label='Client host for testing'), 
-                             Field('avgLatency', 'float', requires=IS_LENGTH(3, 12)), 
-                             Field('avgThroughput', 'float', requires=IS_LENGTH(3, 12)), 
-                             Field('avgJitter', 'float', requires=IS_LENGTH(3, 12)), 
-                             Field('avgPacketLoss', 'float', requires=IS_LENGTH(3, 12)),
+                             Field('avgLatency', 'float'), 
+                             Field('avgThroughput', 'float'), 
+                             Field('avgJitter', 'float'), 
+                             Field('avgPacketLoss', 'float'),
                              Field('rawResults', 'json', label='Raw results from test'))
     
     def insertPerfData(self, perfInfo):
@@ -82,14 +82,28 @@ class logParser():
         self.result.rawResults = perfData
         self.result.testServerIP = getpublicIP()['icanhazip']
         self.result.testClientIP = perfData['start']['connected'][0]['remote_host']
-        # Get packet loss
-        self.result.avgPacketLoss = perfData['end']['sum_sent']['retransmits']
-        # Get mean latency
-        self.result.avgLatency = perfData['end']['streams'][0]['sender']['mean_rtt']
-        # Get throughput
-        self.result.avgThroughput = perfData['end']['sum_received']['bits_per_second']
-        # Get Jitter
-        
+        # Check if udp or tcp
+        if perfData['start']['test_start']['protocol'] == 'UDP':
+            # get packet loss
+            self.result.avgPacketLoss = perfData['end']['sum']['lost_packets']
+            # get mean latency
+            self.result.avgLatency = perfData['end']['sum']['seconds']/ perfData['end']['sum']['packets']
+            # get throughput
+            self.result.avgThroughput = perfData['end']['sum']['bits_per_second']
+            # get jitter
+            self.result.avgJitter = perfData['end']['sum']['jitter_ms']
+            
+        elif perfData['start']['test_start']['protocol'] == 'TCP':
+            # Get packet loss
+            self.result.avgPacketLoss = perfData['end']['sum_sent']['retransmits'] 
+            # Get mean latency
+            self.result.avgLatency = perfData['end']['streams'][0]['sender']['mean_rtt']/2
+            # Get throughput
+            self.result.avgThroughput = perfData['end']['sum_received']['bits_per_second']
+            if self.results.avgThroughput = 0
+                self.result.avgThroughput = perfData['end']['sum_sent']['bits_per_second']
+            # Get Jitter
+            self.result.avgJitter = None
         return self.result
         
 
