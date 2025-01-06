@@ -79,6 +79,7 @@ class logParser():
         self.result.testType = "iperf"
         # TODO: Change this to be more dynamic later from request
         self.result.testHost = "nohost.local"
+        self.result.rawResults = perfData
         self.result.testServerIP = getpublicIP()['icanhazip']
         self.result.testClientIP = perfData['start']['connected'][0]['remote_host']
         # Get packet loss
@@ -87,6 +88,7 @@ class logParser():
         self.result.avgLatency = perfData['end']['streams'][0]['sender']['mean_rtt']
         # Get throughput
         self.result.avgThroughput = perfData['end']['sum_received']['bits_per_second']
+        # Get Jitter
         
         return self.result
         
