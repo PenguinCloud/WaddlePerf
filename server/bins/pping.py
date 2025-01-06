@@ -52,7 +52,7 @@ def ppingResults():
             results.droppped = (line.split(',')[4]).split('=')[1]
             latency = (line.split(',')[6]).split('=')[1]
             f.writeline(latency)
-    return results.
+    return results
 
 def ppingResultsDict():
     results = ppingResults()
