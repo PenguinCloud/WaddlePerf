@@ -83,13 +83,9 @@ class logParser():
         self.result.testClientIP = perfData['start']['connected'][0]['remote_host']
         # Get packet loss
         self.result.avgPacketLoss = perfData['end']['sum_sent']['retransmits']
-        if self.result.avgPacketLoss== 0 or self.result.avgPacketLoss == None:
-            self.result.avgPacketLoss = perfData['end']['sum_received]['retransmits']
         # Get mean latency
         self.result.avgLatency = perfData['end']['streams'][0]['sender']['mean_rtt']
-        if self.result.avgLatency == 0 or self.result.avgLatency == None:
-            self.result.avgLatency = perfData['end']['streams'][0]['receiver']['mean_rtt']
-        #
+        # Get throughput
         self.result.avgThroughput = perfData['end']['sum_received']['bits_per_second']
         
         return self.result
