@@ -1,8 +1,0 @@
----
-- name: Create sshping binary
-  ansible.builtin.template:
-    src: "{{ playbook_dir }}/templates/sshping.j2"
-    dest: /usr/local/bin/sshping-client
-    owner: "{{ run.user }}"
-    group: "{{ run.user }}"
-    mode: "0555"

@@ -1,0 +1,9 @@
+---
+- name: Add a job to upload results to S3
+  ansible.builtin.cron:
+    name: "Upload results"
+    minute: "*/{{ s3.interval }}"
+    job: ansible-playbook /opt/manager/entrypoint.yml -c local --tags=s3
+    cron_file: waddleperf
+  when: s3.enabled
+  tags: s3

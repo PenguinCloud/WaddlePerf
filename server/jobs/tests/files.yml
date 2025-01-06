@@ -6,7 +6,7 @@
   failed_when: userfilestat.stat.exists == false
 - name: Validate results file
   ansible.builtin.stat: 
-    path: "/var/www/{{ app.title }}/results.log"
+    path: "/var/www/{{ app.title }}/results.ljson"
   register: userfilestat
   failed_when: userfilestat.stat.exists == false
 - name: Validate iperf certificate file
@@ -19,23 +19,4 @@
     path: /usr/local/bin/iperf3
   register: userfilestat
   failed_when: userfilestat.stat.exists == false
-- name: Validate iperf3 client script
-  ansible.builtin.stat: 
-    path: "/opt/{{ app.title }}/iperf3-client"
-  register: userfilestat
-  failed_when: userfilestat.stat.exists == false
-- name: Validate mtr client script
-  ansible.builtin.stat: 
-    path: "/opt/{{ app.title }}/mtr-client"
-  register: userfilestat
-  failed_when: userfilestat.stat.exists == false
-- name: Validate pping client script
-  ansible.builtin.stat: 
-    path: "/opt/{{ app.title }}/pping-client"
-  register: userfilestat
-  failed_when: userfilestat.stat.exists == false
-- name: Validate httptrace client script
-  ansible.builtin.stat: 
-    path: "/opt/{{ app.title }}/httptrace-client"
-  register: userfilestat
-  failed_when: userfilestat.stat.exists == false
+
