@@ -7,7 +7,6 @@ Write-Host "Pulling latest version $VERSION"
 choco install iperf3 speedtest-cli httping python -y
 pip install ansible
 
-# TODO: Determine how to check if system is arm64 or x86_64
 if ([System.Environment]::Is64BitProcess -and (Get-WmiObject -Class Win32_Processor).AddressWidth -eq 64) {
   if ((Get-WmiObject -Class Win32_Processor).Architecture -eq 5) {
     Write-Host "This is a 64-bit ARM system which are not supported at this time!"
