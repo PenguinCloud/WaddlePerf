@@ -1,5 +1,0 @@
-- name: Get nginx pids
-  community.general.pids:
-      name: nginx
-  register: nginx_pids
-  failed_when: nginx_pids is failed or nginx_pids is empty
