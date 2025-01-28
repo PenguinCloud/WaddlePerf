@@ -1,4 +1,0 @@
-pping {% if pping.protocol == "http" %} http {% endif %} {% if pping.protocol == "dns" %} dns {% endif %} {% if pping.protocol == "quic" %} quic {% endif %} \
-{% if pping.protocol == "tls" %} tls {% endif %} -c {{ pping.count }} \
--i {{ pping.interval }} {% if pping.use4 == "true" %} -4 {% endif %} {% if pping.use6== "true" %} -6 {% endif %} \
--p {{ pping.port }} {{ pping.desthost }} >> {{results.dir}}/pping-{{pping.desthost}}.log

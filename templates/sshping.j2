@@ -1,3 +1,0 @@
-sshping -c {{sshping.count}} \
--T {{ sshping.timeout }} {% if sshping.bandwidth_test == '1' %} --size {{sshping.size }} {% endif %} \
-{{sshping.user }}@{{ sshping.target }}:{{sshping.port}} >> {{ results.dir }}/sshping-{{ sshping.target }}.log
