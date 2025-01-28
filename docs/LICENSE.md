@@ -541,3 +541,7 @@ specific requirements.
 if any, to sign a "copyright disclaimer" for the program, if necessary.
 For more information on this, and how to apply and follow the GNU AGPL, see
 <https://www.gnu.org/licenses/>.
+
+Exception granted for any employers of contributors during the time of contribution. 
+These employers will be granted MIT license spelled out here: https://opensource.org/license/mit 
+with the modification of they cannot resell the product directly but are free to use internally.
