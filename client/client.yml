@@ -1,0 +1,18 @@
+---
+# This is an Ansible playbook to run through thinclient tests using IPERF3, PPING, SSHPING, and HTTPING
+
+- hosts: all
+  gather_facts: no
+  connection: local
+  tasks:
+    - name: Run IPERF3 test
+      iperf3:
+        server: "{{ item }}"
+        port: "{{ iperf3.port }}"
+        protocol: "{{ iperf3.protocol }}"
+        timeout: "{{ iperf3.timeout }}"
+        retries: "{{ iperf3.retries }}"
+        keepalive: "{{ iperf3.keepalive }}"
+        size: "{{ iperf3.size }}"
+      with_items: "{{ server.hosts }}"
+      register: iperf3_results
