@@ -543,5 +543,7 @@ For more information on this, and how to apply and follow the GNU AGPL, see
 <https://www.gnu.org/licenses/>.
 
 Exception granted for any contributors and employers of contributors during the time of contribution. 
-These employers will be granted MIT license spelled out here: https://opensource.org/license/mit 
+The exception will be grant MIT license terms spelled out here: https://opensource.org/license/mit 
 with the modification of they cannot resell the product directly but are free to use internally.
+
+Terms for other companies to change license available from code owners.
