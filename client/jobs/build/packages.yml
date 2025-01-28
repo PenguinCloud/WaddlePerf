@@ -20,3 +20,5 @@
   ansible.builtin.pip:
     name:
       - psutil
+      - pyopenssl
+      - flask
