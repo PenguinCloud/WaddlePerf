@@ -1,0 +1,8 @@
+{
+    "packets_transmitted": 4,
+    "packets_received": 0,
+    "packet_loss": 100.0,
+    "rtt_min": null,
+    "rtt_avg": null,
+    "rtt_max": null
+}
