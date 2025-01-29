@@ -11,6 +11,8 @@ RUN apt update
 ARG APP_TITLE="WADDLEPERF" # Change this to actual title for Default
 ARG BUILD_THREADS="4"
 ARG RUN_AUTOUPDATES="true"
+ARG AUTOPERF_ENABLED="true"
+ARG AUTOPERF_INTERVAL="5"
 # IPERF ARGS
 ARG IPERF_URL="https://github.com/esnet/iperf/archive/refs/tags/3.14.tar.gz"
 

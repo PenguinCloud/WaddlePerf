@@ -13,10 +13,11 @@
     job: ansible-playbook /opt/manager/entrypoint.yml -c local --tags=health
     cron_file: waddleperf
   when: healthcheck.enabled
-- name: Run a job to test performance
+---
+- name: Update cron job for autoperf tag for the playbook
   ansible.builtin.cron:
-    name: "AutoPerf"
+    name: autoperf
+    job: "ansible-playbook /opt/{{app.title}}/client/autoperf.sh --tags autoperf --connection=local"
     minute: "*/{{ autoperf.interval }}"
-    job: /opt/waddleperf3/iperf3-client
-    cron_file: waddleperf
-  when: autoperf.enabled && iperf.client.enabled
+    user: "{{ run.user }}"
+    cron_file: autoperf

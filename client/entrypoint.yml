@@ -19,7 +19,7 @@
           loop:
             - { file: "jobs/build/user.yml" }
             - { file: "jobs/build/packages.yml" }
-            - { file: "jobs/build/iperf3.yml" }
+            - { file: "jobs/build/iperf3.yml", when: "iperf.enabled" }
             - { file: "jobs/build/filesystem.yml" }
             - { file: "jobs/build/security.yml" }
             - { file: "jobs/build/mtr.yml", when: "mtr.enabled" }
@@ -27,6 +27,7 @@
             - { file: "jobs/build/httptrace.yml", when: "httptrace.enabled" }
             - { file: "jobs/build/sshping.yml", when: "sshping.enabled" }
             - { file: "jobs/build/udpping.yml" }
+            - { file: "jobs/build/cron.yml", when: "autoperf.enabled and ansible_os_family=='Debian'" }
           loop_control:
             loop_var: job
 
