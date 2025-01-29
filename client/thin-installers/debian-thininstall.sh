@@ -5,7 +5,7 @@ $VERSION = curl --silent "https://api.github.com/repos/wzv5/pping/releases/lates
 echo "Pulling latest version $VERSION"
 
 apt install iperf3 speedtest-cli httping python3-pip -y
-pip3 install ansible
+pip3 install -r requirements.txt
 
 if [[ $(uname -m) == "arm64" ]]; then
   echo "This is an ARM-based Mac"

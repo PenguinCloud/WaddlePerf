@@ -8,6 +8,7 @@ brew install iperf3
 brew install speedtest-cli
 brew install httping
 brew install ansible
+brew install json_log_formatter
 
 if [[ $(uname -m) == "arm64" ]]; then
   echo "This is an ARM-based Mac"
