@@ -1,7 +1,8 @@
 ---
-- name: WaddlePerf
+- name: WaddlePerf Client
   hosts: localhost
   connection: local
+  gather_facts: true
   vars_files:
     - vars/base.yml
   tasks:
@@ -9,121 +10,43 @@
       tags:
         - build
       block:
-        - name: Install User
+        - name: Execute build tasks
           ansible.builtin.include_tasks:
-            file: "jobs//build/user.yml"
+            file: "{{ job.file }}"
             apply:
               tags:
                 - build
-        - name: Add apt and pip packages
-          ansible.builtin.include_tasks:
-            file: jobs/build/packages.yml
-            apply:
-              tags:
-                - build
-        - name: Create iperf3 binary
-          ansible.builtin.include_tasks:
-            file: jobs/build/iperf3.yml
-            apply:
-              tags:
-                - build
-        - name: Create filesystem directories and structure
-          ansible.builtin.include_tasks:
-            file: jobs/build/filesystem.yml
-            apply:
-              tags:
-                - build
-        - name: Create logs and sudoers
-          ansible.builtin.include_tasks:
-            file: jobs/build/security.yml
-            apply:
-              tags:
-                - build
-        - name: Create built in certificate
-          ansible.builtin.include_tasks:
-            file: jobs/build/certificate.yml
-            apply:
-              tags:
-                - build
-        - name: Create MTR testing
-          when: mtr.enabled
-          ansible.builtin.include_tasks:
-            file: "jobs/build/mtr.yml"
-            apply:
-              tags:
-                - build
-        - name: Create PPING testing
-          when: pping.enabled
-          ansible.builtin.include_tasks:
-            file: "jobs/build/pping.yml"
-            apply:
-              tags:
-                - build
-        - name: Create HttpTraceroute testing
-          when: httptrace.enabled
-          ansible.builtin.include_tasks:
-            file: "jobs/build/httptrace.yml"
-            apply:
-              tags:
-                - build
-        - name: Install NGINX
-          ansible.builtin.include_tasks:
-            file: "jobs/build/nginx.yml"
-            apply:
-              tags:
-                - build
-        - name: Install SSHPing
-          when: sshping.enabled
-          ansible.builtin.include_tasks:
-            file: "jobs/build/sshping.yml"
-            apply:
-              tags:
-                - build
+          loop:
+            - { file: "jobs/build/user.yml" }
+            - { file: "jobs/build/packages.yml" }
+            - { file: "jobs/build/iperf3.yml" }
+            - { file: "jobs/build/filesystem.yml" }
+            - { file: "jobs/build/security.yml" }
+            - { file: "jobs/build/mtr.yml", when: "mtr.enabled" }
+            - { file: "jobs/build/pping.yml", when: "pping.enabled" }
+            - { file: "jobs/build/httptrace.yml", when: "httptrace.enabled" }
+            - { file: "jobs/build/sshping.yml", when: "sshping.enabled" }
+          loop_control:
+            loop_var: job
+
     - name: Run
       tags:
         - run
         - hash
       block:
-        - name: Configure NGINX default site
+        - name: Execute run tasks
           ansible.builtin.include_tasks:
-            file: jobs/run/nginx.yml
+            file: "{{ job.file }}"
             apply:
               tags:
                 - run
-        - name: Run in server mode
-          ansible.builtin.include_tasks:
-            file: jobs/run/server.yml
-            apply:
-              tags:
-                - run
-          when: iperf.server.enabled
-        - name: Create user hash file
-          ansible.builtin.include_tasks:
-            file: jobs/run/hash.yml
-            apply:
-              tags:
-                - run
-                - hash
-        - name: Create client run script
-          ansible.builtin.include_tasks:
-            file: jobs/run/client.yml
-            apply:
-              tags:
-                - run
-        - name: Run S3 Uploader
-          ansible.builtin.include_tasks:
-            file: jobs/run/s3.yml
-            apply:
-              tags:
-                - run
-                - s3
-        - name: Test Files
-          ansible.builtin.include_tasks:
-            file: jobs/tests/files.yml
-            apply:
-              tags:
-                - run
-                - test
+          loop:
+            - { file: "jobs/run/client.yml" }
+            - { file: "jobs/run/s3.yml", tags: ["run", "s3"] }
+            - { file: "jobs/tests/files.yml", tags: ["run", "test"] }
+          loop_control:
+            loop_var: job
+
     - name: Health Checks
       tags:
         - run
