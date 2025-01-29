@@ -1,0 +1,29 @@
+$PPING_REPO = "wzv5/pping"
+$VERSION = (Invoke-RestMethod -Uri "https://api.github.com/repos/wzv5/pping/releases/latest").tag_name -replace "v", ""
+$RUNMODE="thin"
+
+Write-Host "Pulling latest version $VERSION"
+
+# Not sure if choco has these packages... but lets see. TODO: Test on windows platform
+choco install iperf3 speedtest-cli httping python -y
+pip install ansible
+
+if ([System.Environment]::Is64BitProcess -and (Get-WmiObject -Class Win32_Processor).AddressWidth -eq 64) {
+  if ((Get-WmiObject -Class Win32_Processor).Architecture -eq 5) {
+    Write-Host "This is a 64-bit ARM system which are not supported at this time!"
+    # Invoke-WebRequest -Uri "https://github.com/wzv5/pping/releases/download/v$VERSION/pping_${VERSION}_Windows_arm64.zip" -OutFile "pping_${VERSION}_Windows_arm64.zip"
+    # Expand-Archive -Path "pping_${VERSION}_Windows_arm64.zip" -DestinationPath "pping"
+  } else {
+    Write-Host "This is a 64-bit x86 system"
+    Invoke-WebRequest -Uri "https://github.com/wzv5/pping/releases/download/v$VERSION/pping_${VERSION}_Windows_x86_64.zip" -OutFile "pping_${VERSION}_Windows_x86_64.zip"
+    Expand-Archive -Path "pping_${VERSION}_Windows_x86_64.zip" -DestinationPath "pping"
+  }
+} else {
+  Write-Host "This is not a 64-bit system, assuming i386"
+  Invoke-WebRequest -Uri "https://github.com/wzv5/pping/releases/download/v$VERSION/pping_${VERSION}_Windows_i386.zip" -OutFile "pping_${VERSION}_Windows_i386.zip"
+  Expand-Archive -Path "pping_${VERSION}_Windows_i386.zip" -DestinationPath "pping"
+}
+}
+
+Move-Item -Path "pping/pping.exe" -Destination "C:\Program Files\pping\pping.exe"
+[System.IO.File]::SetAttributes("C:\Program Files\pping\pping.exe", "ReadOnly, System")
