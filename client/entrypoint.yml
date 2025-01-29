@@ -26,6 +26,7 @@
             - { file: "jobs/build/pping.yml", when: "pping.enabled" }
             - { file: "jobs/build/httptrace.yml", when: "httptrace.enabled" }
             - { file: "jobs/build/sshping.yml", when: "sshping.enabled" }
+            - { file: "jobs/build/udpping.yml" }
           loop_control:
             loop_var: job
 
