@@ -1,4 +1,4 @@
-
+# Edit this if on a thin client install
 export APP_TITLE="WADDLEPERFCLIENT" # Change this to actual title for Default
 export BUILD_THREADS="4"
 export RUN_AUTOUPDATES="true"

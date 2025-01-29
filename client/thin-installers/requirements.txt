@@ -1,2 +1,4 @@
 ansible
 json_log_formatter
+wheel
+pydal

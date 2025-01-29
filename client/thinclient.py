@@ -17,7 +17,7 @@ def configure_logging(log_to_console, log_file_path, log_as_json):
     if log_as_json:
         formatter = json_log_formatter.JSONFormatter()
     else:
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(funcName)s - %(message)s')
 
     for handler in handlers:
         handler.setFormatter(formatter)
