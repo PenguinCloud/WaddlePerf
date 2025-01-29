@@ -33,12 +33,11 @@ RUN ansible-playbook entrypoint.yml -c local --tags build
 #------------------------------------------------------------------#
 # General Environment variables
 ENV APP_TITLE="WADDLEPERF"
+ENV RUN_MODE="docker"
 # IPERF Environment variables
-ENV IPERF_SERVER_ENABLED="true"
 ENV IPERF_SERVER_IP="127.0.0.1"
 ENV IPERF_SERVER_PORT="5201"
 ENV IPERF_CLIENT_STREAMS="1"
-ENV IPERF_CLIENT_ENABLED="true"
 ENV IPERF_CLIENT_BITRATE="100M"
 ENV IPERF_CLIENT_RETURN="1"
 ENV IPERF_CLIENT_LOGFILE="0"
@@ -103,8 +102,8 @@ ENV SSHPING_BANDWIDTH="100M"
 # Results drop off location
 ENV RESULTS_DIR="/var/www/waddleperf"
 ENV RESULTS_FILE="results.json"
-RUN chown -R www-data:www-data /var/lib/nginx && chown -R www-data:www-data /usr/share/nginx
+
 # Switch to non-root user
 USER www-data
 # Entrypoint time (aka runtime)
-ENTRYPOINT ["/bin/bash","/opt/manager/entrypoint.sh"]
+ENTRYPOINT ["/bin/bash","/opt/manager/client.sh"]

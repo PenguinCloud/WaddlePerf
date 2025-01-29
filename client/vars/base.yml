@@ -1,6 +1,7 @@
 run:
   user: www-data
   autoupdates: "{{ lookup('env', 'RUN_AUTOUPDATES') }}"
+  mode: "{{ lookup('env', 'RUN_MODE') }}"
 results:
   file: "{{ lookup('env', 'RESULTS_FILE') }}"
   dir: "{{ lookup('env', 'RESULTS_DIR') }}"
