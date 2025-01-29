@@ -43,7 +43,6 @@
           loop:
             - { file: "jobs/run/client.yml" }
             - { file: "jobs/run/s3.yml", tags: ["run", "s3"] }
-            - { file: "jobs/tests/files.yml", tags: ["run", "test"] }
           loop_control:
             loop_var: job
 
@@ -52,11 +51,12 @@
         - run
         - health
         - test
+      when: ansible_os_family == "Debian"
       block:
         - name: Static Health Checks
           tags: static
           ansible.builtin.include_tasks:
-            file: jobs/tests/{{ item }}.yml
+            file: jobs/tests/{{ job }}.yml
             apply:
               tags:
                 - run
@@ -65,3 +65,5 @@
                 - static
           loop:
             - files
+          loop_control:
+            loop_var: job

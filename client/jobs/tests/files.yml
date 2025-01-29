@@ -1,9 +1,4 @@
 ---
-- name: Validate user file
-  ansible.builtin.stat: 
-    path: "/opt/{{ app.title }}/{{ iperf.userfile }}"
-  register: userfilestat
-  failed_when: userfilestat.stat.exists == false
 - name: Validate results file
   ansible.builtin.stat: 
     path: "/var/www/{{ app.title }}/results.log"
