@@ -27,7 +27,7 @@
             - { file: "jobs/build/httptrace.yml", when: "httptrace.enabled" }
             - { file: "jobs/build/sshping.yml", when: "sshping.enabled" }
             - { file: "jobs/build/udpping.yml" }
-            - { file: "jobs/build/cron.yml", when: "autoperf.enabled and ansible_os_family=='Debian'" }
+            - { file: "jobs/build/cron.yml", when: "autoperf.enabled and ansible_os_family=='Debian' and run.mode='docker'" }
           loop_control:
             loop_var: job
 
@@ -45,9 +45,18 @@
           loop:
             - { file: "jobs/run/client.yml" }
             - { file: "jobs/run/s3.yml", tags: ["run", "s3"] }
+            - { file: "jobs/run/cron.yml", when: "autoperf.enabled and ansible_os_family=='Debian' and run.mode='docker'" }
           loop_control:
             loop_var: job
-
+    - name: AutoPerf
+      tags:
+        - autoperf
+      ansible.builtin.include_tasks:
+        file: jobs/run/autoperf.yml
+        apply:
+          tags:
+            - autoperf
+      when: autoperf.enabled and ansible_os_family == "Debian" and run.mode == "docker"
     - name: Health Checks
       tags:
         - run
