@@ -20,17 +20,6 @@ brew install httping
 brew install ansible
 brew install json_log_formatter
 
-if [[ $(uname -m) == "arm64" ]]; then
-  echo "This is an ARM-based Mac"
-  wget https://github.com/wzv5/pping/releases/download/v${VERSION}/pping_${VERSION}_Darwin_arm64.tar.gz
-  tar -xvf pping_${VERSION}_Darwin_arm64.tar.gz -C pping
-  
-else
-  echo "This is not an ARM-based Mac, assuming x86_64"
-  wget https://github.com/wzv5/pping/releases/download/v${VERSION}/pping_${VERSION}_Darwin_x86_64.tar.gz
-  tar -xvf pping_${VERSION}_Darwin_x86_64.tar.gz -C pping
-fi
+ansible-playbook installer.yml -c local
 
-mv pping/pping /usr/local/bin/pping
-chmod +x /usr/local/bin/pping
 export RUNMODE="thin"
