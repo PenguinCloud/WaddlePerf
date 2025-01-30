@@ -1,0 +1,10 @@
+{
+    "datetime": "2025-01-30 23:19:50",
+    "dropped": 0,
+    "dstHost": "google.com",
+    "dstPort": 80,
+    "latencyMax": "33",
+    "latencyMean": "33",
+    "latencyMin": "33",
+    "testtype": "http"
+}
