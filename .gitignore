@@ -10,3 +10,8 @@ venv/
 */*.pcapng
 */*.pcapng.gz
 */*.pcap
+*/*.sqlite
+*/*.sqlite3
+*/*.db
+*/*.db3
+*/*.db
