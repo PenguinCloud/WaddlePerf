@@ -34,4 +34,4 @@
     name:
       - psutil
       - pyopenssl
-      - jsons
+      - scapy

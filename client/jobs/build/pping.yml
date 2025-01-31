@@ -30,7 +30,7 @@
         mode: '0755'
     - name: copy pping wrapper for json output to usr binary directory
       ansible.builtin.copy:
-        src: bins/pping.py
+        src: bins/pping-parser.py
         dest: /usr/local/bin/pping-json
         owner: root
         group: root

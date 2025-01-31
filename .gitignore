@@ -4,3 +4,9 @@ id_rsa*
 *.key
 venv/
 .idea/
+*/*.json
+*/*.log
+*/*.pcap
+*/*.pcapng
+*/*.pcapng.gz
+*/*.pcap

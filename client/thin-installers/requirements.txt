@@ -3,3 +3,4 @@ json_log_formatter
 wheel
 pydal
 jsons
+scapy

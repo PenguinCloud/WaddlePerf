@@ -2,7 +2,6 @@
 # Original source inspiration https://github.com/wangyu-/UDPping/blob/master/udpping.py
 # Cleaned up using CoPilot and migrated to Python 3.11
 
-import socket
 import sys
 import time
 import string
@@ -11,13 +10,18 @@ import signal
 import os
 import getopt
 import json
+import socket
+import logging
 
 INTERVAL = 1000  # unit ms
 LEN = 64
-IP = "127.0.0.1"
+DSTHOST = "127.0.0.1"
 PORT = 2000
 PING_COUNT = 4  # Default count set to 4
 OUTPUT_FILE = "udppingresults.json"  # Default output file
+TTL = 64  # Default TTL value
+LOG_LEVEL = logging.INFO  # Default logging level
+TOKEN = None  # Default token value
 
 count = 0
 count_of_received = 0
@@ -27,12 +31,11 @@ rtt_max = 0.0
 
 def signal_handler(signal, frame):
     if count != 0 and count_of_received != 0:
-        print('')
-        print('--- ping statistics ---')
+        logging.info('--- ping statistics ---')
     if count != 0:
-        print(f'{count} packets transmitted, {count_of_received} received, {(count - count_of_received) * 100.0 / count:.2f}% packet loss')
+        logging.info(f'{count} packets transmitted, {count_of_received} received, {(count - count_of_received) * 100.0 / count:.2f}% packet loss')
     if count_of_received != 0:
-        print(f'rtt min/avg/max = {rtt_min:.2f}/{rtt_sum / count_of_received:.2f}/{rtt_max:.2f} ms')
+        logging.info(f'rtt min/avg/max = {rtt_min:.2f}/{rtt_sum / count_of_received:.2f}/{rtt_max:.2f} ms')
     write_statistics_to_json()
     os._exit(0)
 
@@ -61,17 +64,16 @@ def parse_options(options):
             INTERVAL = int(value)
 
 def main():
-    global IP, PORT, PING_COUNT, OUTPUT_FILE, count, count_of_received, rtt_sum, rtt_min, rtt_max
+    global DSTHOST, PORT, PING_COUNT, OUTPUT_FILE, TTL, LOG_LEVEL, TOKEN, count, count_of_received, rtt_sum, rtt_min, rtt_max
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h:c:o:p:f:", ["hostname=", "count=", "options=", "port=", "file="])
+        opts, args = getopt.getopt(sys.argv[1:], "a:c:o:p:f:t:l:k:h", ["address=", "count=", "options=", "port=", "file=", "ttl=", "loglevel=", "token=", "help"])
     except getopt.GetoptError as err:
-        print(str(err))
+        logging.error(str(err))
         sys.exit(2)
-
     for opt, arg in opts:
-        if opt in ("-h", "--hostname"):
-            IP = arg
+        if opt in ("-a", "--address"):
+            DSTHOST = arg
         elif opt in ("-c", "--count"):
             PING_COUNT = int(arg)
         elif opt in ("-o", "--options"):
@@ -80,51 +82,62 @@ def main():
             PORT = int(arg)
         elif opt in ("-f", "--file"):
             OUTPUT_FILE = arg
-
-    if not IP or not PORT:
-        print("Usage: udpping.py -h <hostname> -c <count> -p <port> -f <output_file>")
+        elif opt in ("-t", "--ttl"):
+            TTL = int(arg)
+        elif opt in ("-l", "--loglevel"):
+            LOG_LEVEL = getattr(logging, arg.upper(), logging.INFO)
+        elif opt in ("-k", "--token"):
+            TOKEN = arg
+        elif opt in ("-h", "--help"):
+            print("Usage: udpping.py -a <address or hostname> -c <count> -p <port> -f <output_file> -l <loglevel> -k <token>")
+            sys.exit()
+    if not DSTHOST or not PORT:
+        print("Usage: udpping.py -a <address or hostname> -c <count> -p <port> -f <output_file> -l <loglevel> -k <token>")
         sys.exit(2)
 
     if LEN < 5:
-        print("LEN must be >=5")
+        logging.error("LEN must be >=5")
         exit()
     if INTERVAL < 50:
-        print("INTERVAL must be >=50")
+        logging.error("INTERVAL must be >=50")
         exit()
+
+    logging.basicConfig(level=LOG_LEVEL, format='%(asctime)s - %(levelname)s - %(message)s')
 
     signal.signal(signal.SIGINT, signal_handler)
 
-    is_ipv6 = ':' in IP
-    sock = socket.socket(socket.AF_INET6 if is_ipv6 else socket.AF_INET, socket.SOCK_DGRAM)
+    logging.info(f"UDPping {DSTHOST} via port {PORT} with {LEN} bytes of payload")
 
-    print(f"UDPping {IP} via port {PORT} with {LEN} bytes of payload")
-    sys.stdout.flush()
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.settimeout(INTERVAL / 1000.0)
+    sock.setsockopt(socket.SOL_IP, socket.IP_TTL, TTL)
 
     while PING_COUNT is None or count < PING_COUNT:
-        payload = random_string(LEN)
-        sock.sendto(payload.encode(), (IP, PORT))
+        payload = random_string(LEN).encode()
+        if TOKEN:
+            payload = f"{TOKEN}:{payload.decode()}".encode()
         time_of_send = time.perf_counter()
+        sock.sendto(payload, (DSTHOST, PORT))
         deadline = time_of_send + INTERVAL / 1000.0
         received = 0
         rtt = 0.0
 
-        while True:
-            timeout = deadline - time.perf_counter()
-            if timeout < 0:
-                break
-            sock.settimeout(timeout)
-            try:
-                recv_data, addr = sock.recvfrom(65536)
-                if recv_data == payload.encode() and addr[0] == IP and addr[1] == PORT:
-                    rtt = (time.perf_counter() - time_of_send) * 1000
-                    print(f"Reply from {IP} seq={count} time={rtt:.2f} ms")
-                    sys.stdout.flush()
+        try:
+            while True:
+                timeout = deadline - time.perf_counter()
+                if timeout < 0:
+                    break
+                sock.settimeout(timeout)
+                response, addr = sock.recvfrom(1024)
+                if addr[0] == DSTHOST and addr[1] == PORT:
+                    recv_time = time.perf_counter()
+                    rtt = (recv_time - time_of_send) * 1000
+                    logging.info(f"Reply from {DSTHOST} seq={count} time={rtt:.2f} ms")
                     received = 1
                     break
-            except socket.timeout:
-                break
-            except:
-                pass
+        except socket.timeout:
+            pass
+
         count += 1
         if received == 1:
             count_of_received += 1
@@ -132,8 +145,7 @@ def main():
             rtt_max = max(rtt_max, rtt)
             rtt_min = min(rtt_min, rtt)
         else:
-            print("Request timed out")
-            sys.stdout.flush()
+            logging.warning("Request timed out")
 
         time_remaining = deadline - time.perf_counter()
         if time_remaining > 0:

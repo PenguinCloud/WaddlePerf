@@ -13,7 +13,7 @@
     job: ansible-playbook /opt/manager/entrypoint.yml -c local --tags=health
     cron_file: waddleperf
   when: healthcheck.enabled
----
+
 - name: Update cron job for autoperf tag for the playbook
   ansible.builtin.cron:
     name: autoperf
