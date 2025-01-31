@@ -2,5 +2,7 @@ ansible
 json_log_formatter
 wheel
 pydal
-jsons
-scapy
+aioquic
+certifi
+asyncio
+aiohttp

@@ -36,6 +36,7 @@ def main(argv):
     logger = logging.getLogger(__name__)
     
     import socket
+    import base64
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((address, int(port)))
 
@@ -45,7 +46,8 @@ def main(argv):
         data, addr = sock.recvfrom(1024)
         message = data.decode('utf-8')
         if token:
-            if message.startswith(f"{token}"):
+            encoded_token = base64.b64encode(token.encode('utf-8')).decode('utf-8')
+            if message.startswith(encoded_token):
                 logger.info(f"Received authenticated message: {message} from {addr}")
                 response = message[len(f"Token {token} "):].encode('utf-8')
                 sock.sendto(response, addr)

@@ -12,6 +12,7 @@ import getopt
 import json
 import socket
 import logging
+import base64
 
 INTERVAL = 1000  # unit ms
 LEN = 64
@@ -115,7 +116,8 @@ def main():
     while PING_COUNT is None or count < PING_COUNT:
         payload = random_string(LEN).encode()
         if TOKEN:
-            payload = f"{TOKEN}:{payload.decode()}".encode()
+            encoded_token = base64.b64encode(TOKEN.encode()).decode()
+            payload = f"{encoded_token}:{payload.decode()}".encode()
         time_of_send = time.perf_counter()
         sock.sendto(payload, (DSTHOST, PORT))
         deadline = time_of_send + INTERVAL / 1000.0

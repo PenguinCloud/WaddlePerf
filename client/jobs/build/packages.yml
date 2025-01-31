@@ -34,4 +34,10 @@
     name:
       - psutil
       - pyopenssl
-      - scapy
+      - aioquic
+      - certifi
+      - asyncio
+      - cryptography
+      - aiohttp
+
+
