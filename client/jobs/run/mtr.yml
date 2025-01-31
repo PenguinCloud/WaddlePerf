@@ -6,3 +6,12 @@
     owner: "{{run.user}}"
     group: "{{run.user}}"
     mode: "0555"
+  when: mtr.enabled
+- name: Copy mtr script to binary
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/templates/mtr.j2"
+    dest: "/opt/{{ app.title }}/mtr-client"
+    owner: "{{run.user}}"
+    group: "{{run.user}}"
+    mode: "0400"
+  when: not mtr.enabled
