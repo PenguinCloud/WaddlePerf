@@ -1,4 +1,3 @@
-# index.html
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,6 +59,14 @@
         function downloadResults() {
             window.location.href = '/downloadresults';
         }
+
+        // WebSocket connection
+        var ws = new WebSocket('ws://localhost:8000/ws');
+        ws.onmessage = function(event) {
+            const responseBox = document.getElementById('response-box');
+            responseBox.textContent += event.data + '\\n';
+            responseBox.scrollTop = responseBox.scrollHeight;
+        };
     </script>
 </head>
 <body>

@@ -75,5 +75,12 @@ server {
         autoindex on;
         try_files $uri $uri/ =404;
     }
-    { %if %}
+    {% if google.cloud %}
+    location /nginx_status {
+        stub_status on;
+        access_log off;
+        allow 127.0.0.1;
+        deny all;
+    }
+    {% endif %}
 }
