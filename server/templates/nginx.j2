@@ -27,7 +27,7 @@ server {
             break;
         }
         location / {
-            // redirect to /speedtest 
+            # redirect to /speedtest 
             return 301 /speedtest/;
         }
 
@@ -69,11 +69,11 @@ server {
         gzip_http_version 1.1;
         gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript image/svg+xml;
     }
-            location /{{app.title}} {
-                # First attempt to serve request as file, then
-                # as directory, then fall back to displaying a 404.
-                autoindex on;
-                try_files $uri $uri/ =404;
-        }
-    
+    location /{{ app.title}} {
+        # First attempt to serve request as file, then
+        # as directory, then fall back to displaying a 404.
+        autoindex on;
+        try_files $uri $uri/ =404;
+    }
+    { %if %}
 }

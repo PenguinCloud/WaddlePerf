@@ -17,7 +17,7 @@ ARG IPERF_URL="https://github.com/esnet/iperf/archive/refs/tags/3.14.tar.gz"
 ARG S3_ENABLED="true"
 
 # BUILD IT!
-#RUN /usr/bin/bash bins/py4web.py
+#RUN /usr/bin/bash bins/py4web.py # This is coming later
 RUN ansible-playbook entrypoint.yml -c local --tags build
 #------------------------------------------------------------------#
 # General Environment variables
@@ -36,7 +36,7 @@ ENV IPERF_USERNAME="www-data"
 ENV IPERF_PROTOCOL="tcp"
 ENV IPERF_AUTHENTICATION="1"
 # NGINX Environment variables
-ENV WEB_PORT="8080"
+ENV WEB_PORT="80"
 ENV WEB_SPORT="443"
 ENV WEB_HOST="localhost"
 
@@ -56,14 +56,17 @@ ENV HEALTHCHECK_INTERVAL="10"
 # Results drop off location
 ENV RESULTS_DIR="/var/www/waddleperf"
 ENV RESULTS_FILE="results.json"
-#  Nginx for results and PEM
-EXPOSE 8080 
-# Nginx for results and PEM
-EXPOSE 443 
+
+# For Promethesus based nginx montoring including GCP Ops Agent
+# https://cloud.google.com/stackdriver/docs/solutions/agents/ops-agent/third-party/nginx
+ENV GOOGLE_CLOUD="false"
+
 # iPerf Server
 EXPOSE 5201 
 # SpeedTest Web UI
 EXPOSE 80 
+#If you want HTTPS, for now, put a reverse proxy in front of this host for web traffic
+
 RUN chown -R www-data:www-data /var/lib/nginx && chown -R www-data:www-data /usr/share/nginx
 # Switch to non-root user
 USER www-data
