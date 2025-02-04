@@ -54,7 +54,7 @@ jobs:
         with:
           context: ./server
           push: true
-          tags: ghcr.io/penguincloud/${{ env.REPO }}:beta
+          tags: ghcr.io/penguincloud/${{ env.REPO }}-server:beta
           labels: ${{ steps.meta.outputs.labels }}
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3

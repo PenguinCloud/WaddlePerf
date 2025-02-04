@@ -35,3 +35,18 @@
         owner: root
         group: root
         mode: '0755'
+    - name: touch pping-client in /opt directory
+      ansible.builtin.file:
+        path:  "/opt/{{ app.title }}/pping-client"
+        state: touch
+        owner: "{{ run.user }}"
+        group: "{{ run.user }}"
+        mode: '0755'
+    - name: create pping client binary link in usr bin directory
+      ansible.builtin.file:
+        dest: /usr/local/bin/pping-client
+        src: "/opt/{{ app.title }}/pping-client"
+        state: link
+        owner: "{{ run.user }}"
+        group: "{{ run.user }}"
+        mode: '0555'

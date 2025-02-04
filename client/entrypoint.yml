@@ -45,6 +45,9 @@
           loop:
             - { file: "jobs/run/client.yml" }
             - { file: "jobs/run/s3.yml", tags: ["run", "s3"] }
+            - { file: "jobs/run/mtr.yml", when: "mtr.enabled" }
+            - { file: "jobs/run/pping.yml", when: "pping.enabled" }
+            - { file: "jobs/run/sshping.yml", when: "sshping.enabled" }
             - { file: "jobs/run/cron.yml", when: "autoperf.enabled and ansible_os_family=='Debian' and run.mode='docker'" }
           loop_control:
             loop_var: job

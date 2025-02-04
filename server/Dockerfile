@@ -1,10 +1,10 @@
 FROM ghcr.io/penguincloud/core
-LABEL company="Penguin Tech Group LLC"
+LABEL company="Penguin Technologies Inc."
 LABEL org.opencontainers.image.authors="info@penguintech.io"
 LABEL license="GNU AGPL3"
 # GET THE FILES WHERE WE NEED THEM!
 COPY . /opt/manager/
-COPY libs/Speed-Test/ /var/www/speedtest
+COPY libs/speedtest/ /var/www/speedtest
 WORKDIR /opt/manager
 RUN apt update 
 # PUT YER ARGS in here
@@ -13,27 +13,15 @@ ARG BUILD_THREADS="4"
 ARG RUN_AUTOUPDATES="true"
 # IPERF ARGS
 ARG IPERF_URL="https://github.com/esnet/iperf/archive/refs/tags/3.14.tar.gz"
-
-# MTR ARGS
-ARG MTR_VERSION="0.95"
-ARG MTR_ENABLED="true"
-ARG MTR_COMPILE="false"
-# HTTPTRACE ARGS
-ARG HTTPTRACE_ENABLED="true"
-# PPING ARGS
-ARG PPING_VERSION="0.8.3"
-ARG PPING_ENABLED="true"
-#SSHPING ARGS
-ARG SSHPING_ENABLED="true"
 # S3
 ARG S3_ENABLED="true"
 
 # BUILD IT!
-RUN /usr/bin/bash bins/py4web.sh
+#RUN /usr/bin/bash bins/py4web.py
 RUN ansible-playbook entrypoint.yml -c local --tags build
 #------------------------------------------------------------------#
 # General Environment variables
-ENV APP_TITLE="WADDLEPERF"
+ENV APP_TITLE="WADDLEPERF-SERVER"
 # IPERF Environment variables
 ENV IPERF_SERVER_ENABLED="true"
 ENV IPERF_SERVER_IP="127.0.0.1"
@@ -65,14 +53,6 @@ ENV S3_KEY_SECRET="SUPERSECRETSQUIRREL_EXAMPLE"
 ENV HEALTHCHECK_ENABLED="true"
 ENV HEALTHCHECK_INTERVAL="10"
 
-# SSHPING
-ENV SSHPING_ENABLED="true"
-ENV SSHPING_COUNT="2"
-ENV SSHPING_TIMEOUT="20"
-ENV SSHPING_DESTHOST="localhost"
-ENV SSHPING_PORT="22"
-ENV SSHPING_USER="ptg-user"
-ENV SSHPING_BANDWIDTH="100M"
 # Results drop off location
 ENV RESULTS_DIR="/var/www/waddleperf"
 ENV RESULTS_FILE="results.json"

@@ -69,3 +69,11 @@
   ansible.builtin.command:
     cmd: chown -R www-data:www-data /var/libs/nginx
   become: true
+- name: Add a link into usr bin for iperf3-server
+  ansible.builtin.file:
+    src: "/opt/{{ app.title }}/iperf3-server"
+    dest: /usr/local/bin/iperf3-server
+    owner: root
+    group: root
+    mode: "0555"
+    state: link

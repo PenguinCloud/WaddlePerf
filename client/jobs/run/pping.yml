@@ -2,7 +2,7 @@
 - name: Copy pping to binary directory
   ansible.builtin.template:
     src: "{{ playbook_dir }}/templates/pping.j2"
-    dest: /usr/local/bin/pping-client
+    dest:  "/opt/{{ app.title }}/pping-client"
     owner: "{{run.user}}"
     group: "{{run.user}}"
-    mode: "0555"
+    mode: "0755"

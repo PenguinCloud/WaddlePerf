@@ -20,3 +20,18 @@
     owner: root
     group: root
     mode: "0555"
+- name: touch sshping-client in /opt directory
+  ansible.builtin.file:
+    path:  "/opt/{{ app.title }}/sshping-client"
+    state: touch
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    mode: '0755'
+- name: create sshping client binary link in usr bin directory
+  ansible.builtin.file:
+    dest: /usr/local/bin/sshping-client
+    src: "/opt/{{ app.title }}/sshping-client"
+    state: link
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    mode: '0555'

@@ -16,6 +16,7 @@
     owner: "{{ run.user }}"
     group: "{{ run.user }}"
     mode: "0500"
+  ignore_errors: true
 - name: Copy mtr client script into opt dir
   when: mtr.enabled
   ansible.builtin.template:

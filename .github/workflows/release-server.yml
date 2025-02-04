@@ -43,8 +43,8 @@ jobs:
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
           images: |
-            penguincloud/${{ env.REPO }}
-            ghcr.io/${{ github.repository }}
+            penguincloud/${{ env.REPO }}-server
+            ghcr.io/${{ github.repository }}-server
     
       - name: Build and push Docker images
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
@@ -58,7 +58,7 @@ jobs:
         with:
           context: ./server
           push: true
-          tags: ghcr.io/penguincloud/${{ env.REPO }}:latest, penguincloud/${{ env.REPO }}:latest
+          tags: ghcr.io/penguincloud/${{ env.REPO }}-server:latest, penguincloud/${{ env.REPO }}-server:latest
           labels: ${{ steps.meta.outputs.labels }}
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3

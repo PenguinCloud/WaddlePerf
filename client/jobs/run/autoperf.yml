@@ -40,3 +40,14 @@
   when: iperf.enabled
   tags: 
     - tier3
+- name:  Import results into the database
+  ansible.builtin.command:
+    cmd: "bins/perfDB.py -d {{ results_dir }}"
+  tags: 
+    - tier1
+    - tier2
+    - tier3
+  delegate_to: localhost
+  delegate_facts: no
+  ignore_errors: yes
+  register: import_results
