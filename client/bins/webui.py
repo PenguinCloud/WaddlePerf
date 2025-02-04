@@ -1,128 +1,72 @@
-#!/usr/bin/env python3
-import getopt
-import sys
+#! /usr/bin/env python3
+# TODO: Get this working again for 4.1.0
+
+# controllers.py
 import json
-from flask import Flask, render_template_string, jsonify, send_file
+import subprocess
+from py4web import action, request, response, abort, redirect, URL
+from py4web.core import Fixture
+#from py4web.utils import websocket
+from yatl.helpers import XML
 from io import BytesIO
+from ppingParser import ppingPerf as pping
 
 class WebUI:
-    def __init__(self, port=5000):
-        self.app = Flask(__name__)
-        self.port = port
-        self.setup_routes()
+    def __init__(self):
         self.results = []
+        self.ws = websocket('ws')
 
-    def setup_routes(self):
-        @self.app.route('/')
-        def index():
-            return render_template_string('''
-                <html>
-                <head>
-                    <title>WaddlePerf Web Client</title>
-                    <style>
-                        body {
-                            background-color: black;
-                            color: green;
-                            text-align: left;
-                            margin-top: 50px;
-                        }
-                        button {
-                            margin: 10px;
-                            padding: 10px 20px;
-                            font-size: 16px;
-                            background-color: black;
-                            border: 2px solid green;
-                            color: green;
-                            font-weight: bold;
-                        }
-                        #response-box {
-                            margin-top: 20px;
-                            padding: 10px;
-                            border: 1px solid green;
-                            height: 200px;
-                            overflow-y: scroll;
-                            white-space: pre-wrap;
-                            text-align: left;
-                        }
-                    </style>
-                    <script>
-                        function fetchAndDisplay(endpoint) {
-                            fetch(endpoint)
-                                .then(response => response.text())
-                                .then(data => {
-                                    const responseBox = document.getElementById('response-box');
-                                    responseBox.textContent += data + '\\n';
-                                    responseBox.scrollTop = responseBox.scrollHeight;
-                                });
-                        }
+    @action('index')
+    @action.uses('index.html')
+    def index(self):
+        return dict()
 
-                        function downloadResults() {
-                            window.location.href = '/downloadresults';
-                        }
-                    </script>
-                </head>
-                <body>
-                    <div id="control-box">
-                    <h1>WaddlePerf Web Client</h1>
-                    <button onclick="fetchAndDisplay('/startiperf')">Start iPerf</button>
-                    <button onclick="fetchAndDisplay('/startmttr')">Start MTTR</button>
-                    <button onclick="fetchAndDisplay('/startssh')">Start SSH</button>
-                    <button onclick="fetchAndDisplay('/starthttp')">Start HTTP</button>
-                    <button onclick="downloadResults()">Download Results</button>
-                    </div>
-                    <div id="response-header"><h2>Results:</h2><br /></div>
-                    <div id="response-box" width="%100"></div>
-                </body>
-                </html>
-            ''')
+    @action('startiperf')
+    def startiperf(self):
+        result = subprocess.run(['iperf3-client'], capture_output=True, text=True)
+        self.results.append(result.stdout)
+        ws.send('update', result.stdout)
+        return 'iPerf started'
 
-        @self.app.route('/startiperf')
-        def startiperf():
-            result = 'iPerf started'
-            self.results.append(result)
-            return result
+    @action('startmttr')
+    def startmttr(self):
+        hostname = request.query.get('hostname')
+        port = request.query.get('port')
+        result = subprocess.run(['mttr', '-h', hostname, '-p', port], capture_output=True, text=True)
+        self.results.append(result.stdout)
+        websocket.send('update', result.stdout)
+        return 'MTTR started'
 
-        @self.app.route('/startmttr')
-        def startmttr():
-            result = 'MTTR started'
-            self.results.append(result)
-            return result
+    @action('startssh')
+    def startssh(self):
+        result = 'SSH not supported by webui yet'
+        self.results.append(result)
+        websocket.send('update', result)
+        return 'SSH started'
 
-        @self.app.route('/startssh')
-        def startssh():
-            result = 'SSH started'
-            self.results.append(result)
-            return result
+    @action('starthttp')
+    def starthttp(self):
+        hostname = request.query.get('hostname')
+        port = request.query.get('port')
+        websocket.send('update', f"Starting HTTP request to {hostname}")
+        pping_instance = pping(dstHost=hostname, dstPort=port)
+        result = pping_instance.run()
+        self.results.append(result)
+        self.results.append(f"latencyMean: {result.latencyMean}\nlatencyMin: {result.latencyMin}\nlatencyMax: {result.latencyMax}")
+        websocket.send('update', result)
+        return 'HTTP started'
 
-        @self.app.route('/starthttp')
-        def starthttp():
-            result = 'HTTP started'
-            self.results.append(result)
-            return result
+    @action('downloadresults')
+    def downloadresults(self):
+        json_data = json.dumps(self.results)
+        response.headers['Content-Type'] = 'application/json'
+        response.headers['Content-Disposition'] = 'attachment; filename=results.json'
+        return json_data
 
-        @self.app.route('/downloadresults')
-        def downloadresults():
-            json_data = json.dumps(self.results)
-            return send_file(BytesIO(json_data.encode()), mimetype='application/json', as_attachment=True, attachment_filename='results.json')
+    @websocket('ws')
+    def ws(self, data):
+        # This method will handle incoming websocket messages
+        print(f"Received websocket message: {data}")
+        websocket.send('update', f"Echo: {data}")
 
-    def run(self):
-        self.app.run(debug=True, port=self.port)
-
-def main(argv):
-    port = 5000  # Default port
-    try:
-        opts, args = getopt.getopt(argv, "hp:", ["port="])
-    except getopt.GetoptError:
-        print('webui.py -p <port>')
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt == '-h':
-            print('webui.py -p <port>')
-            sys.exit()
-        elif opt in ("-p", "--port"):
-            port = int(arg)
-    web_ui = WebUI(port)
-    web_ui.run()
-
-if __name__ == '__main__':
-    main(sys.argv[1:])
+web_ui = WebUI()
