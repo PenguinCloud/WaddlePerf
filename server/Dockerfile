@@ -56,6 +56,14 @@ ENV HEALTHCHECK_INTERVAL="10"
 # Results drop off location
 ENV RESULTS_DIR="/var/www/waddleperf"
 ENV RESULTS_FILE="results.json"
+#  Nginx for results and PEM
+EXPOSE 8080 
+# Nginx for results and PEM
+EXPOSE 443 
+# iPerf Server
+EXPOSE 5201 
+# SpeedTest Web UI
+EXPOSE 80 
 RUN chown -R www-data:www-data /var/lib/nginx && chown -R www-data:www-data /usr/share/nginx
 # Switch to non-root user
 USER www-data
