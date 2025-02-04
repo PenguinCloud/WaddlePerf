@@ -40,7 +40,8 @@ can be found in docs/LICENSE.md
 can be found in docs/CONTRIBUTING.md
 
 # Usage
-can be found in docs/USAGE.md
+* can be found in docs/USAGE.md
+* please use named stable deployments, not main or latest, for production deployments without being given instructions from Penguin Technologies Inc.
 
 All packages are scanned by socket.dev, snyk, and more to ensure security gold standard! 
 However, if you find something we miss (we're only human), please open an issue or email us at: security@penguintech.io 
