@@ -1,23 +1,8 @@
 server {
-        listen 8080 default_server;
-        listen [::]:8080 default_server;
-        root /var/www/{{ app.title }};
-        # Add index.php to the list if you are using PHP
-        #index index.html index.htm index.nginx-debian.html;
-        server_name _;
-        location / {
-                # First attempt to serve request as file, then
-                # as directory, then fall back to displaying a 404.
-                #autoindex on;
-                try_files $uri $uri/ =404;
-        }
-
-}
-server {
         server_name _ ;
-        listen 80 default_server reuseport;
-        listen [::]:80 default_server reuseport;
-        root /var/www/speedtest;
+        listen {{ web.port }} default_server reuseport;
+        listen [::]:{{ web.port }} default_server reuseport;
+        root /var/www;
         index index.html;
         client_max_body_size 35m;
         error_page 405 =200 $uri;
@@ -41,8 +26,12 @@ server {
             try_files $uri =404;
             break;
         }
+        location / {
+            // redirect to /speedtest 
+            return 301 /speedtest/;
+        }
 
-        location / {            
+        location /speedtest {            
             add_header 'Access-Control-Allow-Origin' "*" always;
             add_header 'Access-Control-Allow-Headers' 'Accept,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Mx-ReqToken,X-Requested-With' always;
             add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS' always;
@@ -80,4 +69,11 @@ server {
         gzip_http_version 1.1;
         gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript image/svg+xml;
     }
+            location /{{app.title}} {
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a 404.
+                autoindex on;
+                try_files $uri $uri/ =404;
+        }
+    
 }
