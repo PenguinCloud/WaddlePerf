@@ -57,7 +57,7 @@ ENV HEALTHCHECK_INTERVAL="10"
 ENV RESULTS_DIR="/var/www/waddleperf"
 ENV RESULTS_FILE="results.json"
 
-# If a GCP Host - we turn on the needed ops agent nginx path
+# If a GCP Host - we turn on the needed ops agent nginx integration path
 ENV GOOGLE_CLOUD="false"
 
 # iPerf Server
