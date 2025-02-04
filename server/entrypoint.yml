@@ -1,0 +1,67 @@
+---
+- name: WaddlePerf
+  hosts: localhost
+  connection: local
+  vars_files:
+    - vars/base.yml
+  tasks:
+    - name: Include build tasks
+      tags: 
+        - build
+      ansible.builtin.include_tasks:
+        file: "{{ job.file }}"
+        apply:
+          tags:
+            - build
+      loop: 
+        - { file: "jobs/build/user.yml" }
+        - { file: "jobs/build/packages.yml" }
+        - { file: "jobs/build/iperf3.yml" }
+        - { file: "jobs/build/filesystem.yml" }
+        - { file: "jobs/build/security.yml" }
+        - { file: "jobs/build/certificate.yml" }
+        - { file: "jobs/build/nginx.yml" }
+      loop_control:
+        loop_var: job
+    - name: Include run tasks
+      tags: 
+        - run
+      ansible.builtin.include_tasks:
+        file: "{{ job.file }}"
+        apply:
+          tags:
+            - run
+      loop:
+        - { file: "jobs/run/nginx.yml" }
+        - { file: "jobs/run/server.yml", when: "iperf.server.enabled" }
+        - { file: "jobs/run/hash.yml", when: "iperf.server.enabled" }
+        - { file: "jobs/run/s3.yml" }
+        - { file: "jobs/tests/files.yml" }
+      loop_control:
+        loop_var: job
+    - name: Static Health Checks and unit tests
+      tags: 
+        - health
+        - test
+        - static
+      ansible.builtin.include_tasks:
+        file: "jobs/tests/{{ job }}.yml"
+        apply:
+          tags:
+            - run
+            - health
+            - test
+            - static
+      loop:
+        - files
+      loop_control:
+        loop_var: job
+    - name: Run hash task
+      when: iperf.server.enabled
+      ansible.builtin.include_tasks:
+        file: "jobs/run/hash.yml"
+        apply:
+          tags:
+          - hash
+      tags: 
+        - hash

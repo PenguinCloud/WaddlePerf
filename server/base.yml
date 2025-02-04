@@ -1,0 +1,45 @@
+run:
+  user: www-data
+  autoupdates: "{{ lookup('env', 'RUN_AUTOUPDATES') }}"
+results:
+  file: "{{ lookup('env', 'RESULTS_FILE') }}"
+  dir: "{{ lookup('env', 'RESULTS_DIR') }}"
+app:
+  title: "waddleperf"
+build:
+  threads: "{{ lookup('env', 'BUILD_THREADS') }}"
+iperf:
+  authentication: "{{ lookup('env', 'IPERF_AUTHENTICATION') }}"
+  url: "{{ lookup('env', 'IPERF_URL') }}"
+  client:
+    enabled: "{{ lookup('env', 'IPERF_CLIENT_ENABLED') }}"
+    streams: "{{ lookup('env', 'IPERF_CLIENT_STREAMS') }}"
+    bitrate: "{{ lookup('env', 'IPERF_CLIENT_BITRATE') }}"
+    return: "{{ lookup('env', 'IPERF_CLIENT_RETURN') }}"
+    logfile: "{{ lookup('env', 'IPERF_CLIENT_LOGFILE') }}"
+  server:
+    enabled: "{{ lookup('env', 'IPERF_SERVER_ENABLED') }}"
+    ip: "{{ lookup('env', 'IPERF_SERVER_IP') }}"
+    port: "{{ lookup('env', 'IPERF_SERVER_PORT') }}"
+  format: json
+  userfile: "users.csv"
+  protocol: "{{ lookup('env', 'IPERF_PROTOCOL') }}"
+  username: "{{ lookup('env', 'IPERF_USERNAME') }}"
+  password: "{{ lookup('env', 'IPERF_PASSWORD') }}"
+web:
+  port: "{{ lookup('env', 'WEB_PORT') }}"
+  sport: "{{ lookup('env', 'WEB_SPORT') }}"
+  host: "{{ lookup('env', 'WEB_HOST') }}"
+s3:
+  interval: "{{ lookup('env', 'S3_INTERVAL') }}"
+  enabled: "{{ lookup('env', 'S3_ENABLED') }}"
+  url: "{{ lookup('env', 'S3_URL') }}"
+  bucket: "{{ lookup('env', 'S3_BUCKET') }}"
+  encrypt: "{{ lookup('env', 'S3_ENCRYPT') }}"
+  compatibility: "{{ lookup('env', 'S3_COMPATIBILITY') }}"
+  key:
+    access: "{{ lookup('env', 'S3_KEY_ACCESS') }}"
+    secret: "{{ lookup('env', 'S3_KEY_SECRET') }}"
+healthcheck:
+  enabled: "{{ lookup('env', 'HEALTHCHECK_ENABLED') }}"
+  interval: "{{ lookup('env', 'HEALTHCHECK_INTERVAL') }}"

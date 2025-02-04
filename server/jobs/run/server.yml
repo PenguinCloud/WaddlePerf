@@ -1,0 +1,6 @@
+---
+- name: Move server into place
+  ansible.builtin.template:
+    src: /opt/manager/templates/iperf3-server.j2
+    dest: "/opt/{{ app.title }}/iperf3-server"
+    mode: "0555"

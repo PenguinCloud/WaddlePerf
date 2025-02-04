@@ -1,0 +1,69 @@
+---
+- name: Install pping
+  hosts: localhost
+  connection: local
+  become: true
+  tasks:
+    - name: Get the latest version of pping
+      ansible.builtin.shell: |
+        curl --silent "https://api.github.com/repos/wzv5/pping/releases/latest" | jq -r .tag_name | cut -d "v" -f 2
+      register: version_output
+
+    - name: Set pping version
+      ansible.builtin.set_fact:
+        pping_version: "{{ version_output.stdout }}"
+
+    - name: Check if the system is ARM-based
+      ansible.builtin.set_fact:
+        is_arm: "{{ ansible_architecture == 'aarch64' }}"
+
+    - name: Download pping for ARM-based Linux
+      when: is_arm and ansible_os_family == "Debian"
+      ansible.builtin.get_url:
+        url: "https://github.com/wzv5/pping/releases/download/v{{ pping_version }}/pping_{{ pping_version }}_Linux_arm64.tar.gz"
+        dest: "/tmp/pping_{{ pping_version }}_Linux_arm64.tar.gz"
+
+    - name: Download pping for x86_64 Linux
+      when: not is_arm and ansible_os_family == "Debian"
+      ansible.builtin.get_url:
+        url: "https://github.com/wzv5/pping/releases/download/v{{ pping_version }}/pping_{{ pping_version }}_Linux_x86_64.tar.gz"
+        dest: "/tmp/pping_{{ pping_version }}_Linux_x86_64.tar.gz"
+    
+    - name: Download pping for ARM-based Mac
+      when: is_arm and ansible_os_family == "Darwin"
+      ansible.builtin.get_url:
+        url: "https://github.com/wzv5/pping/releases/download/v{{ pping_version }}/pping_{{ pping_version }}_Darwin_arm64.tar.gz"
+        dest: "/tmp/pping_{{ pping_version }}_Linux_arm64.tar.gz"
+
+    - name: Download pping for x86_64 Mac
+      when: not is_arm and ansible_os_family == "Darwin"
+      ansible.builtin.get_url:
+        url: "https://github.com/wzv5/pping/releases/download/v{{ pping_version }}/pping_{{ pping_version }}_Darwin_x86_64.tar.gz"
+        dest: "/tmp/pping_{{ pping_version }}_Linux_x86_64.tar.gz"
+
+    - name: Create pping folder in tmp
+      ansible.builtin.file:
+        path: /tmp/pping
+        state: directory
+        owner: "{{ ansible_user_id }}"
+        group: "{{ ansible_user_id }}"
+        mode: '0755'
+    - name: Find tar.gz files in tmp
+      ansible.builtin.find:
+        paths: /tmp/
+        patterns: '*.tar.gz'
+      register: ppingfiles
+    - name: Extract pping
+      ansible.builtin.unarchive:
+        src: "{{ item.path }}"
+        dest: /tmp/pping
+        remote_src: yes
+      with_items: "{{ ppingfiles.files }}"
+
+    - name: Move pping binary to /usr/local/bin
+      ansible.builtin.command: mv /tmp/pping/pping /usr/local/bin/pping
+
+    - name: Make pping binary executable
+      ansible.builtin.file:
+        path: /usr/local/bin/pping
+        mode: '0755'

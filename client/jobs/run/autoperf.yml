@@ -1,0 +1,53 @@
+---
+- name: Run pping
+  ansible.builtin.command:
+    cmd: "bins/pping-parser.py -t http -a {{ httping.host}} -p {{ httping.port }} -j {{ results_dir }}/httping.json"
+  when: pping.enabled
+  tags: 
+    - tier1
+
+- name: Run mttr
+  ansible.builtin.command:
+    cmd: mttr-client
+  when: mttr.enabled
+  tags: 
+    - tier1
+
+- name: Run udpping
+  ansible.builtin.command:
+    cmd: udpping
+  when: udpping.enabled
+  tags: 
+    - tier1
+
+- name: Run sshping
+  ansible.builtin.command:
+    cmd: sshping
+  when: sshping.enabled
+  tags: 
+    - tier2
+
+- name: Run httptrace
+  ansible.builtin.command:
+    cmd: httptrace
+  when: httptrace.enabled
+  tags: 
+    - tier2
+
+- name: Run the iperf-client script
+  ansible.builtin.command:
+    cmd: iperf3-client
+  when: iperf.enabled
+  tags: 
+    - tier3
+- name:  Import results into the database
+  ansible.builtin.command:
+    cmd: "bins/perfDB.py -d {{ results_dir }}"
+  tags: 
+    - tier1
+    - tier2
+    - tier3
+  delegate_to: localhost
+  delegate_facts: no
+  ignore_errors: yes
+  register: import_results

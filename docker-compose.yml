@@ -1,22 +1,47 @@
 ---
 version: "3.8"
 services:
-  waddleperf:
-    build: .
+  waddleperf-server:
+    build: ./server
     platform: linux/amd64
-    image: ghcr.io/penguincloud/waddleperf
+    image: ghcr.io/penguincloud/waddleperf-server
     volumes:
       - /var/logs
       # - ./results.log:/var/www/waddleperf3/results.log:rw
       # - ./private.pem:/opt/waddleperf3/private.pem
       # - ./public.pem:/opt/waddleperf3/public.pem
-    # container_name: iperf3
     env_file: .env
     ports:
       - 80:80
       - 443:443
       - 5201:5201/tcp
       - 5201:5201/udp
+      - 8080:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+waddleperf-client:
+    build: ./client
+    platform: linux/amd64
+    image: ghcr.io/penguincloud/waddleperf-client
+    volumes:
+      - /var/logs
+      # - ./results.log:/var/www/waddleperf3/results.log:rw
+      # - ./private.pem:/opt/waddleperf3/private.pem
+      # - ./public.pem:/opt/waddleperf3/public.pem
+    env_file: .env
+    ports:
       - 8080:8080
     deploy:
       resources:

@@ -1,0 +1,6 @@
+---
+- name: Check that a page returns successfully
+  ansible.builtin.uri:
+    url: "{{ healthcheck.url }}"
+  register: httpcheck
+  failed_when: httpcheck is failed or httpcheck.status != 200
