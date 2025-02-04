@@ -89,3 +89,5 @@ sshping:
   target: "{{ lookup('env', 'SSHPING_DESTHOST') }}"
   user: "{{ lookup('env', 'SSHPING_USER') }}"
   port: "{{ lookup('env', 'SSHPING_PORT') }}"
+google:
+  cloud: "{{ lookup('env', 'GOOGLE_CLOUD') }}"
