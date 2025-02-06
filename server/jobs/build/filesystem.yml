@@ -1,5 +1,5 @@
 ---
-- name: Make sure app directories are built
+- name: Make sure app directories are built and owned by run user
   ansible.builtin.file:
     path: "{{ item }}"
     mode: '0744'
@@ -14,6 +14,7 @@
     - /var/libs/nginx
     - /var/www
     - /usr/share/nginx
+    - /var/www/userstats
 - name: Give edit rights to startup
   ansible.builtin.file:
     path: /opt/manager/bins
@@ -77,3 +78,10 @@
     group: root
     mode: "0555"
     state: link
+- name: Copy the userstats.py to /var/www/userstats
+  ansible.builtin.copy:
+    src: web/userstats.py 
+    dest: /var/www/userstats/userstats.py
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    mode: "0555"
