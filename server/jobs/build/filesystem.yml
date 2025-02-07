@@ -101,3 +101,8 @@
     group: "{{ run.user }}"
     mode: "0555"
     state: link
+- name: Unzip GeoIP deb
+  ansible.builtin.unarchive:
+    src: "/opt/{{ app.title}}/data/GeoLite2-City-CSV.zip"
+    dest: /opt/GeoIP
+    remote_src: true
