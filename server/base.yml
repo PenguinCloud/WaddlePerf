@@ -43,3 +43,7 @@ s3:
 healthcheck:
   enabled: "{{ lookup('env', 'HEALTHCHECK_ENABLED') }}"
   interval: "{{ lookup('env', 'HEALTHCHECK_INTERVAL') }}"
+maxmind:
+  url: "{{ lookup('env', 'MAXMIND_URL') }}"
+  license: "{{ lookup('env', 'MAXMIND_LICENSE') }}"
+  accountID: "{{ lookup('env', 'MAXMIND_ACCOUNTID') }}"

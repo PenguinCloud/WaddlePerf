@@ -1,8 +1,8 @@
 ---
-- name: Add cron job for autoperf tag for the playbook
+- name: Add cron job for client
   ansible.builtin.cron:
-    name: autoperf
-    job: "ansible-playbook /opt/{{app.title}}/client/autoperf.sh --tags autoperf --connection=local"
+    name: client
+    job: "ansible-playbook /opt/{{app.title}}/entrypoint.yml --tags cron,autoperf --connection=local"
     minute: "*/{{ autoperf.interval }}"
     user: "{{ run.user }}"
     cron_file: autoperf

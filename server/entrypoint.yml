@@ -39,23 +39,6 @@
         - { file: "jobs/tests/files.yml" }
       loop_control:
         loop_var: job
-    - name: Static Health Checks and unit tests
-      tags: 
-        - health
-        - test
-        - static
-      ansible.builtin.include_tasks:
-        file: "jobs/tests/{{ job }}.yml"
-        apply:
-          tags:
-            - run
-            - health
-            - test
-            - static
-      loop:
-        - files
-      loop_control:
-        loop_var: job
     - name: Run hash task
       when: iperf.server.enabled
       ansible.builtin.include_tasks:
@@ -65,3 +48,29 @@
           - hash
       tags: 
         - hash
+    - name: Include cron tasks
+      tags: 
+        - cron
+      ansible.builtin.include_tasks:
+        file: "{{ job.file }}"
+      loop:
+        - { file: "jobs/run/geoip.yml" }
+      loop_control:
+        loop_var: job
+    - name: Static Health Checks and unit tests
+        tags: 
+          - health
+          - test
+          - static
+        ansible.builtin.include_tasks:
+          file: "jobs/tests/{{ job }}.yml"
+          apply:
+            tags:
+              - run
+              - health
+              - test
+              - static
+        loop:
+          - files
+        loop_control:
+          loop_var: job

@@ -9,6 +9,7 @@
     state: directory
   loop:
     - "/opt/{{ app.title }}"
+    - "/opt/maxmind"
     - "/var/www/{{ app.title }}"
     - /etc/nginx/sites-enabled
     - /var/libs/nginx
@@ -85,3 +86,18 @@
     owner: "{{ run.user }}"
     group: "{{ run.user }}"
     mode: "0555"
+- name: Touch GeoIP.conf
+  ansible.builtin.file:
+    path: /usr/local/etc/GeoIP.conf
+    state: touch
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    mode: "0755"
+- name: Build link in etc to GeoIP.conf
+  ansible.builtin.file:
+    src: /usr/local/etc/GeoIP.conf
+    dest: /etc/GeoIP.conf
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    mode: "0555"
+    state: link
