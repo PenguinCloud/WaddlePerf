@@ -1,0 +1,21 @@
+---
+- name: Overwrite the GeoIP.conf with details
+  tags: run
+  ansible.builtin.template:
+    src: templates/geoip.j2
+    dest: /usr/local/etc/GeoIP.conf
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    mode: "0555"
+  when: maxmind.license is not "changeme"
+- name: Enable the cron job for maxmind
+  tags: run
+  ansible.builtin.cron:
+    name: servercron
+    disabled: false
+  when: maxmind.license is not "changeme"
+- name: Run updater
+  tags: run, cron
+  ansible.builtin.command:
+    cmd: /usr/local/bin/geoipupdate
+  when: maxmind.license is not "changeme" 
