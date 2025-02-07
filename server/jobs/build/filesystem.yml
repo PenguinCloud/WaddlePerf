@@ -9,7 +9,7 @@
     state: directory
   loop:
     - "/opt/{{ app.title }}"
-    - "/opt/maxmind"
+    - "/opt/geoip"
     - "/var/www/{{ app.title }}"
     - /etc/nginx/sites-enabled
     - /var/libs/nginx
@@ -104,5 +104,5 @@
 - name: Unzip GeoIP deb
   ansible.builtin.unarchive:
     src: "/opt/{{ app.title}}/data/GeoLite2-City-CSV.zip"
-    dest: /opt/GeoIP
+    dest: /opt/geoip
     remote_src: true
