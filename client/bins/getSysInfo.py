@@ -69,82 +69,89 @@ class SystemInfo:
 
         return wifi_profiles, current_ssid
 
-    def get_system_info(self):
-        self.system_info['os_family'] = platform.system()
-        self.system_info['os_version'] = platform.version()
+    def get_system_info(self, info_types):
+        if 'os' in info_types or 'all' in info_types:
+            self.system_info['os_family'] = platform.system()
+            self.system_info['os_version'] = platform.version()
 
-        cpu_info = {}
-        cpu_info['cpu_usage'] = psutil.cpu_percent(interval=1)
-        cpu_info['cpu_count'] = psutil.cpu_count(logical=True)
-        cpu_info['cpu_physical_cores'] = psutil.cpu_count(logical=False)
-        cpu_info['cpu_freq'] = psutil.cpu_freq()._asdict()
-        cpu_info['cpu_architecture'] = platform.machine()
-        self.system_info['cpu_info'] = cpu_info
+        if 'cpu' in info_types or 'all' in info_types:
+            cpu_info = {}
+            cpu_info['cpu_usage'] = psutil.cpu_percent(interval=1)
+            cpu_info['cpu_count'] = psutil.cpu_count(logical=True)
+            cpu_info['cpu_physical_cores'] = psutil.cpu_count(logical=False)
+            cpu_info['cpu_freq'] = psutil.cpu_freq()._asdict()
+            cpu_info['cpu_architecture'] = platform.machine()
+            self.system_info['cpu_info'] = cpu_info
 
-        memory_info = {}
-        virtual_mem = psutil.virtual_memory()
-        memory_info['total_memory'] = virtual_mem.total
-        memory_info['available_memory'] = virtual_mem.available
-        memory_info['used_memory'] = virtual_mem.used
-        memory_info['memory_usage'] = virtual_mem.percent
-        self.system_info['memory_info'] = memory_info
+        if 'memory' in info_types or 'all' in info_types:
+            memory_info = {}
+            virtual_mem = psutil.virtual_memory()
+            memory_info['total_memory'] = virtual_mem.total
+            memory_info['available_memory'] = virtual_mem.available
+            memory_info['used_memory'] = virtual_mem.used
+            memory_info['memory_usage'] = virtual_mem.percent
+            self.system_info['memory_info'] = memory_info
 
-        disk_info = {}
-        disk_usage = psutil.disk_usage('/')
-        disk_info['total_disk'] = disk_usage.total
-        disk_info['used_disk'] = disk_usage.used
-        disk_info['free_disk'] = disk_usage.free
-        disk_info['disk_usage'] = disk_usage.percent
+        if 'disk' in info_types or 'all' in info_types:
+            disk_info = {}
+            disk_usage = psutil.disk_usage('/')
+            disk_info['total_disk'] = disk_usage.total
+            disk_info['used_disk'] = disk_usage.used
+            disk_info['free_disk'] = disk_usage.free
+            disk_info['disk_usage'] = disk_usage.percent
 
-        disk_info['disk_models'] = []
-        for disk in psutil.disk_partitions():
-            try:
-                disk_info['disk_models'].append({
-                    'device': disk.device,
-                    'mountpoint': disk.mountpoint,
-                    'fstype': disk.fstype,
-                    'opts': disk.opts
-                })
-            except PermissionError:
-                continue
-        self.system_info['disk_info'] = disk_info
+            disk_info['disk_models'] = []
+            for disk in psutil.disk_partitions():
+                try:
+                    disk_info['disk_models'].append({
+                        'device': disk.device,
+                        'mountpoint': disk.mountpoint,
+                        'fstype': disk.fstype,
+                        'opts': disk.opts
+                    })
+                except PermissionError:
+                    continue
+            self.system_info['disk_info'] = disk_info
 
-        processes = []
-        for proc in psutil.process_iter(['pid', 'name', 'username', 'status', 'create_time', 'memory_info', 'cpu_times']):
-            try:
-                proc_info = proc.info
-                proc_info['memory_info'] = proc.memory_info()._asdict()
-                proc_info['cpu_times'] = proc.cpu_times()._asdict()
-                processes.append(proc_info)
-            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-                continue
-        self.system_info['running_processes'] = processes
+        if 'process' in info_types or 'all' in info_types:
+            processes = []
+            for proc in psutil.process_iter(['pid', 'name', 'username', 'status', 'create_time', 'memory_info', 'cpu_times']):
+                try:
+                    proc_info = proc.info
+                    proc_info['memory_info'] = proc.memory_info()._asdict()
+                    proc_info['cpu_times'] = proc.cpu_times()._asdict()
+                    processes.append(proc_info)
+                except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                    continue
+            self.system_info['running_processes'] = processes
 
-        net_info = {}
-        net_info['interfaces'] = []
-        for interface, addrs in psutil.net_if_addrs().items():
-            iface_info = {'name': interface, 'addresses': []}
-            for addr in addrs:
-                addr_info = {
-                    'family': str(addr.family),
-                    'address': addr.address,
-                    'netmask': addr.netmask,
-                    'broadcast': addr.broadcast
-                }
-                iface_info['addresses'].append(addr_info)
-            net_info['interfaces'].append(iface_info)
+        if 'network' in info_types or 'all' in info_types:
+            net_info = {}
+            net_info['interfaces'] = []
+            for interface, addrs in psutil.net_if_addrs().items():
+                iface_info = {'name': interface, 'addresses': []}
+                for addr in addrs:
+                    addr_info = {
+                        'family': str(addr.family),
+                        'address': addr.address,
+                        'netmask': addr.netmask,
+                        'broadcast': addr.broadcast
+                    }
+                    iface_info['addresses'].append(addr_info)
+                net_info['interfaces'].append(iface_info)
 
-        net_info['stats'] = psutil.net_if_stats()
-        self.system_info['network_info'] = net_info
+            net_info['stats'] = psutil.net_if_stats()
+            self.system_info['network_info'] = net_info
 
-        wifi_profiles, current_ssid = self.get_wifi_profiles()
-        self.system_info['wifi_profiles'] = wifi_profiles
-        self.system_info['current_ssid'] = current_ssid
+        if 'wifi' in info_types or 'all' in info_types:
+            wifi_profiles, current_ssid = self.get_wifi_profiles()
+            self.system_info['wifi_profiles'] = wifi_profiles
+            self.system_info['current_ssid'] = current_ssid
 
         return self.system_info
 
-    def save_system_info(self, filename=None):
-        system_info = self.get_system_info()
+    def save_system_info(self, filename=None, info_types=['all']):
+        system_info = self.get_system_info(info_types)
         if filename:
             with open(filename, 'w') as json_file:
                 json.dump(system_info, json_file, indent=4)
@@ -152,20 +159,38 @@ class SystemInfo:
 
 def main(argv):
     output_file = None
+    info_types = []
     try:
-        opts, args = getopt.getopt(argv, "ho:", ["output="])
+        opts, args = getopt.getopt(argv, "ho:", ["output=", "os", "cpu", "memory", "disk", "process", "network", "wifi"])
     except getopt.GetoptError:
-        print('Usage: getSysInfo.py -o <outputfile>')
+        print('Usage: getSysInfo.py -o <outputfile> [--os] [--cpu] [--memory] [--disk] [--process] [--network] [--wifi]')
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print('Usage: getSysInfo.py -o <outputfile>')
+            print('Usage: getSysInfo.py -o <outputfile> [--os] [--cpu] [--memory] [--disk] [--process] [--network] [--wifi]')
             sys.exit()
         elif opt in ("-o", "--output"):
             output_file = arg
+        elif opt == "--os":
+            info_types.append("os")
+        elif opt == "--cpu":
+            info_types.append("cpu")
+        elif opt == "--memory":
+            info_types.append("memory")
+        elif opt == "--disk":
+            info_types.append("disk")
+        elif opt == "--process":
+            info_types.append("process")
+        elif opt == "--network":
+            info_types.append("network")
+        elif opt == "--wifi":
+            info_types.append("wifi")
+
+    if not info_types:
+        info_types = ['all']
 
     sys_info = SystemInfo()
-    sys_info.save_system_info(output_file)
+    sys_info.save_system_info(output_file, info_types)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
