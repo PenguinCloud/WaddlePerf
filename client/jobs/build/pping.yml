@@ -50,3 +50,16 @@
         owner: "{{ run.user }}"
         group: "{{ run.user }}"
         mode: '0555'
+    - name: Move our custom scripts to bin
+      ansible.builtin.copy:
+        src: bins/{{ item }}.py
+        dest: /usr/local/bin/{{ item }}
+        owner: "{{ run.user }}"
+        group: "{{ run.user }}"
+        mode: '0755'
+        backup: yes
+      loop: 
+        - udpping
+        - mtuFinder
+        - sshping
+        - httptrace
