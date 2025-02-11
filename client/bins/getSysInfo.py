@@ -164,6 +164,7 @@ def main(argv):
         opts, args = getopt.getopt(argv, "ho:", ["output=", "os", "cpu", "memory", "disk", "process", "network", "wifi"])
     except getopt.GetoptError:
         print('Usage: getSysInfo.py -o <outputfile> [--os] [--cpu] [--memory] [--disk] [--process] [--network] [--wifi]')
+        print(" If you do not specify any options, all system information will be collected.")
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
