@@ -47,3 +47,4 @@
 .idea/
 id_rsa*
 venv/
+client/web/apps/.service/*/*
