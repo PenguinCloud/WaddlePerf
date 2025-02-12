@@ -53,3 +53,4 @@ client/web/apps/.service/*/*/*
 */*.log
 */*.table
 */*.bak
+*/*.pyc
