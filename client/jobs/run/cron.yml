@@ -5,6 +5,7 @@
     minute: "*/{{ s3.interval }}"
     job: ansible-playbook /opt/manager/entrypoint.yml -c local --tags=s3
     cron_file: waddleperf
+    user: "{{ run.user }}"
   when: s3.enabled
 - name: Run a job to test ourselves to make sure we are online
   ansible.builtin.cron:
@@ -12,6 +13,8 @@
     minute: "*/{{ healthcheck.interval }}"
     job: ansible-playbook /opt/manager/entrypoint.yml -c local --tags=health
     cron_file: waddleperf
+    user: "{{ run.user }}"
+    disabled: false
   when: healthcheck.enabled
 
 - name: Update cron job for autoperf tag for the playbook
@@ -21,3 +24,4 @@
     minute: "*/{{ autoperf.interval }}"
     user: "{{ run.user }}"
     cron_file: autoperf
+    disabled: false

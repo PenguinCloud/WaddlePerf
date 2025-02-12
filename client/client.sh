@@ -8,4 +8,4 @@ ansible-playbook entrypoint.yml  -c local --tags run
 
 sed -i 's/ \{2,\}/ /g' /opt/waddleperf/iperf3-client
 
-py4web run ./web
+py4web run web/apps
