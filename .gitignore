@@ -48,3 +48,11 @@
 id_rsa*
 venv/
 client/web/apps/.service/*/*
+client/web/apps/.service/*/*/*
+client/web/apps/.service/*
+*/*.storage
+*/*.log
+*/*.table
+*/*.bak
+*/*.pyc
+client/web/apps/__pycache__/*.pyc
