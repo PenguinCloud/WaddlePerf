@@ -7,3 +7,4 @@ certifi
 asyncio
 aiohttp
 dnspython
+json_log_formatter

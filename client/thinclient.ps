@@ -1,0 +1,68 @@
+#!/usr/bin/env pwsh
+
+function Show-Usage {
+    Write-Host "Usage: script.ps1 [OPTIONS]"
+    Write-Host "  -c, --console       Log to console"
+    Write-Host "      --logfile=PATH  Specify log file path"
+    Write-Host "  -j, --json          Log as JSON"
+    Write-Host "  -h, --help          Show help"
+    exit 1
+}
+
+$LOG_TO_CONSOLE = $false
+$LOG_FILE_PATH = "logs/thinclient.log"
+$LOG_AS_JSON = $false
+
+foreach ($arg in $args) {
+    switch -Wildcard ($arg) {
+        '-c' { $LOG_TO_CONSOLE = $true; continue }
+        '--console' { $LOG_TO_CONSOLE = $true; continue }
+        '--logfile=*' {
+            $LOG_FILE_PATH = $arg -replace '^--logfile='
+            if (-not (Test-Path (Split-Path $LOG_FILE_PATH -Parent))) {
+                Write-Host "Log file directory does not exist."
+                exit 1
+            }
+            continue
+        }
+        '-j' { $LOG_AS_JSON = $true; continue }
+        '--json' { $LOG_AS_JSON = $true; continue }
+        '-h' { Show-Usage }
+        '--help' { Show-Usage }
+        default {
+            Write-Host "Invalid option: $arg"
+            Show-Usage
+        }
+    }
+}
+
+Write-Host "Configuring logging..."
+if (-not $LOG_TO_CONSOLE) {
+    New-Item -ItemType File -Path $LOG_FILE_PATH -Force | Out-Null
+}
+
+Write-Host "Running setup..."
+bash vars/thinclientvariables.sh
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Setup script failed."
+    exit 1
+}
+
+Write-Host "Validating installation..."
+pping --version
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Installation check failed."
+    exit 1
+}
+
+Write-Host "Starting background service..."
+Start-Process "py4web" -ArgumentList "run web/apps" -WindowStyle Hidden -RedirectStandardOutput $null -RedirectStandardError $null
+
+Write-Host "Running configuration..."
+ansible-playbook entrypoint.yml -c local --tags thinclient
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Configuration failed."
+    exit 1
+}
+
+Write-Host "Done."

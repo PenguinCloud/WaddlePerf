@@ -60,7 +60,7 @@ pping --version || {
     exit 1
 }
 
-echo "Starting background web service..."
+echo "Starting background service..."
 nohup py4web run web/apps &>/dev/null &
 
 echo "Running configuration..."
