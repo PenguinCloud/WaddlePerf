@@ -7,10 +7,11 @@ import sys
 import getopt
 
 class SystemInfo:
-    def __init__(self):
+    def __init__(self, infoTypes: list = ['all']):
         self.system_info = {}
+        self.info_types = infoTypes
 
-    def get_wifi_profiles(self):
+    def get_wifi_profiles(self) -> tuple:
         wifi_profiles = []
         current_ssid = None
 
@@ -69,12 +70,13 @@ class SystemInfo:
 
         return wifi_profiles, current_ssid
 
-    def get_system_info(self, info_types):
-        if 'os' in info_types or 'all' in info_types:
+    def run(self) -> dict:
+        
+        if 'os' in self.info_types or 'all' in self.info_types:
             self.system_info['os_family'] = platform.system()
             self.system_info['os_version'] = platform.version()
 
-        if 'cpu' in info_types or 'all' in info_types:
+        if 'cpu' in self.info_types or 'all' in self.info_types:
             cpu_info = {}
             cpu_info['cpu_usage'] = psutil.cpu_percent(interval=1)
             cpu_info['cpu_count'] = psutil.cpu_count(logical=True)
@@ -83,7 +85,7 @@ class SystemInfo:
             cpu_info['cpu_architecture'] = platform.machine()
             self.system_info['cpu_info'] = cpu_info
 
-        if 'memory' in info_types or 'all' in info_types:
+        if 'memory' in self.info_types or 'all' in self.info_types:
             memory_info = {}
             virtual_mem = psutil.virtual_memory()
             memory_info['total_memory'] = virtual_mem.total
@@ -92,7 +94,7 @@ class SystemInfo:
             memory_info['memory_usage'] = virtual_mem.percent
             self.system_info['memory_info'] = memory_info
 
-        if 'disk' in info_types or 'all' in info_types:
+        if 'disk' in self.info_types or 'all' in self.info_types:
             disk_info = {}
             disk_usage = psutil.disk_usage('/')
             disk_info['total_disk'] = disk_usage.total
@@ -113,7 +115,7 @@ class SystemInfo:
                     continue
             self.system_info['disk_info'] = disk_info
 
-        if 'process' in info_types or 'all' in info_types:
+        if 'process' in self.info_types or 'all' in self.info_types:
             processes = []
             for proc in psutil.process_iter(['pid', 'name', 'username', 'status', 'create_time', 'memory_info', 'cpu_times']):
                 try:
@@ -125,7 +127,7 @@ class SystemInfo:
                     continue
             self.system_info['running_processes'] = processes
 
-        if 'network' in info_types or 'all' in info_types:
+        if 'network' in self.info_types or 'all' in self.info_types:
             net_info = {}
             net_info['interfaces'] = []
             for interface, addrs in psutil.net_if_addrs().items():
@@ -143,15 +145,15 @@ class SystemInfo:
             net_info['stats'] = psutil.net_if_stats()
             self.system_info['network_info'] = net_info
 
-        if 'wifi' in info_types or 'all' in info_types:
+        if 'wifi' in self.info_types or 'all' in self.info_types:
             wifi_profiles, current_ssid = self.get_wifi_profiles()
             self.system_info['wifi_profiles'] = wifi_profiles
             self.system_info['current_ssid'] = current_ssid
 
         return self.system_info
 
-    def save_system_info(self, filename=None, info_types=['all']):
-        system_info = self.get_system_info(info_types)
+    def save_system_info(self, filename=None):
+        system_info = self.run()
         if filename:
             with open(filename, 'w') as json_file:
                 json.dump(system_info, json_file, indent=4)
@@ -190,8 +192,8 @@ def main(argv):
     if not info_types:
         info_types = ['all']
 
-    sys_info = SystemInfo()
-    sys_info.save_system_info(output_file, info_types)
+    sys_info = SystemInfo(infoTypes=info_types)
+    sys_info.save_system_info(output_file)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
