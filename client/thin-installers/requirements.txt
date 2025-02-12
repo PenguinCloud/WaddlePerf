@@ -6,3 +6,4 @@ aioquic
 certifi
 asyncio
 aiohttp
+dnspython

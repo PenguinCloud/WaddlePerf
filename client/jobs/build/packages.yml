@@ -18,6 +18,7 @@
       - unattended-upgrades
       - python3-flask
       - cron
+      - iputils-ping
 - name: Turn off unattended upgrades
   ansible.builtin.lineinfile:
     path: /etc/apt/apt.conf.d/20auto-upgrades
@@ -39,5 +40,6 @@
       - asyncio
       - cryptography
       - aiohttp
+      - dnspython
 
 

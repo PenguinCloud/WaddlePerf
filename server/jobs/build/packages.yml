@@ -25,3 +25,12 @@
       - pydal
       - pyyaml
       - geoip2
+
+- name: Grab the maxmind database
+  ansible.builtin.get_url:
+    url: "{{ maxmind.url }}"
+    dest: /geoipupdate_linux_amd64.deb
+
+- name: Install the maxmind updater
+  ansible.builtin.deb:
+    deb: /geoipupdate_linux_amd64.deb

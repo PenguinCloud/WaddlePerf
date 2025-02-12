@@ -15,6 +15,8 @@ ARG RUN_AUTOUPDATES="true"
 ARG IPERF_URL="https://github.com/esnet/iperf/archive/refs/tags/3.14.tar.gz"
 # S3
 ARG S3_ENABLED="true"
+# maxmind updater url
+ARG MAXMIND_URL="https://github.com/maxmind/geoipupdate/releases/download/v7.1.0/geoipupdate_7.1.0_linux_amd64.deb"
 
 # BUILD IT!
 #RUN /usr/bin/bash bins/py4web.py # This is coming later
@@ -56,6 +58,10 @@ ENV HEALTHCHECK_INTERVAL="10"
 # Results drop off location
 ENV RESULTS_DIR="/var/www/waddleperf"
 ENV RESULTS_FILE="results.json"
+
+# Optional MaxMind updater info for IP endpoint and test results
+ENV MAXMIND_ACCOUNTID="123456"
+ENV MAXMIND_LICENSE="changeme"
 
 # For Promethesus based nginx montoring including GCP Ops Agent
 # https://cloud.google.com/stackdriver/docs/solutions/agents/ops-agent/third-party/nginx
