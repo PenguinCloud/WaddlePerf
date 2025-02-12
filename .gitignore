@@ -54,3 +54,4 @@ client/web/apps/.service/*/*/*
 */*.table
 */*.bak
 */*.pyc
+client/web/apps/__pycache__/*.pyc
