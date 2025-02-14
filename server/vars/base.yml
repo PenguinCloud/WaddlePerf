@@ -31,6 +31,8 @@ web:
   port: "{{ lookup('env', 'WEB_PORT') }}"
   sport: "{{ lookup('env', 'WEB_SPORT') }}"
   host: "{{ lookup('env', 'WEB_HOST') }}"
+  user: "{{ lookup('env', 'WEB_USER') }}"
+  password: "{{ lookup('env', 'WEB_PASSWORD') }}"
 mtr:
   version: "{{ lookup('env', 'MTR_VERSION') }}"
   enabled: "{{ lookup('env', 'MTR_ENABLED') }}"
@@ -91,3 +93,11 @@ sshping:
   port: "{{ lookup('env', 'SSHPING_PORT') }}"
 google:
   cloud: "{{ lookup('env', 'GOOGLE_CLOUD') }}"
+udpping:
+  enabled: "{{ lookup('env', 'UDPPING_ENABLED') }}"
+  port: "{{ lookup('env', 'UDPPING_PORT') }}"
+  token: "{{ lookup('env', 'UDPPING_TOKEN') }}"
+maxmind:
+  url: "{{ lookup('env', 'MAXMIND_URL') }}"
+  license: "{{ lookup('env', 'MAXMIND_LICENSE') }}"
+  accountID: "{{ lookup('env', 'MAXMIND_ACCOUNTID') }}"

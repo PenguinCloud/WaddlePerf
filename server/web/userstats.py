@@ -19,7 +19,7 @@ def ip():
         output["IP"] = request.environ['REMOTE_ADDR']
         output["Method"] = 'REMOTE_ADDR'
     # The server will use geolite2 to lookup the user's location based on the IP address
-    output["Location"] = 
+    #output["Location"] = 
     return jsonify(output)
 
 def lookupDetails(ip: str) -> dict:

@@ -70,9 +70,11 @@ server {
         gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript image/svg+xml;
     }
 
-    location /{{ app.title}} {
+    location /results {
         # First attempt to serve request as file, then
         # as directory, then fall back to displaying a 404.
+        auth_basic           "Administrator’s Area";
+        auth_basic_user_file /etc/nginx/.htpasswd;
         autoindex on;
         try_files $uri $uri/ =404;
     }

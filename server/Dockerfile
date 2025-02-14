@@ -41,7 +41,8 @@ ENV IPERF_AUTHENTICATION="1"
 ENV WEB_PORT="80"
 ENV WEB_SPORT="443"
 ENV WEB_HOST="localhost"
-
+ENV WEB_USER="waddler"
+ENV WEB_PASS="changeme"
 # S3
 ENV S3_ENABLED="false"
 ENV S3_INTERVAL="10"
@@ -63,6 +64,11 @@ ENV RESULTS_FILE="results.json"
 ENV MAXMIND_ACCOUNTID="123456"
 ENV MAXMIND_LICENSE="changeme"
 
+# UDPPING
+ENV UDPPING_ENABLED="true"
+ENV UDPPING_PORT="2000"
+ENV UDPPING_TOKEN="changeme"
+
 # For Promethesus based nginx montoring including GCP Ops Agent
 # https://cloud.google.com/stackdriver/docs/solutions/agents/ops-agent/third-party/nginx
 ENV GOOGLE_CLOUD="false"
@@ -72,6 +78,9 @@ EXPOSE 5201
 # SpeedTest Web UI
 EXPOSE 80 
 #If you want HTTPS, for now, put a reverse proxy in front of this host for web traffic
+# Expose udp ping
+EXPOSE 2000/udp
+
 
 RUN chown -R www-data:www-data /var/lib/nginx && chown -R www-data:www-data /usr/share/nginx
 # Switch to non-root user
