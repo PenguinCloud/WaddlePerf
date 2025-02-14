@@ -6,3 +6,15 @@
     owner: "{{ run.user }}"
     group: "{{ run.user }}"
     mode: "0555"
+#- name: Generate htpasswd using nginx password
+#  ansible.builtin.command:
+#    cmd: "echo '{{ web.user
+#    }}:$(openssl passwd -apr1 {{ web.password }})' > /etc/nginx/.htpasswd"
+- name: Generate web htpasswd 
+  community.general.htpasswd:
+    path: /etc/nginx/.htpasswd
+    name: "{{ web.user }}"
+    password: "{{ web.password }}"
+    owner: root
+    group: www-data
+    mode: 0540

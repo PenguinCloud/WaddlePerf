@@ -58,19 +58,19 @@
       loop_control:
         loop_var: job
     - name: Static Health Checks and unit tests
-        tags: 
-          - health
-          - test
-          - static
-        ansible.builtin.include_tasks:
-          file: "jobs/tests/{{ job }}.yml"
-          apply:
-            tags:
-              - run
-              - health
-              - test
-              - static
-        loop:
-          - files
-        loop_control:
-          loop_var: job
+      tags: 
+        - health
+        - test
+        - static
+      ansible.builtin.include_tasks:
+        file: "jobs/tests/{{ job }}.yml"
+        apply:
+          tags:
+            - run
+            - health
+            - test
+            - static
+      loop:
+        - files
+      loop_control:
+        loop_var: job

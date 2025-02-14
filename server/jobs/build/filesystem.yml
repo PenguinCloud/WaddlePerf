@@ -93,16 +93,37 @@
     owner: "{{ run.user }}"
     group: "{{ run.user }}"
     mode: "0755"
-- name: Build link in etc to GeoIP.conf
-  ansible.builtin.file:
-    src: /usr/local/etc/GeoIP.conf
-    dest: /etc/GeoIP.conf
+- name: Unzip GeoIP deb
+  ansible.builtin.unarchive:
+    src: "/opt/manager/data/GeoLite2-City_20250207.tar.gz"
+    dest: /opt/geoip
+    remote_src: true
+- name: Copy udpping-server to local bin
+  ansible.builtin.copy:
+    src: "/opt/manager/bins/udpping-server.py"
+    dest: /usr/local/bin/udpping-server
     owner: "{{ run.user }}"
     group: "{{ run.user }}"
     mode: "0555"
+- name: Touch udpping-server-wrapper
+  ansible.builtin.file:
+    path: "/opt/{{ app.title }}/udpping-server-wrapper"
+    state: touch
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    mode: "0755"
+- name: Create a link to udpping-server wrapper
+  ansible.builtin.file:
+    src: "/opt/{{ app.title }}/udpping-server-wrapper"
+    dest: /usr/local/bin/udpping-server-wrapper
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    mode: "0755"
     state: link
-- name: Unzip GeoIP deb
-  ansible.builtin.unarchive:
-    src: "/opt/{{ app.title}}/data/GeoLite2-City-CSV.zip"
-    dest: /opt/geoip
-    remote_src: true
+- name: Touch htpasswd file
+  ansible.builtin.file:
+    path: /etc/nginx/.htpasswd
+    state: touch
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    mode: "0755"

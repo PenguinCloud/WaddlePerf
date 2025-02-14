@@ -1,6 +1,14 @@
 ---
-- name: Move server into place
+- name: Move iperf3 server into place
   ansible.builtin.template:
     src: /opt/manager/templates/iperf3-server.j2
     dest: "/opt/{{ app.title }}/iperf3-server"
     mode: "0555"
+- name: Move udpping wrapper into place
+  ansible.builtin.template:
+    src: /opt/manager/templates/udpping.j2
+    dest: /opt/{{ app.title }}/udpping-server-wrapper
+    mode: "0555"
+    owner: "{{ run.user }}"
+    group: "{{ run.user }}"
+    mode: "0755"
