@@ -1,0 +1,3 @@
+#! /bin/bash
+echo "Starting udpping server..."
+udpping-server -p {{ udpping.port }} -a 0.0.0.0 --logfile {{results.dir}}/iperf3-server.log {% if udpping.token != "changeme" %} -t {{udpping.token}} {% endif %}
